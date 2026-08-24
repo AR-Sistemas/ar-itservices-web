@@ -120,24 +120,29 @@ const PEOPLE = [
   {
     name: "Felix Melinsky",
     role: "Fundador & Presidente",
+    photo: felixPhoto.url,
     quote: "Empezamos hace 25 años haciendo el trabajo. Seguimos haciéndolo.",
   },
   {
     name: "Jose Romanutti",
     role: "Socio & CEO",
+    photo: josePhoto.url,
     quote: "El cliente no compra tecnología: compra un resultado que se pueda medir.",
   },
   {
     name: "Adrián Ferrari",
     role: "Socio & Director de Operaciones",
+    photo: adrianPhoto.url,
     quote: "Un equipo bien armado resuelve más que cualquier metodología de moda.",
   },
   {
     name: "Constanza Giordano",
     role: "Directora de Talento",
+    photo: constanzaPhoto.url,
     quote: "Buscamos gente que quiera quedarse, no perfiles que encajen en una grilla.",
   },
 ];
+
 
 const OFFICES = [
   { city: "Dallas", country: "Estados Unidos", address: "Dallas, Texas" },
