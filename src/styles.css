@@ -185,3 +185,116 @@
     transition: none;
   }
 }
+
+/* ---- Star Border (React Bits) recoloreado a la paleta AR ---- */
+@utility star-border-glow {
+  position: absolute;
+  z-index: 0;
+  width: 300%;
+  height: 50%;
+  opacity: 0.7;
+  border-radius: 9999px;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@utility star-border-bottom {
+  bottom: -11px;
+  right: -250%;
+  background: radial-gradient(circle, var(--brand), transparent 12%);
+  animation-name: star-move-bottom;
+}
+
+@utility star-border-top {
+  top: -11px;
+  left: -250%;
+  background: radial-gradient(circle, var(--brand-dark), transparent 12%);
+  animation-name: star-move-top;
+}
+
+@keyframes star-move-bottom {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-66%);
+  }
+}
+
+@keyframes star-move-top {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(66%);
+  }
+}
+
+/* ---- Magic Bento spotlight ---- */
+@utility magic-card-spotlight {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+  background: radial-gradient(
+    280px circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in oklab, var(--brand) 14%, transparent),
+    transparent 70%
+  );
+}
+
+.magic-card:hover .magic-card-spotlight {
+  opacity: 1;
+}
+
+/* ---- Beams (fondo del hero) ---- */
+@utility beam {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.1;
+}
+
+@utility beam-1 {
+  top: -12rem;
+  left: 8%;
+  width: 34rem;
+  height: 26rem;
+  background: var(--brand);
+  animation: beam-drift 22s ease-in-out infinite alternate;
+}
+
+@utility beam-2 {
+  top: -6rem;
+  right: 4%;
+  width: 30rem;
+  height: 24rem;
+  background: var(--brand-dark);
+  animation: beam-drift 28s ease-in-out infinite alternate-reverse;
+}
+
+@utility beam-3 {
+  top: 6rem;
+  left: 38%;
+  width: 26rem;
+  height: 20rem;
+  background: var(--ink);
+  opacity: 0.08;
+  animation: beam-drift 34s ease-in-out infinite alternate;
+}
+
+@keyframes beam-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  100% {
+    transform: translate3d(4rem, 2rem, 0) scale(1.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .beam,
+  .star-border-glow {
+    animation: none !important;
+  }
+}
