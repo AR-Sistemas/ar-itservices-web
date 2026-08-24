@@ -39,7 +39,7 @@ function BentoTile({ card }: { card: BentoCard }) {
       ref={ref}
       onMouseMove={onMove}
       className={`magic-card group relative overflow-hidden rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40 ${
-        large ? "sm:col-span-2 lg:row-span-2 lg:min-h-64" : ""
+        large ? "sm:col-span-2 lg:p-9" : ""
       }`}
     >
       <span className="magic-card-spotlight" aria-hidden="true" />
