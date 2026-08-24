@@ -12,6 +12,10 @@ import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
+import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
+import josePhoto from "@/assets/jose-romanutti.png.asset.json";
+import adrianPhoto from "@/assets/adrian-ferrari.png.asset.json";
+import constanzaPhoto from "@/assets/constanza-giordano.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -120,24 +124,29 @@ const PEOPLE = [
   {
     name: "Felix Melinsky",
     role: "Fundador & Presidente",
+    photo: felixPhoto.url,
     quote: "Empezamos hace 25 años haciendo el trabajo. Seguimos haciéndolo.",
   },
   {
     name: "Jose Romanutti",
     role: "Socio & CEO",
+    photo: josePhoto.url,
     quote: "El cliente no compra tecnología: compra un resultado que se pueda medir.",
   },
   {
     name: "Adrián Ferrari",
     role: "Socio & Director de Operaciones",
+    photo: adrianPhoto.url,
     quote: "Un equipo bien armado resuelve más que cualquier metodología de moda.",
   },
   {
     name: "Constanza Giordano",
     role: "Directora de Talento",
+    photo: constanzaPhoto.url,
     quote: "Buscamos gente que quiera quedarse, no perfiles que encajen en una grilla.",
   },
 ];
+
 
 const OFFICES = [
   { city: "Dallas", country: "Estados Unidos", address: "Dallas, Texas" },
@@ -358,11 +367,14 @@ function Home() {
                 <AnimatedContent key={p.name} delay={i * 60}>
                   <figure>
                     <TiltedCard>
-                      <div
-                        className="aspect-4/5 w-full rounded-xl bg-secondary"
-                        role="img"
-                        aria-label={`Retrato de ${p.name}`}
-                      />
+                      <div className="flex aspect-4/5 w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-5">
+                        <img
+                          src={p.photo}
+                          alt={`Retrato de ${p.name}`}
+                          loading="lazy"
+                          className="aspect-square w-full rounded-full object-cover ring-1 ring-primary/25"
+                        />
+                      </div>
                     </TiltedCard>
                     <figcaption className="mt-4">
                       <p className="font-semibold">{p.name}</p>
