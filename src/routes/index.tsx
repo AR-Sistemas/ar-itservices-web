@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import logoColor from "@/assets/ar-logo-color.jpg.asset.json";
+import logoWhite from "@/assets/ar-logo-white.png";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
