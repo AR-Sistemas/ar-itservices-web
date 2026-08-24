@@ -155,7 +155,7 @@ function Home() {
             <img
               src={logoColor.url}
               alt="AR IT Services"
-              className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
+              className="h-11 w-auto shrink-0 object-contain"
             />
           </a>
           <div className="flex items-center gap-6">
@@ -439,7 +439,7 @@ function Home() {
             <img
               src={logoColor.url}
               alt="AR IT Services"
-              className="h-14 w-auto object-contain brightness-0 invert"
+              className="h-14 w-auto object-contain"
             />
             <p className="mt-5 text-sm">
               Software, datos y equipos dedicados desde 2001.
