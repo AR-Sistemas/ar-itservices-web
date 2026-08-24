@@ -8,6 +8,7 @@ import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
+import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
@@ -294,7 +295,7 @@ function Home() {
                 <AnimatedContent key={c.client} delay={i * 80}>
                   <SpotlightCard
                     as="article"
-                    className="border-t border-border bg-card pt-8"
+                    className="rounded-2xl border border-border bg-card p-8"
                   >
                     <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     <h3 className="text-xl font-bold">{c.client}</h3>
@@ -325,16 +326,23 @@ function Home() {
           <div className="mx-auto max-w-5xl">
             <AnimatedContent>
               <h2 className="text-2xl font-bold tracking-tight">Stack con el que trabajamos</h2>
-              <ul className="mt-8 flex flex-wrap gap-3">
-                {STACK.map((t) => (
-                  <li
-                    key={t}
-                    className="rounded-full border border-border bg-card px-4 py-2 font-mono text-sm text-foreground"
-                  >
-                    {t}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-8">
+                <LogoLoop
+                  speed={40}
+                  direction="left"
+                  pauseOnHover
+                  fadeOut
+                  fadeOutColor="var(--background)"
+                  logos={STACK.map((t) => (
+                    <span
+                      key={t}
+                      className="inline-flex rounded-full border border-border bg-card px-4 py-2 font-mono text-sm text-foreground"
+                    >
+                      {t}
+                    </span>
+                  ))}
+                />
+              </div>
             </AnimatedContent>
           </div>
         </section>
