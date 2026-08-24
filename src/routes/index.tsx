@@ -362,7 +362,7 @@ function Home() {
             </h2>
             <a
               href="#contacto"
-              className="mt-8 inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-white transition-opacity hover:opacity-90"
+              className="mt-8 inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-foreground transition-opacity hover:opacity-90"
             >
               Escribinos
             </a>
@@ -436,14 +436,11 @@ function Home() {
       <footer id="carreras" className="px-5 py-16 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
-            {/* Logo sobre placa blanca: nunca se altera el logo original sobre fondo oscuro */}
-            <div className="inline-flex rounded-xl bg-white p-4">
-              <img
-                src={logoColor.url}
-                alt="AR IT Services"
-                className="h-14 w-auto object-contain"
-              />
-            </div>
+            <img
+              src={logoColor.url}
+              alt="AR IT Services"
+              className="h-14 w-auto object-contain brightness-0 invert"
+            />
             <p className="mt-5 text-sm">
               Software, datos y equipos dedicados desde 2001.
             </p>
