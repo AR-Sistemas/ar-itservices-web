@@ -1,6 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
+import { Counter } from "@/components/site/Counter";
+import { SpotlightCard } from "@/components/site/SpotlightCard";
+import { TiltedCard } from "@/components/site/TiltedCard";
+import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
@@ -40,10 +44,10 @@ const NAV = [
 ];
 
 const METRICS = [
-  { value: "25+", label: "años de trayectoria" },
-  { value: "2.000+", label: "proyectos entregados" },
-  { value: "3", label: "países con oficina propia" },
-  { value: "2M+", label: "horas-hombre con Claro" },
+  { value: 25, suffix: "+", label: "años de trayectoria" },
+  { value: 2000, suffix: "+", label: "proyectos entregados" },
+  { value: 3, suffix: "", label: "países con oficina propia" },
+  { value: 2, suffix: "M+", label: "horas-hombre con Claro" },
 ];
 
 const SERVICES: BentoCard[] = [
@@ -145,6 +149,9 @@ const OFFICES = [
 function Home() {
   const [lang, setLang] = useState<"ES" | "EN">("ES");
   const [sent, setSent] = useState(false);
+  const headerCta = useSpringPress<HTMLAnchorElement>();
+  const finalCta = useSpringPress<HTMLAnchorElement>();
+  const submitCta = useSpringPress<HTMLButtonElement>();
 
   return (
     <div className="min-h-screen bg-background">
@@ -189,6 +196,8 @@ function Home() {
               ))}
             </div>
             <a
+              ref={headerCta.ref}
+              onMouseDown={headerCta.press}
               href="#contacto"
               className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
             >
@@ -241,7 +250,8 @@ function Home() {
               {METRICS.map((m) => (
                 <div key={m.label}>
                   <p className="font-display text-4xl font-extrabold text-foreground sm:text-5xl">
-                    {m.value}
+                    <Counter value={m.value} />
+                    {m.suffix}
                   </p>
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
@@ -282,7 +292,11 @@ function Home() {
             <div className="mt-12 space-y-14">
               {CASES.map((c, i) => (
                 <AnimatedContent key={c.client} delay={i * 80}>
-                  <article className="grid gap-6 border-t border-border bg-card pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                  <SpotlightCard
+                    as="article"
+                    className="border-t border-border bg-card pt-8"
+                  >
+                    <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     <h3 className="text-xl font-bold">{c.client}</h3>
                     <div className="space-y-5">
                       <div>
@@ -298,7 +312,8 @@ function Home() {
                         <p className="mt-2 text-foreground">{c.result}</p>
                       </div>
                     </div>
-                  </article>
+                    </div>
+                  </SpotlightCard>
                 </AnimatedContent>
               ))}
             </div>
@@ -334,11 +349,13 @@ function Home() {
               {PEOPLE.map((p, i) => (
                 <AnimatedContent key={p.name} delay={i * 60}>
                   <figure>
-                    <div
-                      className="aspect-4/5 w-full rounded-xl bg-secondary"
-                      role="img"
-                      aria-label={`Retrato de ${p.name}`}
-                    />
+                    <TiltedCard>
+                      <div
+                        className="aspect-4/5 w-full rounded-xl bg-secondary"
+                        role="img"
+                        aria-label={`Retrato de ${p.name}`}
+                      />
+                    </TiltedCard>
                     <figcaption className="mt-4">
                       <p className="font-semibold">{p.name}</p>
                       <p className="text-sm text-muted-foreground">{p.role}</p>
@@ -360,6 +377,8 @@ function Home() {
               ¿Armamos el equipo que tu proyecto necesita?
             </h2>
             <a
+              ref={finalCta.ref}
+              onMouseDown={finalCta.press}
               href="#contacto"
               className="mt-8 inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-foreground transition-opacity hover:opacity-90"
             >
@@ -415,6 +434,8 @@ function Home() {
                 </div>
                 <div className="sm:col-span-2">
                   <button
+                    ref={submitCta.ref}
+                    onMouseDown={submitCta.press}
                     type="submit"
                     className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
                   >
