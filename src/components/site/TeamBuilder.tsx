@@ -71,10 +71,10 @@ export function TeamBuilder() {
         <p className="font-mono text-xs tracking-widest text-primary">
           // selecciona las disciplinas
         </p>
-        <h2 className="mt-4 text-3xl font-bold text-white sm:text-4xl">
+        <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">
           Armá el equipo que tu proyecto necesita
         </h2>
-        <p className="mt-4 max-w-md text-white/70">
+        <p className="mt-4 max-w-md text-muted-foreground">
           Tocá las disciplinas y mirá cómo se arma el equipo. Es exactamente lo que hacemos con
           nuestros clientes: perfiles concretos, cantidades concretas.
         </p>
@@ -91,7 +91,7 @@ export function TeamBuilder() {
                 className={`rounded-full border px-4 py-2 font-mono text-sm transition-colors ${
                   on
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-white/20 text-white/80 hover:border-white/50"
+                    : "border-border text-muted-foreground hover:border-muted-foreground"
                 }`}
               >
                 {d.label}
@@ -101,26 +101,26 @@ export function TeamBuilder() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8">
+      <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
         <div className="flex items-baseline justify-between">
-          <p className="font-mono text-xs tracking-widest text-white/50">// equipo propuesto</p>
-          <p className="font-mono text-sm text-white/70">
+          <p className="font-mono text-xs tracking-widest text-muted-foreground">// equipo propuesto</p>
+          <p className="font-mono text-sm text-muted-foreground">
             {total} {total === 1 ? "persona" : "personas"}
           </p>
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2" aria-live="polite">
           {team.length === 0 && (
-            <p className="text-sm text-white/60 sm:col-span-2">
+            <p className="text-sm text-muted-foreground sm:col-span-2">
               Seleccioná al menos una disciplina para ver tu equipo.
             </p>
           )}
           {team.map((t) => (
             <div
               key={t.role}
-              className="flex items-center justify-between rounded-xl border border-white/10 bg-ink/60 px-4 py-3"
+              className="flex items-center justify-between rounded-xl border border-border bg-background/60 px-4 py-3"
             >
-              <span className="text-sm text-white">{t.role}</span>
+              <span className="text-sm text-foreground">{t.role}</span>
               <span className="font-mono text-sm text-primary">×{t.qty}</span>
             </div>
           ))}
