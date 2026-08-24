@@ -1,8 +1,9 @@
 import type { ReactNode } from "react";
+import { useSpringPress } from "./useSpringPress";
 
 /**
  * Star Border (React Bits) recoloreado a la paleta AR: acento rojo #FF000D.
- * Único elemento con movimiento continuo en la página.
+ * Suma rebote físico (Anime.js spring) al click, sin tocar la animación del borde.
  */
 export function StarBorder({
   children,
@@ -15,9 +16,13 @@ export function StarBorder({
   speed?: string;
   className?: string;
 }) {
+  const { ref, press } = useSpringPress<HTMLAnchorElement>();
+
   return (
     <a
+      ref={ref}
       href={href}
+      onMouseDown={press}
       className={`star-border relative inline-block overflow-hidden rounded-full p-[1.5px] ${className}`}
     >
       <span
