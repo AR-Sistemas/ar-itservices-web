@@ -367,11 +367,14 @@ function Home() {
                 <AnimatedContent key={p.name} delay={i * 60}>
                   <figure>
                     <TiltedCard>
-                      <div
-                        className="aspect-4/5 w-full rounded-xl bg-secondary"
-                        role="img"
-                        aria-label={`Retrato de ${p.name}`}
-                      />
+                      <div className="flex aspect-4/5 w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-5">
+                        <img
+                          src={p.photo}
+                          alt={`Retrato de ${p.name}`}
+                          loading="lazy"
+                          className="aspect-square w-full rounded-full object-cover ring-1 ring-primary/25"
+                        />
+                      </div>
                     </TiltedCard>
                     <figcaption className="mt-4">
                       <p className="font-semibold">{p.name}</p>
