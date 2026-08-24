@@ -12,6 +12,10 @@ import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
+import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
+import josePhoto from "@/assets/jose-romanutti.png.asset.json";
+import adrianPhoto from "@/assets/adrian-ferrari.png.asset.json";
+import constanzaPhoto from "@/assets/constanza-giordano.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
