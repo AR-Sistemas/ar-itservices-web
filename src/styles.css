@@ -298,3 +298,41 @@
     animation: none !important;
   }
 }
+
+/* ---- Spotlight Card (React Bits) — glow radial rojo tenue ---- */
+@utility spotlight-card-glow {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease-out;
+  background: radial-gradient(
+    300px circle at var(--sx, 50%) var(--sy, 50%),
+    var(--spotlight-color, rgba(255, 0, 13, 0.12)),
+    transparent 70%
+  );
+}
+
+.spotlight-card:hover .spotlight-card-glow {
+  opacity: 1;
+}
+
+/* ---- Border Glow (React Bits) recoloreado a la paleta AR ---- */
+@utility border-glow-line {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background: radial-gradient(
+    220px circle at var(--gx, 50%) var(--gy, 50%),
+    #ff000d,
+    #990f1b 45%,
+    transparent 72%
+  );
+  opacity: 0.35;
+  transition: opacity 0.35s ease-out;
+}
+
+.border-glow:hover .border-glow-line {
+  opacity: 1;
+}

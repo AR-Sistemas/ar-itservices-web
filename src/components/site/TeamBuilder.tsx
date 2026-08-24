@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useSpringPress } from "./useSpringPress";
 
 /** Disciplinas editables del widget de armado de equipo. */
 const DISCIPLINES = [
@@ -50,6 +51,7 @@ const DISCIPLINES = [
 
 export function TeamBuilder() {
   const [selected, setSelected] = useState<string[]>(["dotnet-react", "data-bi"]);
+  const cta = useSpringPress<HTMLAnchorElement>();
 
   const team = useMemo(() => {
     const map = new Map<string, number>();
@@ -127,6 +129,8 @@ export function TeamBuilder() {
         </div>
 
         <a
+          ref={cta.ref}
+          onMouseDown={cta.press}
           href="#contacto"
           className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
         >
