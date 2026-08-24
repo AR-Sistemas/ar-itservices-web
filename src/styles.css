@@ -336,3 +336,28 @@
 .border-glow:hover .border-glow-line {
   opacity: 1;
 }
+
+@keyframes logo-loop-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.logo-loop-track {
+  animation-name: logo-loop-scroll;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.logo-loop-pausable:hover {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-loop-track {
+    animation: none;
+  }
+}
