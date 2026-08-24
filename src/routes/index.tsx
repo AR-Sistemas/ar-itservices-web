@@ -152,7 +152,7 @@ function Home() {
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3">
           <a href="#top" className="flex min-w-0 items-center p-3" aria-label="AR IT Services">
             <img
-              src={logoWhite}
+              src="/ar-logo-white.png"
               alt="AR IT Services"
               className="h-11 w-auto shrink-0 object-contain"
             />
@@ -436,7 +436,7 @@ function Home() {
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
             <img
-              src={logoWhite}
+              src="/ar-logo-white.png"
               alt="AR IT Services"
               className="h-14 w-auto object-contain"
             />
