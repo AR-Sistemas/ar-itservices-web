@@ -155,7 +155,7 @@ function Home() {
             <img
               src={logoColor.url}
               alt="AR IT Services"
-              className="h-11 w-auto shrink-0 object-contain"
+              className="h-11 w-auto shrink-0 object-contain brightness-0 invert"
             />
           </a>
           <div className="flex items-center gap-6">
@@ -226,7 +226,7 @@ function Home() {
                 </StarBorder>
                 <a
                   href="#casos"
-                  className="rounded-full border border-ink/25 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-ink"
+                  className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
                 >
                   Ver casos de éxito
                 </a>
@@ -266,7 +266,7 @@ function Home() {
         </section>
 
         {/* Sección firma */}
-        <section className="bg-ink px-5 py-24 sm:py-32">
+        <section className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <TeamBuilder />
@@ -283,7 +283,7 @@ function Home() {
             <div className="mt-12 space-y-14">
               {CASES.map((c, i) => (
                 <AnimatedContent key={c.client} delay={i * 80}>
-                  <article className="grid gap-6 border-t border-border pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                  <article className="grid gap-6 border-t border-border bg-card pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     <h3 className="text-xl font-bold">{c.client}</h3>
                     <div className="space-y-5">
                       <div>
@@ -307,7 +307,7 @@ function Home() {
         </section>
 
         {/* Stack */}
-        <section className="border-y border-border bg-secondary px-5 py-20">
+        <section className="border-y border-border px-5 py-20">
           <div className="mx-auto max-w-5xl">
             <AnimatedContent>
               <h2 className="text-2xl font-bold tracking-tight">Stack con el que trabajamos</h2>
@@ -395,7 +395,7 @@ function Home() {
                   <select
                     id="tipo"
                     name="tipo"
-                    className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm"
+                    className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   >
                     <option>Desarrollo web/mobile</option>
                     <option>Data &amp; BI</option>
@@ -411,7 +411,7 @@ function Home() {
                     id="mensaje"
                     name="mensaje"
                     rows={5}
-                    className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm"
+                    className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   />
                 </div>
                 <div className="sm:col-span-2">
@@ -433,7 +433,7 @@ function Home() {
         </section>
       </main>
 
-      <footer id="carreras" className="bg-ink px-5 py-16 text-white/70">
+      <footer id="carreras" className="px-5 py-16 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
             {/* Logo sobre placa blanca: nunca se altera el logo original sobre fondo oscuro */}
@@ -449,21 +449,21 @@ function Home() {
             </p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white">Oficinas</h3>
+            <h3 className="text-sm font-semibold text-foreground">Oficinas</h3>
             <ul className="mt-4 space-y-3 text-sm">
               {OFFICES.map((o) => (
                 <li key={o.city}>
-                  <span className="text-white">{o.city}</span> — {o.address}, {o.country}
+                  <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white">Secciones</h3>
+            <h3 className="text-sm font-semibold text-foreground">Secciones</h3>
             <ul className="mt-4 space-y-3 text-sm">
               {NAV.map((n) => (
                 <li key={n.href}>
-                  <a href={n.href} className="transition-colors hover:text-white">
+                  <a href={n.href} className="transition-colors hover:text-foreground">
                     {n.label}
                   </a>
                 </li>
@@ -471,11 +471,11 @@ function Home() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-white">Seguinos</h3>
+            <h3 className="text-sm font-semibold text-foreground">Seguinos</h3>
             <ul className="mt-4 space-y-3 text-sm">
               {["LinkedIn", "Instagram", "WhatsApp"].map((s) => (
                 <li key={s}>
-                  <a href="#contacto" className="transition-colors hover:text-white">
+                  <a href="#contacto" className="transition-colors hover:text-foreground">
                     {s}
                   </a>
                 </li>
@@ -502,7 +502,7 @@ function Field({ id, label, type = "text" }: { id: string; label: string; type?:
         name={id}
         type={type}
         required
-        className="mt-2 w-full rounded-lg border border-input bg-background px-4 py-3 text-sm"
+        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
       />
     </div>
   );
