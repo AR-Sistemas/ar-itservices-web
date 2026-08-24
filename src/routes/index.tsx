@@ -1,7 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import logoColor from "@/assets/ar-logo-color.jpg.asset.json";
-import { Reveal } from "@/components/site/Reveal";
+import { AnimatedContent } from "@/components/site/AnimatedContent";
+import { Beams } from "@/components/site/Beams";
+import { BlurText } from "@/components/site/BlurText";
+import { LogoDraw } from "@/components/site/LogoDraw";
+import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
+import { StarBorder } from "@/components/site/StarBorder";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 
 export const Route = createFileRoute("/")({
@@ -42,14 +47,18 @@ const METRICS = [
   { value: "2M+", label: "horas-hombre con Claro" },
 ];
 
-const SERVICES = [
+const SERVICES: BentoCard[] = [
   {
     title: "Desarrollo Web & Mobile",
-    desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen.",
+    desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
+    label: "Producto",
+    span: "large",
   },
   {
     title: "Ciencia de Datos & BI",
-    desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI.",
+    desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI que se usan todos los días.",
+    label: "Datos e IA",
+    span: "large",
   },
   {
     title: "QA & Testing",
@@ -193,28 +202,28 @@ function Home() {
       <main id="top">
         {/* Hero */}
         <section className="relative px-5 pt-20 pb-40 sm:pt-28">
-          <div className="mx-auto max-w-4xl text-center">
-            <Reveal>
-              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                AR IT Services · Dallas · Córdoba · Asunción
-              </p>
-              <h1 className="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-6xl">
-                Armamos el equipo exacto que tu producto necesita,{" "}
-                <span className="text-primary">con datos e IA en el flujo</span>, no como promesa.
-              </h1>
+          <Beams />
+          <div className="relative mx-auto max-w-4xl text-center">
+            <LogoDraw className="mx-auto h-16 w-auto text-primary" />
+            <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
+              AR IT Services · Dallas · Córdoba · Asunción
+            </p>
+            <h1 className="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-6xl">
+              <BlurText
+                text="Armamos el equipo exacto que tu producto necesita, con datos e IA en el flujo, no como promesa."
+                highlightFrom={8}
+                highlightTo={15}
+              />
+            </h1>
+            <AnimatedContent delay={400} distance={24}>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
                 25 años desarrollando software, modelos de datos y equipos dedicados para empresas y
                 gobiernos, desde tres países.
               </p>
-            </Reveal>
-            <Reveal delay={120}>
-              <div className="mt-9 flex flex-wrap justify-center gap-3">
-                <a
-                  href="#contacto"
-                  className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-                >
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+                <StarBorder href="#contacto" className="group">
                   Hablemos de tu proyecto
-                </a>
+                </StarBorder>
                 <a
                   href="#casos"
                   className="rounded-full border border-ink/25 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-ink"
@@ -222,13 +231,13 @@ function Home() {
                   Ver casos de éxito
                 </a>
               </div>
-            </Reveal>
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Métricas */}
         <section className="relative -mt-28 px-5">
-          <Reveal className="mx-auto max-w-5xl">
+          <AnimatedContent className="mx-auto max-w-5xl">
             <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-4">
               {METRICS.map((m) => (
                 <div key={m.label}>
@@ -239,48 +248,41 @@ function Home() {
                 </div>
               ))}
             </div>
-          </Reveal>
+          </AnimatedContent>
         </section>
 
         {/* Servicios */}
         <section id="servicios" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl">
-            <Reveal>
+            <AnimatedContent>
               <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
                 Qué hacemos
               </h2>
-            </Reveal>
-            <div className="mt-12 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
-              {SERVICES.map((s, i) => (
-                <Reveal key={s.title} delay={i * 60}>
-                  <div className="border-t border-border pt-6">
-                    <h3 className="text-lg font-semibold">{s.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{s.desc}</p>
-                  </div>
-                </Reveal>
-              ))}
-            </div>
+            </AnimatedContent>
+            <AnimatedContent className="mt-12" distance={30}>
+              <MagicBento cards={SERVICES} />
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Sección firma */}
         <section className="bg-ink px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl">
-            <Reveal>
+            <AnimatedContent>
               <TeamBuilder />
-            </Reveal>
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Casos */}
         <section id="casos" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-5xl">
-            <Reveal>
+            <AnimatedContent>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Casos de éxito</h2>
-            </Reveal>
+            </AnimatedContent>
             <div className="mt-12 space-y-14">
               {CASES.map((c, i) => (
-                <Reveal key={c.client} delay={i * 80}>
+                <AnimatedContent key={c.client} delay={i * 80}>
                   <article className="grid gap-6 border-t border-border pt-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     <h3 className="text-xl font-bold">{c.client}</h3>
                     <div className="space-y-5">
@@ -298,7 +300,7 @@ function Home() {
                       </div>
                     </div>
                   </article>
-                </Reveal>
+                </AnimatedContent>
               ))}
             </div>
           </div>
@@ -307,7 +309,7 @@ function Home() {
         {/* Stack */}
         <section className="border-y border-border bg-secondary px-5 py-20">
           <div className="mx-auto max-w-5xl">
-            <Reveal>
+            <AnimatedContent>
               <h2 className="text-2xl font-bold tracking-tight">Stack con el que trabajamos</h2>
               <ul className="mt-8 flex flex-wrap gap-3">
                 {STACK.map((t) => (
@@ -319,19 +321,19 @@ function Home() {
                   </li>
                 ))}
               </ul>
-            </Reveal>
+            </AnimatedContent>
           </div>
         </section>
 
         {/* Nuestra gente */}
         <section id="nosotros" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl">
-            <Reveal>
+            <AnimatedContent>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Nuestra gente</h2>
-            </Reveal>
+            </AnimatedContent>
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
               {PEOPLE.map((p, i) => (
-                <Reveal key={p.name} delay={i * 60}>
+                <AnimatedContent key={p.name} delay={i * 60}>
                   <figure>
                     <div
                       className="aspect-4/5 w-full rounded-xl bg-secondary"
@@ -346,7 +348,7 @@ function Home() {
                       “{p.quote}”
                     </blockquote>
                   </figure>
-                </Reveal>
+                </AnimatedContent>
               ))}
             </div>
           </div>
@@ -354,7 +356,7 @@ function Home() {
 
         {/* CTA final */}
         <section className="bg-primary px-5 py-20">
-          <Reveal className="mx-auto max-w-4xl text-center">
+          <AnimatedContent className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold text-primary-foreground sm:text-4xl">
               ¿Armamos el equipo que tu proyecto necesita?
             </h2>
@@ -364,13 +366,13 @@ function Home() {
             >
               Escribinos
             </a>
-          </Reveal>
+          </AnimatedContent>
         </section>
 
         {/* Contacto */}
         <section id="contacto" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-2xl">
-            <Reveal>
+            <AnimatedContent>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Contanos tu proyecto</h2>
               <p className="mt-3 text-muted-foreground">
                 Respondemos con una propuesta de equipo, no con un folleto.
@@ -426,7 +428,7 @@ function Home() {
                   )}
                 </div>
               </form>
-            </Reveal>
+            </AnimatedContent>
           </div>
         </section>
       </main>
