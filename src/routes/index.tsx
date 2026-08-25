@@ -8,6 +8,7 @@ import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
+import { LogoMark } from "@/components/site/LogoMark";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
@@ -168,11 +169,7 @@ function Home() {
       <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
         <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3">
           <a href="#top" className="flex min-w-0 items-center p-3" aria-label="AR IT Services">
-            <img
-              src="/ar-logo-white.png"
-              alt="AR IT Services"
-              className="h-11 w-auto shrink-0 object-contain"
-            />
+            <LogoMark className="h-11 w-auto shrink-0 text-foreground" />
           </a>
           <div className="flex items-center gap-6">
             <nav className="hidden items-center gap-6 lg:flex">
@@ -476,11 +473,7 @@ function Home() {
       <footer id="carreras" className="px-5 py-16 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
-            <img
-              src="/ar-logo-white.png"
-              alt="AR IT Services"
-              className="h-14 w-auto object-contain"
-            />
+            <LogoMark className="h-14 w-auto text-foreground" />
             <p className="mt-5 text-sm">
               Software, datos y equipos dedicados desde 2001.
             </p>

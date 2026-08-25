@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX } from "./LogoMark";
 
 /**
  * Isotipo "AR" real vectorizado del logotipo institucional, animado con
@@ -50,7 +51,7 @@ export function LogoDraw({ className = "" }: { className?: string }) {
   return (
     <svg
       ref={ref}
-      viewBox="0 0 400 246.7"
+      viewBox={AR_VIEWBOX}
       className={className}
       role="img"
       aria-label="AR IT Services"
@@ -58,13 +59,12 @@ export function LogoDraw({ className = "" }: { className?: string }) {
       <path
         id="ar-logo-a"
         className="ar-logo-path"
-        fillRule="evenodd"
         fill="#FF000D"
         stroke="#FF000D"
         strokeWidth={3}
         strokeLinejoin="round"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
-        d="M 168.5 0.0 L 112.6 0.3 L 0.0 246.1 L 54.2 246.1 L 85.1 178.8 L 221.8 243.6 L 249.3 246.1 L 263.6 237.8 L 267.3 228.4 L 265.9 218.1 Z M 140.4 58.5 L 209.7 214.3 L 95.4 156.2 Z"
+        d={AR_PATH_A}
       />
       <path
         id="ar-logo-r"
@@ -74,7 +74,7 @@ export function LogoDraw({ className = "" }: { className?: string }) {
         strokeWidth={3}
         strokeLinejoin="round"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
-        d="M 184.2 0.3 L 201.4 38.7 L 315.5 38.7 L 332.1 43.8 L 343.3 53.0 L 351.3 67.9 L 352.1 84.8 L 345.3 100.9 L 333.0 112.0 L 314.3 117.8 L 236.7 118.3 L 253.3 155.3 L 272.2 157.0 L 288.5 166.2 L 347.6 246.1 L 399.7 246.1 L 326.1 155.3 L 362.5 138.4 L 377.9 121.5 L 386.8 104.0 L 390.0 64.2 L 372.5 27.8 L 350.1 9.7 L 323.5 0.9 Z"
+        d={AR_PATH_R}
       />
     </svg>
   );
