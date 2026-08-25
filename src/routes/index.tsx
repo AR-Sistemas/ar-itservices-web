@@ -9,6 +9,7 @@ import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
 import { LogoMark } from "@/components/site/LogoMark";
+import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
@@ -104,21 +105,21 @@ const CASES = [
   },
 ];
 
-const STACK = [
-  ".NET",
-  "React",
-  "TypeScript",
-  "Angular",
-  "Python",
-  "Node.js",
-  "Swift",
-  "Kotlin",
-  "Power BI",
-  "n8n",
-  "AWS",
-  "Azure",
-  "GCP",
-  "Jira",
+const TECH = [
+  { name: ".NET", src: "/logos/dotnet.svg" },
+  { name: "React", src: "/logos/react.svg" },
+  { name: "TypeScript", src: "/logos/typescript.svg" },
+  { name: "Angular", src: "/logos/angular.svg" },
+  { name: "Python", src: "/logos/python.svg" },
+  { name: "Node.js", src: "/logos/nodejs.svg" },
+  { name: "Swift", src: "/logos/swift.svg" },
+  { name: "Kotlin", src: "/logos/kotlin.svg" },
+  { name: "Power BI", src: "/logos/powerbi.svg" },
+  { name: "n8n", src: "/logos/n8n.svg" },
+  { name: "AWS", src: "/logos/aws.svg" },
+  { name: "Azure", src: "/logos/azure.svg" },
+  { name: "GCP", src: "/logos/gcp.svg" },
+  { name: "Jira", src: "/logos/jira.svg" },
 ];
 
 const PEOPLE = [
@@ -160,59 +161,45 @@ const OFFICES = [
 function Home() {
   const [lang, setLang] = useState<"ES" | "EN">("ES");
   const [sent, setSent] = useState(false);
-  const headerCta = useSpringPress<HTMLAnchorElement>();
   const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
-        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3">
-          <a href="#top" className="flex min-w-0 items-center p-3" aria-label="AR IT Services">
-            <LogoMark className="h-11 w-auto shrink-0 text-foreground" />
-          </a>
-          <div className="flex items-center gap-6">
-            <nav className="hidden items-center gap-6 lg:flex">
-              {NAV.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
-            <div
-              className="hidden items-center gap-1 text-xs font-semibold sm:flex"
-              role="group"
-              aria-label="Idioma"
-            >
-              {(["ES", "EN"] as const).map((l) => (
-                <button
-                  key={l}
-                  type="button"
-                  aria-pressed={lang === l}
-                  onClick={() => setLang(l)}
-                  className={`rounded px-2 py-1 transition-colors ${
-                    lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-            <a
-              ref={headerCta.ref}
-              onMouseDown={headerCta.press}
-              href="#contacto"
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-            >
-              Hablemos
-            </a>
+    <div className="min-h-screen overflow-x-hidden bg-background">
+      <FloatingNav
+        items={NAV}
+        ctaLabel="Hablemos"
+        ctaHref="#contacto"
+        logo={
+          <span className="flex items-center gap-2 sm:gap-2.5">
+            <LogoMark className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
+            <span className="text-[0.7rem] font-semibold tracking-[0.25em] text-muted-foreground uppercase sm:text-xs">
+              IT Services
+            </span>
+          </span>
+        }
+        rightSlot={
+          <div
+            className="hidden items-center gap-1 text-xs font-semibold sm:flex"
+            role="group"
+            aria-label="Idioma"
+          >
+            {(["ES", "EN"] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                aria-pressed={lang === l}
+                onClick={() => setLang(l)}
+                className={`rounded px-2 py-1 transition-colors ${
+                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <main id="top">
         {/* Hero */}
@@ -339,12 +326,18 @@ function Home() {
                   pauseOnHover
                   fadeOut
                   fadeOutColor="var(--background)"
-                  logos={STACK.map((t) => (
+                  logos={TECH.map((t) => (
                     <span
-                      key={t}
-                      className="inline-flex rounded-full border border-border bg-card px-4 py-2 font-mono text-sm text-foreground"
+                      key={t.name}
+                      className="inline-flex items-center gap-2.5 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground"
                     >
-                      {t}
+                      <img
+                        src={t.src}
+                        alt={`Logo de ${t.name}`}
+                        loading="lazy"
+                        className="h-6 w-6 shrink-0 object-contain"
+                      />
+                      {t.name}
                     </span>
                   ))}
                 />
