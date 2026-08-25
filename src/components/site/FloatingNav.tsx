@@ -69,6 +69,11 @@ export function FloatingNav({
 
   // Visible mientras estemos scrolleados y haya actividad (o el menú esté abierto).
   const visible = shown && (active || menuOpen);
+  // Esfumado por inactividad (sigue scrolleado pero sin actividad): usamos una
+  // transición mucho más lenta para que el efecto se aprecie. La aparición y el
+  // rearmado mantienen su velocidad original.
+  const dissolving = shown && !visible;
+  const dur = dissolving ? "duration-[2200ms]" : "duration-500";
   const delay = (i: number) => (visible ? `${100 + i * 70}ms` : "0ms");
   const enter = visible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0";
   const tab = visible ? 0 : -1;
@@ -87,14 +92,14 @@ export function FloatingNav({
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
       <nav
         aria-hidden={!visible}
-        className={`w-full max-w-5xl rounded-2xl border border-white/10 bg-card/70 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/5 backdrop-blur-xl transition-all duration-500 ease-out ${island}`}
+        className={`w-full max-w-5xl rounded-2xl border border-white/10 bg-card/70 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/5 backdrop-blur-xl transition-all ${dur} ease-out ${island}`}
       >
         <div className="flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5">
           <a
             href="#top"
             aria-label="AR IT Services"
             tabIndex={tab}
-            className={`flex min-w-0 items-center transition-all duration-500 ease-out ${enter}`}
+            className={`flex min-w-0 items-center transition-all ${dur} ease-out ${enter}`}
             style={{ transitionDelay: delay(0) }}
           >
             {logo}
@@ -106,7 +111,7 @@ export function FloatingNav({
                 key={n.href}
                 href={n.href}
                 tabIndex={tab}
-                className={`text-sm font-medium text-muted-foreground transition-all duration-500 ease-out hover:text-foreground ${enter}`}
+                className={`text-sm font-medium text-muted-foreground transition-all ${dur} ease-out hover:text-foreground ${enter}`}
                 style={{ transitionDelay: delay(i + 1) }}
               >
                 {n.label}
@@ -115,7 +120,7 @@ export function FloatingNav({
           </div>
 
           <div
-            className={`flex items-center gap-2 transition-all duration-500 ease-out sm:gap-4 ${enter}`}
+            className={`flex items-center gap-2 transition-all ${dur} ease-out sm:gap-4 ${enter}`}
             style={{ transitionDelay: delay(items.length + 1) }}
           >
             {rightSlot}
