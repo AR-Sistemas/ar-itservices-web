@@ -10,8 +10,7 @@ import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX } from "./LogoMark";
  * Usa ids propios (nav-logo-*) para no colisionar con el `svg.createDrawable`
  * del logo del hero, que selecciona por id global.
  *
- * Se dispara una sola vez, cuando `play` pasa a true (la primera vez que la
- * barra se hace visible).
+ * Se redibuja cada vez que `play` pasa a true (cada vez que la barra reaparece).
  */
 export function LogoDrawInline({
   className = "",
@@ -25,57 +24,59 @@ export function LogoDrawInline({
   fillColor?: string;
 }) {
   const ref = useRef<SVGSVGElement>(null);
-  const played = useRef(false);
 
   useEffect(() => {
-    if (!play || played.current) return;
+    if (!play) return;
     const el = ref.current;
     if (!el) return;
     const paths = Array.from(el.querySelectorAll<SVGPathElement>(".ar-draw-path"));
-    played.current = true;
 
-    const showFinal = () => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       for (const p of paths) {
         p.style.fillOpacity = "1";
         p.style.strokeOpacity = "0";
       }
-    };
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      showFinal();
       return;
     }
 
     let cancelled = false;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const running: any[] = [];
     void (async () => {
       const { animate, svg } = await import("animejs");
       if (cancelled) return;
+      // Reset: contorno rojo visible, relleno oculto (para redibujar de cero).
       for (const p of paths) {
         p.style.strokeOpacity = "1";
         p.style.fillOpacity = "0";
       }
       // 1) Se dibuja el contorno rojo (la "reescritura").
-      animate(svg.createDrawable("#nav-logo-a"), {
-        draw: ["0 0", "0 1"],
-        ease: "inOutQuad",
-        duration: 550,
-      });
-      animate(svg.createDrawable("#nav-logo-r"), {
-        draw: ["0 0", "0 1"],
-        ease: "inOutQuad",
-        duration: 550,
-        delay: 150,
-      });
-      // 2) El relleno blanco entra y el trazo rojo se desvanece (crossfade).
-      animate(paths, {
-        fillOpacity: [0, 1],
-        strokeOpacity: [1, 0],
-        ease: "outQuad",
-        duration: 420,
-        delay: 720,
-      });
+      running.push(
+        animate(svg.createDrawable("#nav-logo-a"), {
+          draw: ["0 0", "0 1"],
+          ease: "inOutQuad",
+          duration: 1100,
+        }),
+        animate(svg.createDrawable("#nav-logo-r"), {
+          draw: ["0 0", "0 1"],
+          ease: "inOutQuad",
+          duration: 1100,
+          delay: 300,
+        }),
+        // 2) El relleno blanco entra y el trazo rojo se desvanece (crossfade).
+        animate(paths, {
+          fillOpacity: [0, 1],
+          strokeOpacity: [1, 0],
+          ease: "outQuad",
+          duration: 650,
+          delay: 1450,
+        }),
+      );
     })();
     return () => {
       cancelled = true;
+      // Corta cualquier animación en curso si la barra se esfuma a mitad.
+      for (const a of running) a?.pause?.();
     };
   }, [play]);
 
