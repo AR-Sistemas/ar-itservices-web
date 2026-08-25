@@ -9,6 +9,7 @@ import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
 import { LogoMark } from "@/components/site/LogoMark";
+import { CardNav, type CardNavCard } from "@/components/site/CardNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
@@ -47,6 +48,31 @@ const NAV = [
   { label: "Casos de éxito", href: "#casos" },
   { label: "Nosotros", href: "#nosotros" },
   { label: "Carreras", href: "#carreras" },
+];
+
+const NAV_CARDS: CardNavCard[] = [
+  {
+    label: "Qué hacemos",
+    links: [
+      { label: "Servicios", href: "#servicios" },
+      { label: "Casos de éxito", href: "#casos" },
+    ],
+  },
+  {
+    label: "Compañía",
+    links: [
+      { label: "Nosotros", href: "#nosotros" },
+      { label: "Carreras", href: "#carreras" },
+    ],
+  },
+  {
+    label: "Hablemos",
+    accent: true,
+    links: [
+      { label: "Contactanos", href: "#contacto" },
+      { label: "Nuestras oficinas", href: "#carreras" },
+    ],
+  },
 ];
 
 const METRICS = [
@@ -160,63 +186,49 @@ const OFFICES = [
 function Home() {
   const [lang, setLang] = useState<"ES" | "EN">("ES");
   const [sent, setSent] = useState(false);
-  const headerCta = useSpringPress<HTMLAnchorElement>();
   const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-50 border-b border-border/80 bg-background/90 backdrop-blur">
-        <div className="mx-auto grid max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-5 py-3">
-          <a href="#top" className="flex min-w-0 items-center p-3" aria-label="AR IT Services">
-            <LogoMark className="h-11 w-auto shrink-0 text-foreground" />
-          </a>
-          <div className="flex items-center gap-6">
-            <nav className="hidden items-center gap-6 lg:flex">
-              {NAV.map((n) => (
-                <a
-                  key={n.href}
-                  href={n.href}
-                  className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {n.label}
-                </a>
-              ))}
-            </nav>
-            <div
-              className="hidden items-center gap-1 text-xs font-semibold sm:flex"
-              role="group"
-              aria-label="Idioma"
-            >
-              {(["ES", "EN"] as const).map((l) => (
-                <button
-                  key={l}
-                  type="button"
-                  aria-pressed={lang === l}
-                  onClick={() => setLang(l)}
-                  className={`rounded px-2 py-1 transition-colors ${
-                    lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {l}
-                </button>
-              ))}
-            </div>
-            <a
-              ref={headerCta.ref}
-              onMouseDown={headerCta.press}
-              href="#contacto"
-              className="rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-            >
-              Hablemos
-            </a>
+    <div className="min-h-screen overflow-x-hidden bg-background">
+      <CardNav
+        cards={NAV_CARDS}
+        ctaLabel="Hablemos"
+        ctaHref="#contacto"
+        logo={
+          <span className="flex items-center gap-2 sm:gap-2.5">
+            <LogoMark className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
+            <span className="text-[0.7rem] font-semibold tracking-[0.25em] text-muted-foreground uppercase sm:text-xs">
+              IT Services
+            </span>
+          </span>
+        }
+        rightSlot={
+          <div
+            className="hidden items-center gap-1 text-xs font-semibold sm:flex"
+            role="group"
+            aria-label="Idioma"
+          >
+            {(["ES", "EN"] as const).map((l) => (
+              <button
+                key={l}
+                type="button"
+                aria-pressed={lang === l}
+                onClick={() => setLang(l)}
+                className={`rounded px-2 py-1 transition-colors ${
+                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {l}
+              </button>
+            ))}
           </div>
-        </div>
-      </header>
+        }
+      />
 
       <main id="top">
         {/* Hero */}
-        <section className="relative px-5 pt-20 pb-40 sm:pt-28">
+        <section className="relative px-5 pt-16 pb-36 sm:pt-24 sm:pb-40">
           <Beams />
           <div className="relative mx-auto max-w-4xl text-center">
             <LogoDraw className="mx-auto h-16 w-auto text-primary" />
