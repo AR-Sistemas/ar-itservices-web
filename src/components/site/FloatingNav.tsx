@@ -10,6 +10,9 @@ export type NavItem = { label: string; href: string };
  *    y hace fade, y sus elementos (logo, links, CTA) entran escalonados.
  *  - Una vez visible, queda fija (`position: fixed`) y acompaña el scroll.
  *  - Despegada del fondo: bordes redondeados, sombra, blur y ring sutil.
+ *  - Tras unos segundos de inactividad se "esfuma" (blur + fade, el inverso de
+ *    materializarse) y reaparece con cualquier interacción (mouse, scroll, tecla,
+ *    touch), volviendo a armarse con el mismo stagger.
  *  - Responsive: en pantallas chicas los links pasan a un menú desplegable.
  */
 export function FloatingNav({
@@ -19,6 +22,7 @@ export function FloatingNav({
   ctaHref = "#contacto",
   rightSlot,
   revealAt = 120,
+  idleMs = 3500,
 }: {
   logo: ReactNode;
   items: NavItem[];
@@ -26,8 +30,10 @@ export function FloatingNav({
   ctaHref?: string;
   rightSlot?: ReactNode;
   revealAt?: number;
+  idleMs?: number;
 }) {
   const [shown, setShown] = useState(false);
+  const [active, setActive] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const cta = useSpringPress<HTMLAnchorElement>();
 
@@ -38,22 +44,50 @@ export function FloatingNav({
     return () => window.removeEventListener("scroll", onScroll);
   }, [revealAt]);
 
+  // Detección de inactividad: cada interacción reactiva la barra y reinicia el
+  // temporizador; si no pasa nada durante idleMs, se esfuma.
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const ping = () => {
+      setActive(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setActive(false), idleMs);
+    };
+    const events = ["mousemove", "mousedown", "keydown", "touchstart", "wheel", "scroll"];
+    for (const e of events) window.addEventListener(e, ping, { passive: true });
+    ping();
+    return () => {
+      clearTimeout(timer);
+      for (const e of events) window.removeEventListener(e, ping);
+    };
+  }, [idleMs]);
+
   // El menú mobile no puede quedar abierto si la barra se oculta.
   useEffect(() => {
     if (!shown) setMenuOpen(false);
   }, [shown]);
 
-  const delay = (i: number) => (shown ? `${100 + i * 70}ms` : "0ms");
-  const enter = shown ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0";
-  const tab = shown ? 0 : -1;
+  // Visible mientras estemos scrolleados y haya actividad (o el menú esté abierto).
+  const visible = shown && (active || menuOpen);
+  const delay = (i: number) => (visible ? `${100 + i * 70}ms` : "0ms");
+  const enter = visible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0";
+  const tab = visible ? 0 : -1;
+
+  // Tres estados para el contenedor:
+  //  - arriba del todo (no scrolleado): sube y desaparece.
+  //  - esfumado por inactividad: se queda en lugar y se disuelve (blur + fade).
+  //  - visible: nítido y en su sitio.
+  const island = visible
+    ? "pointer-events-auto translate-y-0 scale-100 opacity-100 blur-0"
+    : shown
+      ? "pointer-events-none scale-[0.98] opacity-0 blur-[6px]"
+      : "pointer-events-none -translate-y-8 opacity-0";
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
       <nav
-        aria-hidden={!shown}
-        className={`w-full max-w-5xl rounded-2xl border border-white/10 bg-card/70 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/5 backdrop-blur-xl transition-all duration-500 ease-out ${
-          shown ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-8 opacity-0"
-        }`}
+        aria-hidden={!visible}
+        className={`w-full max-w-5xl rounded-2xl border border-white/10 bg-card/70 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/5 backdrop-blur-xl transition-all duration-500 ease-out ${island}`}
       >
         <div className="flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5">
           <a

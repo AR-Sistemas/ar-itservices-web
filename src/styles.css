@@ -361,3 +361,34 @@
     animation: none;
   }
 }
+
+/* ---- Scrollbar integrada a la marca: degradé rojo → negro ---- */
+html {
+  scrollbar-width: thin;
+  /* Firefox: pulgar rojo, riel del color de fondo */
+  scrollbar-color: var(--brand) var(--background);
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  /* deja aire alrededor del pulgar para que se vea tipo píldora flotante */
+  border: 3px solid var(--background);
+  background: linear-gradient(180deg, #ff000d 0%, #990f1b 55%, #14131c 100%);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #ff2a35 0%, #ff000d 55%, #232234 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--background);
+}
