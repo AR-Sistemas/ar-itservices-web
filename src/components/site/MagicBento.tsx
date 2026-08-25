@@ -1,5 +1,6 @@
 import { BorderGlow } from "./BorderGlow";
 import { SpotlightCard } from "./SpotlightCard";
+import { StarBorderCard } from "./StarBorderCard";
 
 export type BentoCard = {
   title: string;
@@ -17,11 +18,13 @@ export function MagicBento({ cards }: { cards: BentoCard[] }) {
     <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
       {cards.map((c) =>
         c.span === "large" ? (
-          <BorderGlow key={c.title} className="sm:col-span-2">
-            <div className="p-7 lg:p-9">
-              <Content card={c} large />
-            </div>
-          </BorderGlow>
+          <StarBorderCard key={c.title} className="sm:col-span-2">
+            <BorderGlow className="h-full">
+              <div className="p-7 lg:p-9">
+                <Content card={c} large />
+              </div>
+            </BorderGlow>
+          </StarBorderCard>
         ) : (
           <SpotlightCard
             key={c.title}

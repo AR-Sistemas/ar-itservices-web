@@ -14,6 +14,7 @@ import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
+import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
 import josePhoto from "@/assets/jose-romanutti.png.asset.json";
@@ -290,11 +291,12 @@ function Home() {
             <div className="mt-12 space-y-14">
               {CASES.map((c, i) => (
                 <AnimatedContent key={c.client} delay={i * 80}>
-                  <SpotlightCard
-                    as="article"
-                    className="rounded-2xl border border-border bg-card p-8"
-                  >
-                    <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                  <StarBorderCard>
+                    <SpotlightCard
+                      as="article"
+                      className="rounded-2xl border border-border bg-card p-8"
+                    >
+                      <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
                     <h3 className="text-xl font-bold">{c.client}</h3>
                     <div className="space-y-5">
                       <div>
@@ -311,7 +313,8 @@ function Home() {
                       </div>
                     </div>
                     </div>
-                  </SpotlightCard>
+                    </SpotlightCard>
+                  </StarBorderCard>
                 </AnimatedContent>
               ))}
             </div>
