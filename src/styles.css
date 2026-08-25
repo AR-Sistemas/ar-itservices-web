@@ -362,6 +362,13 @@
   }
 }
 
+/* ---- Scroll suave al navegar por anclas (#servicios, #casos, etc.) ---- */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
 /* ---- Scrollbar integrada a la marca: degradé rojo → negro ---- */
 html {
   scrollbar-width: thin;
