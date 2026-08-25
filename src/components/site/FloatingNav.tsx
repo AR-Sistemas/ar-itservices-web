@@ -92,8 +92,19 @@ export function FloatingNav({
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
       <nav
         aria-hidden={!visible}
-        className={`w-full max-w-5xl rounded-2xl border border-white/10 bg-card/70 shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] ring-1 ring-white/5 backdrop-blur-xl transition-all ${dur} ease-out ${island}`}
+        className={`star-border relative w-full max-w-5xl overflow-hidden rounded-2xl p-[1.5px] shadow-[0_18px_50px_-20px_rgba(0,0,0,0.85)] transition-all ${dur} ease-out ${island}`}
       >
+        <span
+          className="star-border-glow star-border-bottom"
+          style={{ animationDuration: "8s" }}
+          aria-hidden="true"
+        />
+        <span
+          className="star-border-glow star-border-top"
+          style={{ animationDuration: "8s" }}
+          aria-hidden="true"
+        />
+        <div className="relative z-10 rounded-2xl border border-white/10 bg-card/70 ring-1 ring-white/5 backdrop-blur-xl">
         <div className="flex items-center justify-between gap-3 px-4 py-2.5 sm:px-5">
           <a
             href="#top"
@@ -182,6 +193,7 @@ export function FloatingNav({
               </a>
             </div>
           </div>
+        </div>
         </div>
       </nav>
     </div>
