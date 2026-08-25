@@ -24,7 +24,7 @@ export function FloatingNav({
   revealAt = 120,
   idleMs = 3500,
 }: {
-  logo: ReactNode;
+  logo: ReactNode | ((visible: boolean) => ReactNode);
   items: NavItem[];
   ctaLabel?: string;
   ctaHref?: string;
@@ -102,7 +102,7 @@ export function FloatingNav({
             className={`flex min-w-0 items-center transition-all ${dur} ease-out ${enter}`}
             style={{ transitionDelay: delay(0) }}
           >
-            {logo}
+            {typeof logo === "function" ? logo(visible) : logo}
           </a>
 
           <div className="hidden items-center gap-6 lg:flex">

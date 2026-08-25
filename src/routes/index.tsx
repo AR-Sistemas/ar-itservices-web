@@ -9,6 +9,7 @@ import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
 import { LogoMark } from "@/components/site/LogoMark";
+import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
@@ -170,14 +171,17 @@ function Home() {
         items={NAV}
         ctaLabel="Hablemos"
         ctaHref="#contacto"
-        logo={
+        logo={(visible) => (
           <span className="flex items-center gap-2 sm:gap-2.5">
-            <LogoMark className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
+            <LogoDrawInline
+              play={visible}
+              className="h-8 w-auto shrink-0 text-foreground sm:h-9"
+            />
             <span className="text-[0.7rem] font-semibold tracking-[0.25em] text-muted-foreground uppercase sm:text-xs">
               IT Services
             </span>
           </span>
-        }
+        )}
         rightSlot={
           <div
             className="hidden items-center gap-1 text-xs font-semibold sm:flex"
