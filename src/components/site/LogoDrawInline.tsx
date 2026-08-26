@@ -3,9 +3,10 @@ import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX } from "./LogoMark";
 
 /**
  * Variante animada del isotipo "AR" para la barra de navegación: reusa el mismo
- * efecto de "reescritura" del logo del hero, pero el trazo se dibuja en rojo y
- * al terminar hace crossfade a blanco (fillColor), para no romper el contraste
- * con la barra oscura.
+ * efecto de "reescritura" del logo del hero. El trazo se dibuja en rojo y al
+ * rellenarse queda en la versión de marca "Negativo color" (Brand Book 1.3):
+ * la "A" en rojo #ff000d y la "R" en blanco (fillColor / currentColor), que es
+ * la versión correcta sobre fondos oscuros. La "A" va por encima de la "R".
  *
  * Usa ids propios (nav-logo-*) para no colisionar con el `svg.createDrawable`
  * del logo del hero, que selecciona por id global.
@@ -90,24 +91,26 @@ export function LogoDrawInline({
       fill={fillColor}
     >
       <path
-        id="nav-logo-a"
-        className="ar-draw-path"
-        stroke={strokeColor}
-        strokeWidth={4}
-        strokeLinejoin="round"
-        strokeLinecap="round"
-        style={{ fillOpacity: 0, strokeOpacity: 0 }}
-        d={AR_PATH_A}
-      />
-      <path
         id="nav-logo-r"
         className="ar-draw-path"
         stroke={strokeColor}
-        strokeWidth={4}
+        strokeWidth={0.8}
         strokeLinejoin="round"
         strokeLinecap="round"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
         d={AR_PATH_R}
+      />
+      <path
+        id="nav-logo-a"
+        className="ar-draw-path"
+        fill="#FF000D"
+        fillRule="evenodd"
+        stroke={strokeColor}
+        strokeWidth={0.8}
+        strokeLinejoin="round"
+        strokeLinecap="round"
+        style={{ fillOpacity: 0, strokeOpacity: 0 }}
+        d={AR_PATH_A}
       />
     </svg>
   );

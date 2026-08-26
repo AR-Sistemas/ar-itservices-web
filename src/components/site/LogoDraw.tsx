@@ -57,24 +57,25 @@ export function LogoDraw({ className = "" }: { className?: string }) {
       aria-label="AR IT Services"
     >
       <path
-        id="ar-logo-a"
-        className="ar-logo-path"
-        fill="#FF000D"
-        stroke="#FF000D"
-        strokeWidth={3}
-        strokeLinejoin="round"
-        style={{ fillOpacity: 0, strokeOpacity: 0 }}
-        d={AR_PATH_A}
-      />
-      <path
         id="ar-logo-r"
         className="ar-logo-path"
-        fill="#FF000D"
-        stroke="#FF000D"
-        strokeWidth={3}
+        fill="#FFFFFF"
+        stroke="#FFFFFF"
+        strokeWidth={0.6}
         strokeLinejoin="round"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
         d={AR_PATH_R}
+      />
+      <path
+        id="ar-logo-a"
+        className="ar-logo-path"
+        fill="#FF000D"
+        fillRule="evenodd"
+        stroke="#FF000D"
+        strokeWidth={0.6}
+        strokeLinejoin="round"
+        style={{ fillOpacity: 0, strokeOpacity: 0 }}
+        d={AR_PATH_A}
       />
     </svg>
   );

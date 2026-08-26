@@ -1,19 +1,25 @@
 /**
- * Curvas reales del isologo "AR" vectorizadas del logotipo institucional.
- * Fuente única de verdad compartida entre el logo animado del hero (LogoDraw)
- * y este isotipo estático usado en navbar / footer.
+ * Curvas OFICIALES del isotipo "AR" extraídas del logotipo vectorizado del
+ * Brand Book (archivo editable). Fuente única de verdad compartida entre el
+ * logo animado del hero (LogoDraw), el de la navbar (LogoDrawInline) y este
+ * isotipo estático (footer).
+ *
+ * La "A" incluye su perforación interna (contrapunzón) como subpath, por eso
+ * debe pintarse con `fillRule="evenodd"`. La "R" es la forma oficial plana.
  */
-export const AR_VIEWBOX = "0 0 400 246.54";
+export const AR_VIEWBOX = "0 0 77.23 47.8";
 
 export const AR_PATH_A =
-  "M 113.00 0.00 L 0.00 246.54 L 53.85 246.54 L 85.29 178.99 L 214.47 241.25 L 235.64 246.54 L 250.89 246.23 L 257.74 243.74 L 266.46 233.46 L 267.70 228.48 L 266.46 218.83 L 168.72 0.00 Z";
+  "M18.45 30.17L27.13 11.24 40.61 41.42ZM21.79 0L0 47.53H10.5L16.46 34.52 39.36 45.61C41.98 46.87 44.5 47.8 47.74 47.53 50.58 47.53 52.48 44.6 51.32 42.01L32.57 0Z";
 
 export const AR_PATH_R =
-  "M 184.28 0.00 L 201.40 38.60 L 315.64 38.60 L 332.76 43.89 L 343.97 53.23 L 352.06 68.79 L 352.68 84.67 L 346.46 99.92 L 334.01 111.75 L 317.20 117.67 L 236.89 117.98 L 253.70 155.64 L 273.00 157.20 L 288.87 166.23 L 347.70 246.23 L 400.00 246.23 L 326.54 155.64 L 345.84 149.11 L 363.89 137.59 L 377.59 122.65 L 386.93 104.90 L 391.28 86.23 L 390.66 65.68 L 385.37 47.63 L 372.61 27.39 L 350.51 9.65 L 324.67 0.93 Z";
+  "M63.04 30.03L62.99 29.93C70.13 28.64 75.55 22.48 75.55 15.09 75.55 6.77 68.66 0 60.2 0H35.54L38.87 7.48H60.2C64.54 7.48 68.07 10.9 68.07 15.09 68.07 19.15 64.77 22.47 60.63 22.68V22.67L45.65 22.68 48.92 30.03H50.32C52.9 30.03 55.33 31.27 56.84 33.36L67.09 47.53H77.23Z";
 
 /**
- * Isotipo "AR" vectorial estático. Toma el color del texto vía `currentColor`,
- * así se puede pintar blanco (header/footer) o rojo (`text-primary`) sin editarlo.
+ * Isotipo "AR" vectorial estático en su versión de marca "Negativo color"
+ * (Brand Book 1.3): la "A" en rojo #ff000d y la "R" en el color del texto
+ * (`currentColor` → blanco sobre fondos oscuros). La "A" se dibuja por encima
+ * de la "R", como en el logotipo oficial.
  */
 export function LogoMark({ className = "" }: { className?: string }) {
   return (
@@ -24,8 +30,8 @@ export function LogoMark({ className = "" }: { className?: string }) {
       aria-label="AR IT Services"
       fill="currentColor"
     >
-      <path d={AR_PATH_A} />
       <path d={AR_PATH_R} />
+      <path d={AR_PATH_A} fill="#FF000D" fillRule="evenodd" />
     </svg>
   );
 }
