@@ -16,6 +16,7 @@ import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
+import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
 import josePhoto from "@/assets/jose-romanutti.png.asset.json";
@@ -244,7 +245,7 @@ function Home() {
         {/* Métricas */}
         <section className="relative -mt-28 px-5">
           <AnimatedContent className="mx-auto max-w-5xl">
-            <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-4">
+            <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-5">
               {METRICS.map((m) => (
                 <div key={m.label}>
                   <p className="font-display text-4xl font-extrabold text-foreground sm:text-5xl">
@@ -254,6 +255,7 @@ function Home() {
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
               ))}
+              <IsoBadge />
             </div>
           </AnimatedContent>
         </section>
@@ -512,8 +514,9 @@ function Home() {
             </ul>
           </div>
         </div>
-        <div className="mx-auto mt-12 max-w-6xl border-t border-white/10 pt-6 text-xs">
-          © 2026 AR Consultores SRL. Todos los derechos reservados.
+        <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+          <p>© 2026 AR Consultores SRL. Todos los derechos reservados.</p>
+          <IsoBadge compact />
         </div>
       </footer>
     </div>
