@@ -85,7 +85,7 @@ function PeoplePage() {
         }
       />
 
-      <main className="px-5 pt-24 pb-10 sm:pt-28">
+      <main className="px-5 pt-22 pb-8 sm:pt-26">
         <div className="mx-auto max-w-5xl">
           <AnimatedContent>
             <Link
@@ -94,12 +94,12 @@ function PeoplePage() {
             >
               ← {c.people.backLink}
             </Link>
-            <h1 className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">
+            <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
               {c.people.heading}
             </h1>
             <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.people.statement}</p>
           </AnimatedContent>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {c.people.items.map((p, i) => (
               <AnimatedContent key={p.name} delay={i * 60}>
                 <figure className="flex flex-col items-center text-center">
