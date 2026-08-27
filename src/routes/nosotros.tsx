@@ -85,8 +85,8 @@ function PeoplePage() {
         }
       />
 
-      <main className="px-5 pt-32 pb-24 sm:pt-40">
-        <div className="mx-auto max-w-6xl">
+      <main className="px-5 pt-20 pb-8 sm:pt-24">
+        <div className="mx-auto max-w-5xl">
           <AnimatedContent>
             <Link
               to="/"
@@ -94,17 +94,17 @@ function PeoplePage() {
             >
               ← {c.people.backLink}
             </Link>
-            <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
               {c.people.heading}
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{c.people.statement}</p>
+            <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.people.statement}</p>
           </AnimatedContent>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {c.people.items.map((p, i) => (
               <AnimatedContent key={p.name} delay={i * 60}>
-                <figure>
-                  <TiltedCard>
-                    <div className="flex aspect-4/5 w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-5">
+                <figure className="flex flex-col items-center text-center">
+                  <TiltedCard className="w-full max-w-[140px]">
+                    <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-2">
                       <img
                         src={PHOTOS[i]}
                         alt={c.people.portraitAlt(p.name)}
@@ -127,15 +127,15 @@ function PeoplePage() {
         </div>
       </main>
 
-      <footer className="px-5 py-16 text-muted-foreground">
-        <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
+      <footer className="px-5 py-8 text-muted-foreground">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-4">
           <div>
-            <LogoMark className="h-14 w-auto text-foreground" />
-            <p className="mt-5 text-sm">{c.footer.tagline}</p>
+            <LogoMark className="h-10 w-auto text-foreground" />
+            <p className="mt-2 text-sm">{c.footer.tagline}</p>
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground">{c.footer.officesHeading}</h2>
-            <ul className="mt-4 space-y-3 text-sm">
+            <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
                   <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
@@ -145,7 +145,7 @@ function PeoplePage() {
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground">{c.footer.sectionsHeading}</h2>
-            <ul className="mt-4 space-y-3 text-sm">
+            <ul className="mt-2 space-y-1.5 text-sm">
               {navItems.map((n) => (
                 <li key={n.href}>
                   <a href={n.href} className="transition-colors hover:text-foreground">
@@ -160,7 +160,7 @@ function PeoplePage() {
             <SocialLinks />
           </div>
         </div>
-        <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto mt-6 flex max-w-6xl flex-col gap-3 border-t border-white/10 pt-4 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>{c.footer.legal}</p>
           <IsoBadge compact label={c.iso.certified} />
         </div>
