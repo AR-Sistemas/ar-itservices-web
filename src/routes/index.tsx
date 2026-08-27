@@ -18,6 +18,7 @@ import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
+import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
