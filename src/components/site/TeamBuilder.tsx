@@ -1,66 +1,23 @@
 import { useMemo, useState } from "react";
 import { useSpringPress } from "./useSpringPress";
-
-/** Disciplinas editables del widget de armado de equipo. */
-const DISCIPLINES = [
-  {
-    id: "dotnet-react",
-    label: ".NET & React",
-    roles: [
-      { role: "Dev .NET Senior", qty: 2 },
-      { role: "Dev React", qty: 2 },
-    ],
-  },
-  {
-    id: "data-bi",
-    label: "Data & Power BI",
-    roles: [
-      { role: "Data Engineer", qty: 1 },
-      { role: "Analista Power BI", qty: 1 },
-    ],
-  },
-  {
-    id: "qa",
-    label: "QA & Testing",
-    roles: [{ role: "QA Automation", qty: 1 }],
-  },
-  {
-    id: "scrum",
-    label: "Scrum Master",
-    roles: [{ role: "Scrum Master", qty: 1 }],
-  },
-  {
-    id: "mobile",
-    label: "Mobile",
-    roles: [{ role: "Dev iOS / Android", qty: 2 }],
-  },
-  {
-    id: "devops",
-    label: "DevOps & n8n",
-    roles: [
-      { role: "DevOps Engineer", qty: 1 },
-      { role: "Especialista Automatización", qty: 1 },
-    ],
-  },
-  {
-    id: "pm",
-    label: "Project Manager",
-    roles: [{ role: "Project Manager", qty: 1 }],
-  },
-] as const;
+import { useLang } from "@/i18n/language";
+import { getContent } from "@/i18n/content";
 
 export function TeamBuilder() {
+  const { lang } = useLang();
+  const t = getContent(lang).team;
   const [selected, setSelected] = useState<string[]>(["dotnet-react", "data-bi"]);
   const cta = useSpringPress<HTMLAnchorElement>();
 
   const team = useMemo(() => {
+    const disciplines = getContent(lang).team.disciplines;
     const map = new Map<string, number>();
-    for (const d of DISCIPLINES) {
+    for (const d of disciplines) {
       if (!selected.includes(d.id)) continue;
       for (const r of d.roles) map.set(r.role, (map.get(r.role) ?? 0) + r.qty);
     }
     return [...map.entries()].map(([role, qty]) => ({ role, qty }));
-  }, [selected]);
+  }, [selected, lang]);
 
   const total = team.reduce((a, b) => a + b.qty, 0);
 
@@ -70,19 +27,12 @@ export function TeamBuilder() {
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div>
-        <p className="font-mono text-xs tracking-widest text-primary">
-          // selecciona las disciplinas
-        </p>
-        <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">
-          Armá el equipo que tu proyecto necesita
-        </h2>
-        <p className="mt-4 max-w-md text-muted-foreground">
-          Tocá las disciplinas y mirá cómo se arma el equipo. Es exactamente lo que hacemos con
-          nuestros clientes: perfiles concretos, cantidades concretas.
-        </p>
+        <p className="font-mono text-xs tracking-widest text-primary">{t.eyebrow}</p>
+        <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">{t.heading}</h2>
+        <p className="mt-4 max-w-md text-muted-foreground">{t.paragraph}</p>
 
-        <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label="Disciplinas">
-          {DISCIPLINES.map((d) => {
+        <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label={t.disciplinesAria}>
+          {t.disciplines.map((d) => {
             const on = selected.includes(d.id);
             return (
               <button
@@ -105,25 +55,23 @@ export function TeamBuilder() {
 
       <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
         <div className="flex items-baseline justify-between">
-          <p className="font-mono text-xs tracking-widest text-muted-foreground">// equipo propuesto</p>
+          <p className="font-mono text-xs tracking-widest text-muted-foreground">{t.proposed}</p>
           <p className="font-mono text-sm text-muted-foreground">
-            {total} {total === 1 ? "persona" : "personas"}
+            {total} {total === 1 ? t.person : t.people}
           </p>
         </div>
 
         <div className="mt-6 grid gap-3 sm:grid-cols-2" aria-live="polite">
           {team.length === 0 && (
-            <p className="text-sm text-muted-foreground sm:col-span-2">
-              Seleccioná al menos una disciplina para ver tu equipo.
-            </p>
+            <p className="text-sm text-muted-foreground sm:col-span-2">{t.empty}</p>
           )}
-          {team.map((t) => (
+          {team.map((tm) => (
             <div
-              key={t.role}
+              key={tm.role}
               className="flex items-center justify-between rounded-xl border border-border bg-background/60 px-4 py-3"
             >
-              <span className="text-sm text-foreground">{t.role}</span>
-              <span className="font-mono text-sm text-primary">×{t.qty}</span>
+              <span className="text-sm text-foreground">{tm.role}</span>
+              <span className="font-mono text-sm text-primary">×{tm.qty}</span>
             </div>
           ))}
         </div>
@@ -134,7 +82,7 @@ export function TeamBuilder() {
           href="#contacto"
           className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
         >
-          Agendar una llamada con tu equipo propuesto
+          {t.cta}
         </a>
       </div>
     </div>

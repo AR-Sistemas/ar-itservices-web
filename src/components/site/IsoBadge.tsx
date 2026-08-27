@@ -30,9 +30,11 @@ function ShieldCheck({ className = "" }: { className?: string }) {
 export function IsoBadge({
   compact = false,
   className = "",
+  label = "Certificados",
 }: {
   compact?: boolean;
   className?: string;
+  label?: string;
 }) {
   if (compact) {
     return (
@@ -40,7 +42,7 @@ export function IsoBadge({
         <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
         <span className="leading-tight">
           <span className="block text-xs font-medium text-foreground">ISO 9001:2015</span>
-          <span className="block text-[0.65rem] text-muted-foreground">Certificados</span>
+          <span className="block text-[0.65rem] text-muted-foreground">{label}</span>
         </span>
       </span>
     );
@@ -50,7 +52,7 @@ export function IsoBadge({
     <div className={`flex flex-col justify-center ${className}`}>
       <ShieldCheck className="h-10 w-10 text-primary" />
       <p className="mt-3 font-display text-lg font-medium text-foreground">ISO 9001:2015</p>
-      <p className="mt-1 text-sm text-muted-foreground">Certificados</p>
+      <p className="mt-1 text-sm text-muted-foreground">{label}</p>
     </div>
   );
 }

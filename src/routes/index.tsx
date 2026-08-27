@@ -13,11 +13,13 @@ import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
-import { MagicBento, type BentoCard } from "@/components/site/MagicBento";
+import { MagicBento } from "@/components/site/MagicBento";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
+import { useLang } from "@/i18n/language";
+import { getContent } from "@/i18n/content";
 import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
 import josePhoto from "@/assets/jose-romanutti.png.asset.json";
 import adrianPhoto from "@/assets/adrian-ferrari.png.asset.json";
@@ -45,69 +47,7 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-/* ---- Contenido editable ---- */
-
-const NAV = [
-  { label: "Servicios", href: "#servicios" },
-  { label: "Casos de éxito", href: "#casos" },
-  { label: "Nosotros", href: "#nosotros" },
-  { label: "Carreras", href: "#carreras" },
-];
-
-const METRICS = [
-  { value: 25, suffix: "+", label: "años de trayectoria" },
-  { value: 2000, suffix: "+", label: "proyectos entregados" },
-  { value: 3, suffix: "", label: "países con oficina propia" },
-  { value: 2, suffix: "M+", label: "horas-hombre con Claro" },
-];
-
-const SERVICES: BentoCard[] = [
-  {
-    title: "Desarrollo Web & Mobile",
-    desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
-    label: "Producto",
-    span: "large",
-  },
-  {
-    title: "Ciencia de Datos & BI",
-    desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI que se usan todos los días.",
-    label: "Datos e IA",
-    span: "large",
-  },
-  {
-    title: "QA & Testing",
-    desc: "Automatización de pruebas y control de calidad integrado al ciclo de desarrollo.",
-  },
-  {
-    title: "Equipos dedicados & Scrum",
-    desc: "Perfiles seleccionados, on-boarding rápido y ceremonias que se cumplen.",
-  },
-  {
-    title: "Automatización",
-    desc: "Flujos con n8n, pipelines de DevOps y despliegues repetibles.",
-  },
-  {
-    title: "Consultoría & Project Management",
-    desc: "Planificamos, medimos y reportamos avance con números, no con impresiones.",
-  },
-];
-
-const CASES = [
-  {
-    client: "Dirección de Inteligencia Fiscal de Córdoba",
-    challenge:
-      "Detectar patrones de fraude fiscal sobre grandes volúmenes de datos tributarios sin depender de revisiones manuales.",
-    result:
-      "Modelos de machine learning en producción que priorizan casos sospechosos y ordenan el trabajo de los equipos de fiscalización.",
-  },
-  {
-    client: "Claro",
-    challenge:
-      "Sostener una demanda continua de desarrollo y soporte en múltiples países de LATAM con equipos que puedan escalar.",
-    result:
-      "Más de 2.000 proyectos entregados y 2M+ horas-hombre acumuladas trabajando junto a sus equipos en toda la región.",
-  },
-];
+/* ---- Datos no traducibles (logos de marca y fotos) ---- */
 
 const TECH = [
   { name: ".NET", src: "/logos/dotnet.svg" },
@@ -126,44 +66,15 @@ const TECH = [
   { name: "Jira", src: "/logos/jira.svg" },
 ];
 
-const PEOPLE = [
-  {
-    name: "Felix Melinsky",
-    role: "Fundador & Presidente",
-    photo: felixPhoto.url,
-    quote: "Empezamos hace 25 años haciendo el trabajo. Seguimos haciéndolo.",
-  },
-  {
-    name: "Jose Romanutti",
-    role: "Socio & CEO",
-    photo: josePhoto.url,
-    quote: "El cliente no compra tecnología: compra un resultado que se pueda medir.",
-  },
-  {
-    name: "Adrián Ferrari",
-    role: "Socio & Director de Operaciones",
-    photo: adrianPhoto.url,
-    quote: "Un equipo bien armado resuelve más que cualquier metodología de moda.",
-  },
-  {
-    name: "Constanza Giordano",
-    role: "Directora de Talento",
-    photo: constanzaPhoto.url,
-    quote: "Buscamos gente que quiera quedarse, no perfiles que encajen en una grilla.",
-  },
-];
+const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url];
 
-
-const OFFICES = [
-  { city: "Dallas", country: "Estados Unidos", address: "Dallas, Texas" },
-  { city: "Córdoba", country: "Argentina", address: "Córdoba Capital" },
-  { city: "Asunción", country: "Paraguay", address: "Asunción" },
-];
+const SOCIAL = ["LinkedIn", "Instagram", "WhatsApp"];
 
 /* ---- Página ---- */
 
 function Home() {
-  const [lang, setLang] = useState<"ES" | "EN">("ES");
+  const { lang, setLang } = useLang();
+  const c = getContent(lang);
   const [sent, setSent] = useState(false);
   const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
@@ -171,8 +82,8 @@ function Home() {
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
       <FloatingNav
-        items={NAV}
-        ctaLabel="Hablemos"
+        items={c.nav}
+        ctaLabel={c.cta.talk}
         ctaHref="#contacto"
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
@@ -187,7 +98,7 @@ function Home() {
           <div
             className="hidden items-center gap-1 text-xs font-semibold sm:flex"
             role="group"
-            aria-label="Idioma"
+            aria-label={c.langLabel}
           >
             {(["ES", "EN"] as const).map((l) => (
               <button
@@ -213,29 +124,24 @@ function Home() {
           <div className="relative mx-auto max-w-4xl text-center">
             <LogoDraw className="mx-auto h-16 w-auto text-primary" />
             <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
-              AR IT Services · Dallas · Córdoba · Asunción
+              {c.hero.eyebrow}
             </p>
             <h1 className="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-6xl">
-              <BlurText
-                text="Armamos el equipo exacto que tu producto necesita, con datos e IA en el flujo, no como promesa."
-                highlightFrom={8}
-                highlightTo={15}
-              />
+              <BlurText text={c.hero.h1} highlightFrom={8} highlightTo={15} />
             </h1>
             <AnimatedContent delay={400} distance={24}>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
-                25 años desarrollando software, modelos de datos y equipos dedicados para empresas y
-                gobiernos, desde tres países.
+                {c.hero.subtitle}
               </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <StarBorder href="#contacto" className="group">
-                  Hablemos de tu proyecto
+                  {c.hero.ctaPrimary}
                 </StarBorder>
                 <a
                   href="#casos"
                   className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
                 >
-                  Ver casos de éxito
+                  {c.hero.ctaSecondary}
                 </a>
               </div>
             </AnimatedContent>
@@ -246,7 +152,7 @@ function Home() {
         <section className="relative -mt-28 px-5">
           <AnimatedContent className="mx-auto max-w-5xl">
             <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-5">
-              {METRICS.map((m) => (
+              {c.metrics.map((m) => (
                 <div key={m.label}>
                   <p className="font-display text-4xl font-extrabold text-foreground sm:text-5xl">
                     <Counter value={m.value} />
@@ -255,7 +161,7 @@ function Home() {
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
               ))}
-              <IsoBadge />
+              <IsoBadge label={c.iso.certified} />
             </div>
           </AnimatedContent>
         </section>
@@ -265,11 +171,11 @@ function Home() {
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-                Qué hacemos
+                {c.services.heading}
               </h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
-              <MagicBento cards={SERVICES} />
+              <MagicBento cards={c.services.cards} />
             </AnimatedContent>
           </div>
         </section>
@@ -287,33 +193,33 @@ function Home() {
         <section id="casos" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-5xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Casos de éxito</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.cases.heading}</h2>
             </AnimatedContent>
             <div className="mt-12 space-y-14">
-              {CASES.map((c, i) => (
-                <AnimatedContent key={c.client} delay={i * 80}>
+              {c.cases.items.map((cs, i) => (
+                <AnimatedContent key={cs.client} delay={i * 80}>
                   <StarBorderCard>
                     <SpotlightCard
                       as="article"
                       className="rounded-2xl border border-border bg-card p-8"
                     >
                       <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-                    <h3 className="text-xl font-bold">{c.client}</h3>
-                    <div className="space-y-5">
-                      <div>
-                        <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                          Desafío
-                        </p>
-                        <p className="mt-2 text-muted-foreground">{c.challenge}</p>
+                        <h3 className="text-xl font-bold">{cs.client}</h3>
+                        <div className="space-y-5">
+                          <div>
+                            <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                              {c.cases.challengeLabel}
+                            </p>
+                            <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
+                          </div>
+                          <div>
+                            <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                              {c.cases.resultLabel}
+                            </p>
+                            <p className="mt-2 text-foreground">{cs.result}</p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                          Resultado
-                        </p>
-                        <p className="mt-2 text-foreground">{c.result}</p>
-                      </div>
-                    </div>
-                    </div>
                     </SpotlightCard>
                   </StarBorderCard>
                 </AnimatedContent>
@@ -326,7 +232,7 @@ function Home() {
         <section className="border-y border-border px-5 py-20">
           <div className="mx-auto max-w-5xl">
             <AnimatedContent>
-              <h2 className="text-2xl font-bold tracking-tight">Stack con el que trabajamos</h2>
+              <h2 className="text-2xl font-bold tracking-tight">{c.stack.heading}</h2>
               <div className="mt-8">
                 <LogoLoop
                   speed={40}
@@ -341,7 +247,7 @@ function Home() {
                     >
                       <img
                         src={t.src}
-                        alt={`Logo de ${t.name}`}
+                        alt={c.stack.logoAlt(t.name)}
                         loading="lazy"
                         className="h-6 w-6 shrink-0 object-contain"
                       />
@@ -358,17 +264,17 @@ function Home() {
         <section id="nosotros" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Nuestra gente</h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.people.heading}</h2>
             </AnimatedContent>
             <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {PEOPLE.map((p, i) => (
+              {c.people.items.map((p, i) => (
                 <AnimatedContent key={p.name} delay={i * 60}>
                   <figure>
                     <TiltedCard>
                       <div className="flex aspect-4/5 w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-5">
                         <img
-                          src={p.photo}
-                          alt={`Retrato de ${p.name}`}
+                          src={PHOTOS[i]}
+                          alt={c.people.portraitAlt(p.name)}
                           loading="lazy"
                           className="aspect-square w-full rounded-full object-cover ring-1 ring-primary/25"
                         />
@@ -392,7 +298,7 @@ function Home() {
         <section className="bg-primary px-5 py-20">
           <AnimatedContent className="mx-auto max-w-4xl text-center">
             <h2 className="text-3xl font-bold text-primary-foreground sm:text-4xl">
-              ¿Armamos el equipo que tu proyecto necesita?
+              {c.finalCta.heading}
             </h2>
             <a
               ref={finalCta.ref}
@@ -400,7 +306,7 @@ function Home() {
               href="#contacto"
               className="mt-8 inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-foreground transition-opacity hover:opacity-90"
             >
-              Escribinos
+              {c.finalCta.button}
             </a>
           </AnimatedContent>
         </section>
@@ -409,10 +315,8 @@ function Home() {
         <section id="contacto" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-2xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Contanos tu proyecto</h2>
-              <p className="mt-3 text-muted-foreground">
-                Respondemos con una propuesta de equipo, no con un folleto.
-              </p>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.contact.heading}</h2>
+              <p className="mt-3 text-muted-foreground">{c.contact.subtitle}</p>
               <form
                 className="mt-10 grid gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
@@ -420,28 +324,27 @@ function Home() {
                   setSent(true);
                 }}
               >
-                <Field id="nombre" label="Nombre" />
-                <Field id="email" label="Email" type="email" />
-                <Field id="empresa" label="Empresa" />
-                <Field id="pais" label="País" />
+                <Field id="nombre" label={c.contact.fields.name} />
+                <Field id="email" label={c.contact.fields.email} type="email" />
+                <Field id="empresa" label={c.contact.fields.company} />
+                <Field id="pais" label={c.contact.fields.country} />
                 <div className="sm:col-span-2">
                   <label htmlFor="tipo" className="text-sm font-medium">
-                    Tipo de proyecto
+                    {c.contact.fields.projectType}
                   </label>
                   <select
                     id="tipo"
                     name="tipo"
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   >
-                    <option>Desarrollo web/mobile</option>
-                    <option>Data &amp; BI</option>
-                    <option>Staffing / equipo dedicado</option>
-                    <option>Otro</option>
+                    {c.contact.projectOptions.map((opt) => (
+                      <option key={opt}>{opt}</option>
+                    ))}
                   </select>
                 </div>
                 <div className="sm:col-span-2">
                   <label htmlFor="mensaje" className="text-sm font-medium">
-                    Mensaje
+                    {c.contact.fields.message}
                   </label>
                   <textarea
                     id="mensaje"
@@ -457,11 +360,11 @@ function Home() {
                     type="submit"
                     className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
                   >
-                    Enviar consulta
+                    {c.contact.submit}
                   </button>
                   {sent && (
                     <p className="mt-4 text-sm text-muted-foreground" role="status">
-                      Gracias. Te vamos a contactar a la brevedad.
+                      {c.contact.success}
                     </p>
                   )}
                 </div>
@@ -475,14 +378,12 @@ function Home() {
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
             <LogoMark className="h-14 w-auto text-foreground" />
-            <p className="mt-5 text-sm">
-              Software, datos y equipos dedicados desde 2001.
-            </p>
+            <p className="mt-5 text-sm">{c.footer.tagline}</p>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Oficinas</h3>
+            <h3 className="text-sm font-semibold text-foreground">{c.footer.officesHeading}</h3>
             <ul className="mt-4 space-y-3 text-sm">
-              {OFFICES.map((o) => (
+              {c.footer.offices.map((o) => (
                 <li key={o.city}>
                   <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
                 </li>
@@ -490,9 +391,9 @@ function Home() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Secciones</h3>
+            <h3 className="text-sm font-semibold text-foreground">{c.footer.sectionsHeading}</h3>
             <ul className="mt-4 space-y-3 text-sm">
-              {NAV.map((n) => (
+              {c.nav.map((n) => (
                 <li key={n.href}>
                   <a href={n.href} className="transition-colors hover:text-foreground">
                     {n.label}
@@ -502,9 +403,9 @@ function Home() {
             </ul>
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-foreground">Seguinos</h3>
+            <h3 className="text-sm font-semibold text-foreground">{c.footer.followHeading}</h3>
             <ul className="mt-4 space-y-3 text-sm">
-              {["LinkedIn", "Instagram", "WhatsApp"].map((s) => (
+              {SOCIAL.map((s) => (
                 <li key={s}>
                   <a href="#contacto" className="transition-colors hover:text-foreground">
                     {s}
@@ -515,8 +416,8 @@ function Home() {
           </div>
         </div>
         <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
-          <p>© 2026 AR Consultores SRL. Todos los derechos reservados.</p>
-          <IsoBadge compact />
+          <p>{c.footer.legal}</p>
+          <IsoBadge compact label={c.iso.certified} />
         </div>
       </footer>
     </div>
