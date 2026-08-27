@@ -127,15 +127,15 @@ function PeoplePage() {
         </div>
       </main>
 
-      <footer className="px-5 py-10 text-muted-foreground">
-        <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-4">
+      <footer className="px-5 py-8 text-muted-foreground">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-4">
           <div>
-            <LogoMark className="h-12 w-auto text-foreground" />
-            <p className="mt-3 text-sm">{c.footer.tagline}</p>
+            <LogoMark className="h-10 w-auto text-foreground" />
+            <p className="mt-2 text-sm">{c.footer.tagline}</p>
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground">{c.footer.officesHeading}</h2>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
                   <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
@@ -145,7 +145,7 @@ function PeoplePage() {
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground">{c.footer.sectionsHeading}</h2>
-            <ul className="mt-3 space-y-2 text-sm">
+            <ul className="mt-2 space-y-1.5 text-sm">
               {navItems.map((n) => (
                 <li key={n.href}>
                   <a href={n.href} className="transition-colors hover:text-foreground">
@@ -160,7 +160,7 @@ function PeoplePage() {
             <SocialLinks />
           </div>
         </div>
-        <div className="mx-auto mt-8 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-5 text-xs sm:flex-row sm:items-center sm:justify-between">
+        <div className="mx-auto mt-6 flex max-w-6xl flex-col gap-3 border-t border-white/10 pt-4 text-xs sm:flex-row sm:items-center sm:justify-between">
           <p>{c.footer.legal}</p>
           <IsoBadge compact label={c.iso.certified} />
         </div>
