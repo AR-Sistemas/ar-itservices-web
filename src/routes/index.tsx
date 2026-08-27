@@ -405,15 +405,7 @@ function Home() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground">{c.footer.followHeading}</h3>
-            <ul className="mt-4 space-y-3 text-sm">
-              {SOCIAL.map((s) => (
-                <li key={s}>
-                  <a href="#contacto" className="transition-colors hover:text-foreground">
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialLinks />
           </div>
         </div>
         <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
