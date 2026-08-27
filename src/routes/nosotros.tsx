@@ -85,7 +85,7 @@ function PeoplePage() {
         }
       />
 
-      <main className="px-5 pt-22 pb-8 sm:pt-26">
+      <main className="px-5 pt-20 pb-8 sm:pt-24">
         <div className="mx-auto max-w-5xl">
           <AnimatedContent>
             <Link
