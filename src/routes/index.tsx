@@ -69,8 +69,6 @@ const TECH = [
 
 const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url];
 
-const SOCIAL = ["LinkedIn", "Instagram", "WhatsApp"];
-
 /* ---- Página ---- */
 
 function Home() {
