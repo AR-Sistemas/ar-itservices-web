@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
-import { TiltedCard } from "@/components/site/TiltedCard";
+
 import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
 import { BlurText } from "@/components/site/BlurText";
@@ -21,10 +21,6 @@ import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
-import josePhoto from "@/assets/jose-romanutti.png.asset.json";
-import adrianPhoto from "@/assets/adrian-ferrari.png.asset.json";
-import constanzaPhoto from "@/assets/constanza-giordano.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,8 +62,6 @@ const TECH = [
   { name: "GCP", src: "/logos/gcp.svg" },
   { name: "Jira", src: "/logos/jira.svg" },
 ];
-
-const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url];
 
 /* ---- Página ---- */
 
@@ -259,38 +253,22 @@ function Home() {
           </div>
         </section>
 
-        {/* Nuestra gente */}
-        <section id="nosotros" className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.people.heading}</h2>
-            </AnimatedContent>
-            <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {c.people.items.map((p, i) => (
-                <AnimatedContent key={p.name} delay={i * 60}>
-                  <figure>
-                    <TiltedCard>
-                      <div className="flex aspect-4/5 w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-5">
-                        <img
-                          src={PHOTOS[i]}
-                          alt={c.people.portraitAlt(p.name)}
-                          loading="lazy"
-                          className="aspect-square w-full rounded-full object-cover ring-1 ring-primary/25"
-                        />
-                      </div>
-                    </TiltedCard>
-                    <figcaption className="mt-4">
-                      <p className="font-semibold">{p.name}</p>
-                      <p className="text-sm text-muted-foreground">{p.role}</p>
-                    </figcaption>
-                    <blockquote className="mt-3 text-sm text-foreground italic">
-                      “{p.quote}”
-                    </blockquote>
-                  </figure>
-                </AnimatedContent>
-              ))}
-            </div>
-          </div>
+        {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
+        <section className="px-5 py-24 sm:py-32">
+          <AnimatedContent className="mx-auto max-w-3xl text-center">
+            <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
+              {c.people.heading}
+            </h2>
+            <p className="mt-6 text-3xl leading-snug font-bold tracking-tight text-balance sm:text-4xl">
+              {c.people.statement}
+            </p>
+            <Link
+              to="/nosotros"
+              className="mt-9 inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
+            >
+              {c.people.ctaLink}
+            </Link>
+          </AnimatedContent>
         </section>
 
         {/* CTA final */}
