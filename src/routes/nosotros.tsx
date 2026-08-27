@@ -85,8 +85,8 @@ function PeoplePage() {
         }
       />
 
-      <main className="px-5 pt-32 pb-24 sm:pt-40">
-        <div className="mx-auto max-w-6xl">
+      <main className="px-5 pt-28 pb-16 sm:pt-36">
+        <div className="mx-auto max-w-5xl">
           <AnimatedContent>
             <Link
               to="/"
@@ -94,12 +94,12 @@ function PeoplePage() {
             >
               ← {c.people.backLink}
             </Link>
-            <h1 className="mt-6 text-3xl font-bold tracking-tight sm:text-4xl">
+            <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">
               {c.people.heading}
             </h1>
-            <p className="mt-4 max-w-2xl text-lg text-muted-foreground">{c.people.statement}</p>
+            <p className="mt-3 max-w-2xl text-base text-muted-foreground">{c.people.statement}</p>
           </AnimatedContent>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {c.people.items.map((p, i) => (
               <AnimatedContent key={p.name} delay={i * 60}>
                 <figure>
