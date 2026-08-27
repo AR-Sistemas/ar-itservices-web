@@ -103,8 +103,8 @@ function PeoplePage() {
             {c.people.items.map((p, i) => (
               <AnimatedContent key={p.name} delay={i * 60}>
                 <figure className="flex flex-col items-center text-center">
-                  <TiltedCard className="w-full max-w-[180px]">
-                    <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-3">
+                  <TiltedCard className="w-full max-w-[150px]">
+                    <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-2.5">
                       <img
                         src={PHOTOS[i]}
                         alt={c.people.portraitAlt(p.name)}
