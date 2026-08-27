@@ -18,6 +18,7 @@ import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
+import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
@@ -67,8 +68,6 @@ const TECH = [
 ];
 
 const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url];
-
-const SOCIAL = ["LinkedIn", "Instagram", "WhatsApp"];
 
 /* ---- Página ---- */
 
@@ -404,15 +403,7 @@ function Home() {
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground">{c.footer.followHeading}</h3>
-            <ul className="mt-4 space-y-3 text-sm">
-              {SOCIAL.map((s) => (
-                <li key={s}>
-                  <a href="#contacto" className="transition-colors hover:text-foreground">
-                    {s}
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <SocialLinks />
           </div>
         </div>
         <div className="mx-auto mt-12 flex max-w-6xl flex-col gap-4 border-t border-white/10 pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
