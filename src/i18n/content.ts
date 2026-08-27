@@ -25,6 +25,9 @@ export type SiteContent = {
   stack: { heading: string; logoAlt: (name: string) => string };
   people: {
     heading: string;
+    statement: string;
+    ctaLink: string;
+    backLink: string;
     items: { name: string; role: string; quote: string }[];
     portraitAlt: (name: string) => string;
   };
@@ -75,7 +78,7 @@ const ES: SiteContent = {
   nav: [
     { label: "Servicios", href: "#servicios" },
     { label: "Casos de éxito", href: "#casos" },
-    { label: "Nosotros", href: "#nosotros" },
+    { label: "Nosotros", href: "/nosotros" },
     { label: "Carreras", href: "#carreras" },
   ],
   cta: { talk: "Hablemos" },
@@ -151,6 +154,10 @@ const ES: SiteContent = {
   stack: { heading: "Stack con el que trabajamos", logoAlt: (n) => `Logo de ${n}` },
   people: {
     heading: "Nuestra gente",
+    statement:
+      "Detrás de cada proyecto hay personas que se quedan. 25 años, un mismo equipo de socios al frente.",
+    ctaLink: "Conocé a nuestra gente",
+    backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
     items: [
       {
@@ -239,7 +246,7 @@ const EN: SiteContent = {
   nav: [
     { label: "Services", href: "#servicios" },
     { label: "Success stories", href: "#casos" },
-    { label: "About us", href: "#nosotros" },
+    { label: "About us", href: "/nosotros" },
     { label: "Careers", href: "#carreras" },
   ],
   cta: { talk: "Let's talk" },
@@ -315,6 +322,10 @@ const EN: SiteContent = {
   stack: { heading: "The stack we work with", logoAlt: (n) => `${n} logo` },
   people: {
     heading: "Our people",
+    statement:
+      "Behind every project there are people who stay. 25 years, the same team of partners in charge.",
+    ctaLink: "Meet our people",
+    backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
     items: [
       {
