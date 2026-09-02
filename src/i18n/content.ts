@@ -101,24 +101,30 @@ const ES: SiteContent = {
     heading: "Qué hacemos",
     cards: [
       {
-        title: "Desarrollo Web & Mobile",
-        desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
-        label: "Producto",
+        title: "IA Aplicada & Agentes",
+        desc: "Sumamos IA generativa y agentes al producto del cliente: menos tiempo de desarrollo, misma calidad, sin sumar headcount.",
+        label: "IA",
         span: "large",
       },
       {
         title: "Ciencia de Datos & BI",
         desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI que se usan todos los días.",
-        label: "Datos e IA",
+        label: "Datos & BI",
         span: "large",
-      },
-      {
-        title: "QA & Testing",
-        desc: "Automatización de pruebas y control de calidad integrado al ciclo de desarrollo.",
       },
       {
         title: "Equipos dedicados & Scrum",
         desc: "Perfiles seleccionados, on-boarding rápido y ceremonias que se cumplen.",
+        label: "Talento",
+        span: "large",
+      },
+      {
+        title: "Desarrollo Web & Mobile",
+        desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
+      },
+      {
+        title: "QA & Testing",
+        desc: "Automatización de pruebas y control de calidad integrado al ciclo de desarrollo.",
       },
       {
         title: "Automatización",
@@ -269,24 +275,30 @@ const EN: SiteContent = {
     heading: "What we do",
     cards: [
       {
-        title: "Web & Mobile Development",
-        desc: ".NET, React, iOS and Android. Products that ship to production and are maintained, with teams that understand the client's business.",
-        label: "Product",
+        title: "AI Applied & Agents",
+        desc: "We embed generative AI and agents into the client's product: less development time, same quality, no added headcount.",
+        label: "AI",
         span: "large",
       },
       {
         title: "Data Science & BI",
         desc: "Predictive models, applied machine learning and Power BI dashboards used every day.",
-        label: "Data & AI",
+        label: "Data & BI",
         span: "large",
-      },
-      {
-        title: "QA & Testing",
-        desc: "Test automation and quality control integrated into the development cycle.",
       },
       {
         title: "Dedicated teams & Scrum",
         desc: "Hand-picked profiles, fast onboarding and ceremonies that actually happen.",
+        label: "Talent",
+        span: "large",
+      },
+      {
+        title: "Web & Mobile Development",
+        desc: ".NET, React, iOS and Android. Products that ship to production and are maintained, with teams that understand the client's business.",
+      },
+      {
+        title: "QA & Testing",
+        desc: "Test automation and quality control integrated into the development cycle.",
       },
       {
         title: "Automation",

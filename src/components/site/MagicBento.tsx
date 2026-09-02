@@ -11,14 +11,15 @@ export type BentoCard = {
 
 /**
  * Magic Bento (React Bits) restyleado a la paleta AR:
- * las 2 tarjetas grandes usan Border Glow, las chicas Spotlight Card.
+ * las 3 tarjetas grandes usan Border Glow (mismo peso visual entre sí),
+ * las chicas Spotlight Card.
  */
 export function MagicBento({ cards }: { cards: BentoCard[] }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-12">
       {cards.map((c) =>
         c.span === "large" ? (
-          <StarBorderCard key={c.title} className="sm:col-span-2">
+          <StarBorderCard key={c.title} className="sm:col-span-2 lg:col-span-4">
             <BorderGlow className="h-full">
               <div className="p-7 lg:p-9">
                 <Content card={c} large />
@@ -29,7 +30,7 @@ export function MagicBento({ cards }: { cards: BentoCard[] }) {
           <SpotlightCard
             key={c.title}
             as="article"
-            className="rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40"
+            className="rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40 lg:col-span-3"
           >
             <Content card={c} />
           </SpotlightCard>
