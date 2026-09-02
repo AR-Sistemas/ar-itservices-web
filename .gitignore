@@ -24,6 +24,10 @@ dist-ssr
 .vscode/*
 !.vscode/extensions.json
 .idea
+.claude/
+
+# Lockfile (not tracked in this repo)
+package-lock.json
 .DS_Store
 *.suo
 *.ntvs*
