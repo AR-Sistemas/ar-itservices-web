@@ -10,11 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CarrerasRouteImport } from './routes/carreras'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
+import { Route as NovedadesRouteImport } from './routes/novedades'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CarrerasRoute = CarrerasRouteImport.update({
+  id: '/carreras',
+  path: '/carreras',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NosotrosRoute = NosotrosRouteImport.update({
@@ -22,31 +29,44 @@ const NosotrosRoute = NosotrosRouteImport.update({
   path: '/nosotros',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NovedadesRoute = NovedadesRouteImport.update({
+  id: '/novedades',
+  path: '/novedades',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/carreras': typeof CarrerasRoute
   '/nosotros': typeof NosotrosRoute
+  '/novedades': typeof NovedadesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/carreras': typeof CarrerasRoute
   '/nosotros': typeof NosotrosRoute
+  '/novedades': typeof NovedadesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/carreras': typeof CarrerasRoute
   '/nosotros': typeof NosotrosRoute
+  '/novedades': typeof NovedadesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/nosotros'
+  fullPaths: '/' | '/carreras' | '/nosotros' | '/novedades'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/nosotros'
-  id: '__root__' | '/' | '/nosotros'
+  to: '/' | '/carreras' | '/nosotros' | '/novedades'
+  id: '__root__' | '/' | '/carreras' | '/nosotros' | '/novedades'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CarrerasRoute: typeof CarrerasRoute
   NosotrosRoute: typeof NosotrosRoute
+  NovedadesRoute: typeof NovedadesRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +78,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/carreras': {
+      id: '/carreras'
+      path: '/carreras'
+      fullPath: '/carreras'
+      preLoaderRoute: typeof CarrerasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/nosotros': {
       id: '/nosotros'
       path: '/nosotros'
@@ -65,12 +92,21 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NosotrosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/novedades': {
+      id: '/novedades'
+      path: '/novedades'
+      fullPath: '/novedades'
+      preLoaderRoute: typeof NovedadesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CarrerasRoute: CarrerasRoute,
   NosotrosRoute: NosotrosRoute,
+  NovedadesRoute: NovedadesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

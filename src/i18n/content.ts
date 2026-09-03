@@ -30,6 +30,7 @@ export type SiteContent = {
     backLink: string;
     items: { name: string; role: string; quote: string }[];
     portraitAlt: (name: string) => string;
+    careersLink: string;
   };
   finalCta: { heading: string; button: string };
   contact: {
@@ -72,14 +73,31 @@ export type SiteContent = {
       roles: { role: string; qty: number }[];
     }[];
   };
+  careers: {
+    heading: string;
+    backLink: string;
+    intro: string;
+    positionsHeading: string;
+    emptyHeading: string;
+    emptyBody: string;
+    applyCta: string;
+    positionCtaLabel: string;
+    positions: { title: string; area: string; modality: string; location: string }[];
+  };
+  news: {
+    backLink: string;
+    enNoticeHeading: string;
+    enNoticeBody: string;
+  };
 };
 
 const ES: SiteContent = {
   nav: [
     { label: "Servicios", href: "#servicios" },
     { label: "Casos de éxito", href: "#casos" },
+    { label: "Novedades", href: "/novedades" },
     { label: "Nosotros", href: "/nosotros" },
-    { label: "Carreras", href: "#carreras" },
+    { label: "Carreras", href: "/carreras" },
   ],
   cta: { talk: "Hablemos" },
   langLabel: "Idioma",
@@ -165,6 +183,7 @@ const ES: SiteContent = {
     ctaLink: "Conocé a nuestra gente",
     backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
+    careersLink: "Ver vacantes abiertas",
     items: [
       {
         name: "Felix Melinsky",
@@ -246,14 +265,34 @@ const ES: SiteContent = {
       { id: "pm", label: "Project Manager", roles: [{ role: "Project Manager", qty: 1 }] },
     ],
   },
+  careers: {
+    heading: "Sumate al equipo",
+    backLink: "Volver al inicio",
+    intro:
+      "25 años armando equipos que se quedan. Buscamos gente con ganas de resolver problemas reales, no perfiles que encajen en una grilla.",
+    positionsHeading: "Búsquedas abiertas",
+    emptyHeading: "Por ahora no tenemos búsquedas puntuales",
+    emptyBody:
+      "Pero eso cambia seguido. Dejanos tu perfil y te tenemos en cuenta apenas abramos una posición que matchee.",
+    applyCta: "Dejanos tu CV",
+    positionCtaLabel: "Postularme",
+    positions: [],
+  },
+  news: {
+    backLink: "Volver al inicio",
+    enNoticeHeading: "Este boletín se publica en español",
+    enNoticeBody:
+      "Nuestro boletín mensual de IA está escrito para el mercado hispanohablante. Cambiá a ES arriba para leer la última edición.",
+  },
 };
 
 const EN: SiteContent = {
   nav: [
     { label: "Services", href: "#servicios" },
     { label: "Success stories", href: "#casos" },
+    { label: "News", href: "/novedades" },
     { label: "About us", href: "/nosotros" },
-    { label: "Careers", href: "#carreras" },
+    { label: "Careers", href: "/carreras" },
   ],
   cta: { talk: "Let's talk" },
   langLabel: "Language",
@@ -339,6 +378,7 @@ const EN: SiteContent = {
     ctaLink: "Meet our people",
     backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
+    careersLink: "See open positions",
     items: [
       {
         name: "Felix Melinsky",
@@ -419,6 +459,25 @@ const EN: SiteContent = {
       { id: "devops", label: "DevOps & n8n", roles: [{ role: "DevOps Engineer", qty: 1 }, { role: "Automation Specialist", qty: 1 }] },
       { id: "pm", label: "Project Manager", roles: [{ role: "Project Manager", qty: 1 }] },
     ],
+  },
+  careers: {
+    heading: "Join the team",
+    backLink: "Back to home",
+    intro:
+      "25 years building teams that stay. We look for people who want to solve real problems, not profiles that fit a checklist.",
+    positionsHeading: "Open positions",
+    emptyHeading: "No open positions right now",
+    emptyBody:
+      "That changes often. Send us your profile and we'll reach out when something matches.",
+    applyCta: "Send us your CV",
+    positionCtaLabel: "Apply",
+    positions: [],
+  },
+  news: {
+    backLink: "Back to home",
+    enNoticeHeading: "This newsletter is published in Spanish",
+    enNoticeBody:
+      "Our monthly AI newsletter is written for the Spanish-speaking market. Switch to ES above to read the latest issue.",
   },
 };
 

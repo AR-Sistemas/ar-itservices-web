@@ -262,12 +262,20 @@ function Home() {
             <p className="mt-6 text-3xl leading-snug font-bold tracking-tight text-balance sm:text-4xl">
               {c.people.statement}
             </p>
-            <Link
-              to="/nosotros"
-              className="mt-9 inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
-            >
-              {c.people.ctaLink}
-            </Link>
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
+              <Link
+                to="/nosotros"
+                className="inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
+              >
+                {c.people.ctaLink}
+              </Link>
+              <Link
+                to="/carreras"
+                className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+              >
+                {c.people.careersLink} →
+              </Link>
+            </div>
           </AnimatedContent>
         </section>
 
@@ -351,7 +359,7 @@ function Home() {
         </section>
       </main>
 
-      <footer id="carreras" className="px-5 py-16 text-muted-foreground">
+      <footer className="px-5 py-16 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
             <LogoMark className="h-14 w-auto text-foreground" />
