@@ -63,7 +63,7 @@ export type NewsletterIssue = {
   subtitle: string;
   description: string;
   closingDate: string;
-  podcast?: { title: string; audioUrl: string; note: string };
+  podcast?: { title: string; spotifyEpisodeId: string };
   editorial: { heading: string; body: string; calloutHeading: string; calloutBody: string };
   sections: NewsletterSection[];
   sourcesHeading: string;
@@ -81,8 +81,7 @@ export const NEWSLETTER_ISSUE: NewsletterIssue = {
   closingDate: "Fecha de cierre: 31 de julio de 2026 · Córdoba, Argentina",
   podcast: {
     title: "La IA pasa de chatear a ejecutar",
-    audioUrl: "/podcast/julio-2026.m4a",
-    note: "Muy pronto, también en nuestro canal de Spotify.",
+    spotifyEpisodeId: "2ZAp8EpR2XsyjW3y2EaM0H",
   },
   editorial: {
     heading: "Nota editorial",

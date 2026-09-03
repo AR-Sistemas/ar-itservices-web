@@ -13,7 +13,7 @@ import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE, type NewsletterSection } from "@/data/newsletter";
 
-type PodcastData = { title: string; audioUrl: string; note: string };
+type PodcastData = { title: string; spotifyEpisodeId: string };
 
 export const Route = createFileRoute("/novedades")({
   head: () => ({
@@ -207,10 +207,16 @@ function Podcast({
             Episodio del mes
           </p>
           <p className="mt-2 font-semibold">{podcast.title}</p>
-          <audio controls preload="none" className="mt-4 w-full" src={podcast.audioUrl}>
-            Tu navegador no soporta la reproducción de audio.
-          </audio>
-          <p className="mt-3 text-xs text-muted-foreground">{podcast.note}</p>
+          <iframe
+            className="mt-4 w-full rounded-xl"
+            src={`https://open.spotify.com/embed/episode/${podcast.spotifyEpisodeId}?utm_source=generator`}
+            width="100%"
+            height="152"
+            frameBorder="0"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            title={podcast.title}
+          />
         </div>
       </BorderGlow>
     </AnimatedContent>
