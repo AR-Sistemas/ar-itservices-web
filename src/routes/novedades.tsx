@@ -13,6 +13,8 @@ import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE, type NewsletterSection } from "@/data/newsletter";
 
+type PodcastData = { title: string; audioUrl: string; note: string };
+
 export const Route = createFileRoute("/novedades")({
   head: () => ({
     meta: [
@@ -106,6 +108,8 @@ function NewsletterPage() {
             </AnimatedContent>
           ) : (
             <>
+              {issue.podcast && <Podcast className="mt-10" podcast={issue.podcast} />}
+
               <AnimatedContent className="mt-10" distance={30}>
                 <h2 className="text-xl font-bold tracking-tight">{issue.editorial.heading}</h2>
                 <p className="mt-3 text-muted-foreground">{issue.editorial.body}</p>
@@ -185,6 +189,31 @@ function SectionHeader({ number, heading, intro }: { number: string; heading: st
       <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">{heading}</h2>
       <p className="mt-3 max-w-2xl text-muted-foreground">{intro}</p>
     </div>
+  );
+}
+
+function Podcast({
+  podcast,
+  className = "",
+}: {
+  podcast: PodcastData;
+  className?: string;
+}) {
+  return (
+    <AnimatedContent className={className} distance={30}>
+      <BorderGlow>
+        <div className="p-6 sm:p-7">
+          <p className="font-mono text-xs tracking-widest text-primary uppercase">
+            Episodio del mes
+          </p>
+          <p className="mt-2 font-semibold">{podcast.title}</p>
+          <audio controls preload="none" className="mt-4 w-full" src={podcast.audioUrl}>
+            Tu navegador no soporta la reproducción de audio.
+          </audio>
+          <p className="mt-3 text-xs text-muted-foreground">{podcast.note}</p>
+        </div>
+      </BorderGlow>
+    </AnimatedContent>
   );
 }
 

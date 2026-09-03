@@ -63,6 +63,7 @@ export type NewsletterIssue = {
   subtitle: string;
   description: string;
   closingDate: string;
+  podcast?: { title: string; audioUrl: string; note: string };
   editorial: { heading: string; body: string; calloutHeading: string; calloutBody: string };
   sections: NewsletterSection[];
   sourcesHeading: string;
@@ -78,6 +79,11 @@ export const NEWSLETTER_ISSUE: NewsletterIssue = {
   description:
     "Una recorrida por los anuncios, herramientas y conversaciones que marcaron el mes.",
   closingDate: "Fecha de cierre: 31 de julio de 2026 · Córdoba, Argentina",
+  podcast: {
+    title: "La IA pasa de chatear a ejecutar",
+    audioUrl: "/podcast/julio-2026.m4a",
+    note: "Muy pronto, también en nuestro canal de Spotify.",
+  },
   editorial: {
     heading: "Nota editorial",
     body: "Julio fue un mes especialmente activo para la inteligencia artificial. Más que un único lanzamiento dominante, se observó una sucesión de anuncios que muestran cómo la tecnología se está integrando en el trabajo cotidiano: asistentes que usan herramientas, agentes que completan tareas, modelos más económicos, nuevas formas de programar y una conversación cada vez más seria sobre seguridad y control.",
