@@ -82,7 +82,18 @@ export type SiteContent = {
     emptyBody: string;
     applyCta: string;
     positionCtaLabel: string;
-    positions: { title: string; area: string; modality: string; location: string }[];
+    mustHaveLabel: string;
+    niceToHaveLabel: string;
+    positions: {
+      title: string;
+      location: string;
+      modality: string;
+      seniority: string;
+      stack: string[];
+      intro: string;
+      mustHave: string[];
+      niceToHave: string[];
+    }[];
   };
   news: {
     backLink: string;
@@ -97,7 +108,7 @@ const ES: SiteContent = {
     { label: "Casos de éxito", href: "#casos" },
     { label: "Novedades", href: "/novedades" },
     { label: "Nosotros", href: "/nosotros" },
-    { label: "Carreras", href: "/carreras" },
+    { label: "Trabajá con nosotros", href: "/trabaja-con-nosotros" },
   ],
   cta: { talk: "Hablemos" },
   langLabel: "Idioma",
@@ -276,7 +287,114 @@ const ES: SiteContent = {
       "Pero eso cambia seguido. Dejanos tu perfil y te tenemos en cuenta apenas abramos una posición que matchee.",
     applyCta: "Dejanos tu CV",
     positionCtaLabel: "Postularme",
-    positions: [],
+    mustHaveLabel: "¿Qué buscamos?",
+    niceToHaveLabel: "Valoramos",
+    positions: [
+      {
+        title: "Desarrollador/a .NET Senior",
+        location: "Córdoba, Argentina",
+        modality: "Híbrida (remoto + oficina cuando se requiera)",
+        seniority: "Senior",
+        stack: [".NET", "C#", "React", "SQL Server"],
+        intro:
+          "Buscamos incorporar un/a Desarrollador/a .NET Senior para sumarse a un equipo que trabaja en productos que salen a producción y se mantienen en el tiempo, no solo prototipos.",
+        mustHave: [
+          "+5 años de experiencia en desarrollo .NET y C#.",
+          "Experiencia con React en el frontend.",
+          "Manejo de SQL Server y diseño de bases de datos relacionales.",
+          "Familiaridad con metodologías ágiles (Scrum/Kanban).",
+          "Perfil autónomo, con capacidad de tomar decisiones técnicas.",
+        ],
+        niceToHave: [
+          "Experiencia con Azure o AWS.",
+          "Uso de herramientas de AI Coding (Copilot, Claude Code) en el día a día.",
+          "Experiencia liderando equipos chicos o mentoreando devs junior.",
+        ],
+      },
+      {
+        title: "Data Engineer",
+        location: "Remoto (Argentina)",
+        modality: "100% remoto",
+        seniority: "Semi Senior / Senior",
+        stack: ["Python", "SQL", "Power BI", "Apache Airflow"],
+        intro:
+          "Buscamos un/a Data Engineer para diseñar y mantener pipelines de datos que alimentan modelos predictivos y tableros que las áreas de negocio de nuestros clientes usan todos los días.",
+        mustHave: [
+          "+3 años de experiencia trabajando con pipelines de datos en Python.",
+          "Experiencia con SQL avanzado y modelado de datos.",
+          "Manejo de Power BI o una herramienta de BI equivalente.",
+          "Conocimientos de orquestación de procesos (Airflow o similar).",
+          "Perfil analítico, con atención al detalle en la calidad del dato.",
+        ],
+        niceToHave: [
+          "Experiencia con machine learning aplicado.",
+          "Manejo de servicios cloud de datos (BigQuery, Redshift, Synapse).",
+          "Inglés técnico para lectura de documentación.",
+        ],
+      },
+      {
+        title: "QA Automation Engineer",
+        location: "Córdoba, Argentina",
+        modality: "Híbrida (remoto + oficina cuando se requiera)",
+        seniority: "Semi Senior",
+        stack: ["Java", "Playwright", "Cypress", "CI/CD"],
+        intro:
+          "Buscamos un/a QA Automation Engineer para diseñar estrategias de testing y automatizar la validación de productos antes de que lleguen a producción.",
+        mustHave: [
+          "+3 años de experiencia en QA Automation.",
+          "Experiencia sólida en testing funcional.",
+          "Desarrollo de automatizaciones con Java y/o Python.",
+          "Manejo de Jira y herramientas de gestión de bugs.",
+          "Perfil proactivo, orientado a la mejora continua.",
+        ],
+        niceToHave: [
+          "Experiencia con Playwright, Cypress o Selenium.",
+          "Integración de tests en pipelines de CI/CD.",
+          "Conocimientos de testing de APIs (Postman).",
+        ],
+      },
+      {
+        title: "Mobile Developer (iOS / Android)",
+        location: "Remoto (Argentina / LatAm)",
+        modality: "100% remoto",
+        seniority: "Semi Senior",
+        stack: ["React Native", "TypeScript", "iOS", "Android"],
+        intro:
+          "Buscamos un/a Mobile Developer para trabajar en apps que ya están en producción, con usuarios reales, no solo en fase de prototipo.",
+        mustHave: [
+          "+3 años de experiencia en desarrollo mobile con React Native.",
+          "Conocimientos sólidos de TypeScript.",
+          "Experiencia publicando apps en App Store y Google Play.",
+          "Manejo de control de versiones (Git) y flujos de PR/code review.",
+        ],
+        niceToHave: [
+          "Experiencia con desarrollo nativo (Swift o Kotlin).",
+          "Conocimientos de CI/CD para mobile (Fastlane, EAS).",
+          "Experiencia con testing automatizado en mobile.",
+        ],
+      },
+      {
+        title: "DevOps Engineer",
+        location: "Córdoba, Argentina",
+        modality: "Híbrida (remoto + oficina cuando se requiera)",
+        seniority: "Senior",
+        stack: ["AWS", "Docker", "Kubernetes", "n8n"],
+        intro:
+          "Buscamos un/a DevOps Engineer para mantener y mejorar la infraestructura y los pipelines de despliegue de nuestros equipos y clientes.",
+        mustHave: [
+          "+4 años de experiencia en roles de DevOps o SRE.",
+          "Experiencia con AWS (o equivalente en otra nube).",
+          "Manejo de Docker y orquestación con Kubernetes.",
+          "Experiencia diseñando pipelines de CI/CD.",
+          "Perfil resolutivo, cómodo con guardias/soporte productivo.",
+        ],
+        niceToHave: [
+          "Experiencia con Terraform o infraestructura como código.",
+          "Conocimientos de n8n u otras herramientas de automatización de workflows.",
+          "Certificaciones cloud (AWS/Azure).",
+        ],
+      },
+    ],
   },
   news: {
     backLink: "Volver al inicio",
@@ -292,7 +410,7 @@ const EN: SiteContent = {
     { label: "Success stories", href: "#casos" },
     { label: "News", href: "/novedades" },
     { label: "About us", href: "/nosotros" },
-    { label: "Careers", href: "/carreras" },
+    { label: "Work with us", href: "/trabaja-con-nosotros" },
   ],
   cta: { talk: "Let's talk" },
   langLabel: "Language",
@@ -471,7 +589,114 @@ const EN: SiteContent = {
       "That changes often. Send us your profile and we'll reach out when something matches.",
     applyCta: "Send us your CV",
     positionCtaLabel: "Apply",
-    positions: [],
+    mustHaveLabel: "What we're looking for",
+    niceToHaveLabel: "Nice to have",
+    positions: [
+      {
+        title: "Senior .NET Developer",
+        location: "Córdoba, Argentina",
+        modality: "Hybrid (remote + office when required)",
+        seniority: "Senior",
+        stack: [".NET", "C#", "React", "SQL Server"],
+        intro:
+          "We're hiring a Senior .NET Developer to join a team that works on products that ship to production and stay maintained, not just prototypes.",
+        mustHave: [
+          "5+ years of experience with .NET and C# development.",
+          "Experience with React on the frontend.",
+          "Solid SQL Server skills and relational data modeling.",
+          "Familiarity with agile methodologies (Scrum/Kanban).",
+          "Autonomous profile, comfortable making technical decisions.",
+        ],
+        niceToHave: [
+          "Experience with Azure or AWS.",
+          "Daily use of AI coding tools (Copilot, Claude Code).",
+          "Experience leading small teams or mentoring junior devs.",
+        ],
+      },
+      {
+        title: "Data Engineer",
+        location: "Remote (Argentina)",
+        modality: "100% remote",
+        seniority: "Mid / Senior",
+        stack: ["Python", "SQL", "Power BI", "Apache Airflow"],
+        intro:
+          "We're hiring a Data Engineer to design and maintain the data pipelines behind predictive models and dashboards our clients' teams use every day.",
+        mustHave: [
+          "3+ years of experience building data pipelines in Python.",
+          "Advanced SQL and data modeling experience.",
+          "Hands-on with Power BI or an equivalent BI tool.",
+          "Experience orchestrating workflows (Airflow or similar).",
+          "Analytical profile with a sharp eye for data quality.",
+        ],
+        niceToHave: [
+          "Experience with applied machine learning.",
+          "Cloud data services (BigQuery, Redshift, Synapse).",
+          "Working English for reading documentation.",
+        ],
+      },
+      {
+        title: "QA Automation Engineer",
+        location: "Córdoba, Argentina",
+        modality: "Hybrid (remote + office when required)",
+        seniority: "Mid-level",
+        stack: ["Java", "Playwright", "Cypress", "CI/CD"],
+        intro:
+          "We're hiring a QA Automation Engineer to design testing strategies and automate validation before products reach production.",
+        mustHave: [
+          "3+ years of experience in QA Automation.",
+          "Solid functional testing experience.",
+          "Building automations with Java and/or Python.",
+          "Comfortable with Jira and bug-tracking tools.",
+          "Proactive profile, focused on continuous improvement.",
+        ],
+        niceToHave: [
+          "Experience with Playwright, Cypress or Selenium.",
+          "Integrating tests into CI/CD pipelines.",
+          "API testing knowledge (Postman).",
+        ],
+      },
+      {
+        title: "Mobile Developer (iOS / Android)",
+        location: "Remote (Argentina / LatAm)",
+        modality: "100% remote",
+        seniority: "Mid-level",
+        stack: ["React Native", "TypeScript", "iOS", "Android"],
+        intro:
+          "We're hiring a Mobile Developer to work on apps that are already live, with real users, not just in the prototype stage.",
+        mustHave: [
+          "3+ years of experience building mobile apps with React Native.",
+          "Solid TypeScript skills.",
+          "Experience shipping apps to the App Store and Google Play.",
+          "Comfortable with Git and PR/code review workflows.",
+        ],
+        niceToHave: [
+          "Experience with native development (Swift or Kotlin).",
+          "Mobile CI/CD knowledge (Fastlane, EAS).",
+          "Experience with automated mobile testing.",
+        ],
+      },
+      {
+        title: "DevOps Engineer",
+        location: "Córdoba, Argentina",
+        modality: "Hybrid (remote + office when required)",
+        seniority: "Senior",
+        stack: ["AWS", "Docker", "Kubernetes", "n8n"],
+        intro:
+          "We're hiring a DevOps Engineer to maintain and improve the infrastructure and deployment pipelines for our teams and clients.",
+        mustHave: [
+          "4+ years of experience in DevOps or SRE roles.",
+          "Experience with AWS (or an equivalent cloud provider).",
+          "Hands-on with Docker and Kubernetes orchestration.",
+          "Experience designing CI/CD pipelines.",
+          "Resolutive profile, comfortable with production on-call support.",
+        ],
+        niceToHave: [
+          "Experience with Terraform or infrastructure as code.",
+          "Knowledge of n8n or other workflow automation tools.",
+          "Cloud certifications (AWS/Azure).",
+        ],
+      },
+    ],
   },
   news: {
     backLink: "Back to home",

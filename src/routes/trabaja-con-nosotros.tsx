@@ -10,25 +10,30 @@ import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
-export const Route = createFileRoute("/carreras")({
+export const Route = createFileRoute("/trabaja-con-nosotros")({
   head: () => ({
     meta: [
-      { title: "Carreras — AR IT Services" },
+      { title: "Trabajá con nosotros — AR IT Services" },
       {
         name: "description",
         content:
           "Sumate al equipo de AR IT Services: 25 años armando equipos que se quedan en software, datos e IA.",
       },
-      { property: "og:title", content: "Carreras — AR IT Services" },
+      { property: "og:title", content: "Trabajá con nosotros — AR IT Services" },
       {
         property: "og:description",
         content: "Búsquedas abiertas y postulación espontánea en AR IT Services.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://ar-talent-forge.lovable.app/carreras" },
+      {
+        property: "og:url",
+        content: "https://ar-talent-forge.lovable.app/trabaja-con-nosotros",
+      },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://ar-talent-forge.lovable.app/carreras" }],
+    links: [
+      { rel: "canonical", href: "https://ar-talent-forge.lovable.app/trabaja-con-nosotros" },
+    ],
   }),
   component: CareersPage,
 });
@@ -81,7 +86,7 @@ function CareersPage() {
       />
 
       <main className="px-5 pt-20 pb-8 sm:pt-24">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-3xl">
           <AnimatedContent>
             <Link
               to="/"
@@ -101,27 +106,77 @@ function CareersPage() {
             </h2>
 
             {hasPositions ? (
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {c.careers.positions.map((p) => (
-                  <SpotlightCard
-                    key={p.title}
-                    as="article"
-                    className="rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40"
-                  >
-                    <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
-                      {p.area}
-                    </p>
-                    <h3 className="mt-3 text-lg font-semibold">{p.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground">
-                      {p.modality} · {p.location}
-                    </p>
-                    <a
-                      href="/#contacto"
-                      className="mt-5 inline-flex text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+              <div className="mt-5 space-y-5">
+                {c.careers.positions.map((p, i) => (
+                  <AnimatedContent key={p.title} delay={Math.min(i, 4) * 60}>
+                    <SpotlightCard
+                      as="article"
+                      className="rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40"
                     >
-                      {c.careers.positionCtaLabel} →
-                    </a>
-                  </SpotlightCard>
+                      <div className="flex flex-wrap items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-semibold">{p.title}</h3>
+                          <p className="mt-1 text-sm text-muted-foreground">
+                            {p.location} · {p.modality} · {p.seniority}
+                          </p>
+                        </div>
+                        <a
+                          href="/#contacto"
+                          className="inline-flex shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                        >
+                          {c.careers.positionCtaLabel}
+                        </a>
+                      </div>
+
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {p.stack.map((s) => (
+                          <span
+                            key={s}
+                            className="rounded-full border border-border px-3 py-1 font-mono text-[11px] text-muted-foreground"
+                          >
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+
+                      <p className="mt-4 text-sm text-muted-foreground">{p.intro}</p>
+
+                      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+                        <div>
+                          <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
+                            {c.careers.mustHaveLabel}
+                          </p>
+                          <ul className="mt-2 space-y-1.5">
+                            {p.mustHave.map((item) => (
+                              <li key={item} className="flex gap-2 text-sm">
+                                <span
+                                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-primary"
+                                  aria-hidden="true"
+                                />
+                                <span className="text-muted-foreground">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
+                            {c.careers.niceToHaveLabel}
+                          </p>
+                          <ul className="mt-2 space-y-1.5">
+                            {p.niceToHave.map((item) => (
+                              <li key={item} className="flex gap-2 text-sm">
+                                <span
+                                  className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-muted-foreground"
+                                  aria-hidden="true"
+                                />
+                                <span className="text-muted-foreground">{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </SpotlightCard>
+                  </AnimatedContent>
                 ))}
               </div>
             ) : (

@@ -270,7 +270,7 @@ function Home() {
                 {c.people.ctaLink}
               </Link>
               <Link
-                to="/carreras"
+                to="/trabaja-con-nosotros"
                 className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
               >
                 {c.people.careersLink} →
