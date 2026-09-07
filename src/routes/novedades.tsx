@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import type { ReactNode } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
+import { BackButton } from "@/components/site/BackButton";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
 import { BorderGlow } from "@/components/site/BorderGlow";
 import { FloatingNav } from "@/components/site/FloatingNav";
@@ -43,6 +44,53 @@ function NewsletterPage() {
     n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n,
   );
 
+  // "Modo revista": en vez de un scroll continuo por las 8 secciones, se
+  // navega página por página (portada, 01-08, fuentes) con flechas, teclado
+  // o swipe — como si fueras pasando las hojas del boletín.
+  const pageCount = issue.sections.length + 2;
+  const [pageIndex, setPageIndex] = useState(0);
+  const [dir, setDir] = useState<1 | -1>(1);
+  const touchStartX = useRef<number | null>(null);
+
+  const goTo = (i: number) => {
+    const clamped = Math.max(0, Math.min(pageCount - 1, i));
+    setDir(clamped >= pageIndex ? 1 : -1);
+    setPageIndex(clamped);
+  };
+
+  useEffect(() => {
+    if (lang === "EN") return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") goTo(pageIndex + 1);
+      else if (e.key === "ArrowLeft") goTo(pageIndex - 1);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageIndex, lang]);
+
+  const onTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  };
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = touchStartX.current;
+    touchStartX.current = null;
+    if (start == null) return;
+    const dx = (e.changedTouches[0]?.clientX ?? start) - start;
+    if (Math.abs(dx) < 40) return;
+    goTo(dx < 0 ? pageIndex + 1 : pageIndex - 1);
+  };
+
+  const currentPageLabel =
+    pageIndex === 0
+      ? "Portada"
+      : pageIndex === pageCount - 1
+        ? issue.sourcesHeading
+        : (() => {
+            const s = issue.sections[pageIndex - 1];
+            return s ? `${s.number} — ${s.heading}` : "";
+          })();
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
       <FloatingNav
@@ -82,60 +130,125 @@ function NewsletterPage() {
       />
 
       <main className="px-5 pt-20 pb-8 sm:pt-24">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <Link
-              to="/"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              ← {c.news.backLink}
-            </Link>
+            <BackButton label={c.news.backLink} />
             <p className="mt-5 font-mono text-xs tracking-widest text-primary uppercase">
               {issue.kicker}
             </p>
             <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">{issue.title}</h1>
-            <p className="mt-2 text-lg font-medium text-foreground">{issue.subtitle}</p>
-            <p className="mt-3 text-base text-muted-foreground">{issue.description}</p>
+            <div className="max-w-2xl">
+              <p className="mt-2 text-lg font-medium text-foreground">{issue.subtitle}</p>
+              <p className="mt-3 text-base text-muted-foreground">{issue.description}</p>
+            </div>
             <p className="mt-4 text-xs text-muted-foreground">{issue.closingDate}</p>
           </AnimatedContent>
 
           {lang === "EN" ? (
-            <AnimatedContent className="mt-10" distance={30}>
+            <AnimatedContent className="mt-10 max-w-2xl" distance={30}>
               <div className="rounded-2xl border border-border bg-card p-8">
                 <p className="text-lg font-semibold">{c.news.enNoticeHeading}</p>
                 <p className="mt-2 text-sm text-muted-foreground">{c.news.enNoticeBody}</p>
               </div>
             </AnimatedContent>
           ) : (
-            <>
-              {issue.podcast && <Podcast className="mt-10" podcast={issue.podcast} />}
-
-              <AnimatedContent className="mt-10" distance={30}>
-                <h2 className="text-xl font-bold tracking-tight">{issue.editorial.heading}</h2>
-                <p className="mt-3 text-muted-foreground">{issue.editorial.body}</p>
-                <PullQuote
-                  className="mt-5"
-                  heading={issue.editorial.calloutHeading}
-                  body={issue.editorial.calloutBody}
-                />
-              </AnimatedContent>
-
-              <div className="mt-16 space-y-16">
-                {issue.sections.map((section, i) => (
-                  <AnimatedContent key={section.number} delay={Math.min(i, 3) * 60}>
-                    <Section section={section} />
-                  </AnimatedContent>
+            <div className="mt-10">
+              {/* Índice — tabs de página, como las solapas de una revista */}
+              <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Páginas del boletín">
+                <PageTab label="Portada" active={pageIndex === 0} onClick={() => goTo(0)} />
+                {issue.sections.map((s, i) => (
+                  <PageTab
+                    key={s.number}
+                    label={s.number}
+                    active={pageIndex === i + 1}
+                    onClick={() => goTo(i + 1)}
+                  />
                 ))}
+                <PageTab
+                  label="Fuentes"
+                  active={pageIndex === pageCount - 1}
+                  onClick={() => goTo(pageCount - 1)}
+                />
               </div>
 
-              <AnimatedContent className="mt-16 border-t border-white/10 pt-8" distance={20}>
-                <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
-                  {issue.sourcesHeading}
-                </h2>
-                <p className="mt-3 text-sm text-muted-foreground">{issue.sources.join(" · ")}</p>
-                <p className="mt-6 text-xs text-muted-foreground">{issue.closingNote}</p>
-              </AnimatedContent>
-            </>
+              <p aria-live="polite" className="sr-only">
+                {currentPageLabel}
+              </p>
+
+              <div
+                onTouchStart={onTouchStart}
+                onTouchEnd={onTouchEnd}
+                className="relative mt-6 min-h-[50vh] overflow-hidden"
+              >
+                <div
+                  key={pageIndex}
+                  className={
+                    dir === 1
+                      ? "animate-[page-slide-in-right_420ms_ease-out]"
+                      : "animate-[page-slide-in-left_420ms_ease-out]"
+                  }
+                >
+                  {pageIndex === 0 && (
+                    <div>
+                      {issue.podcast && <Podcast className="max-w-2xl" podcast={issue.podcast} />}
+                      <div className="mt-10 max-w-2xl">
+                        <h2 className="text-xl font-bold tracking-tight">
+                          {issue.editorial.heading}
+                        </h2>
+                        <p className="mt-3 text-muted-foreground">{issue.editorial.body}</p>
+                        <PullQuote
+                          className="mt-5"
+                          heading={issue.editorial.calloutHeading}
+                          body={issue.editorial.calloutBody}
+                        />
+                      </div>
+                    </div>
+                  )}
+
+                  {pageIndex >= 1 &&
+                    pageIndex <= issue.sections.length &&
+                    (() => {
+                      const s = issue.sections[pageIndex - 1];
+                      return s ? <Section section={s} /> : null;
+                    })()}
+
+                  {pageIndex === pageCount - 1 && (
+                    <div className="max-w-2xl">
+                      <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
+                        {issue.sourcesHeading}
+                      </h2>
+                      <p className="mt-3 text-sm text-muted-foreground">
+                        {issue.sources.join(" · ")}
+                      </p>
+                      <p className="mt-6 text-xs text-muted-foreground">{issue.closingNote}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Prev / next */}
+              <div className="mt-10 flex items-center justify-between border-t border-white/10 pt-6">
+                <button
+                  type="button"
+                  onClick={() => goTo(pageIndex - 1)}
+                  disabled={pageIndex === 0}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:pointer-events-none disabled:opacity-30"
+                >
+                  ← Anterior
+                </button>
+                <p className="font-mono text-xs text-muted-foreground">
+                  {pageIndex + 1} / {pageCount}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => goTo(pageIndex + 1)}
+                  disabled={pageIndex === pageCount - 1}
+                  className="inline-flex items-center gap-2 rounded-full border border-white/15 px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary disabled:pointer-events-none disabled:opacity-30"
+                >
+                  Siguiente →
+                </button>
+              </div>
+            </div>
           )}
         </div>
       </main>
@@ -192,6 +305,32 @@ function SectionHeader({ number, heading, intro }: { number: string; heading: st
   );
 }
 
+function PageTab({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={`rounded-full border px-3.5 py-1.5 font-mono text-xs tracking-widest uppercase transition-colors ${
+        active
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
 function Podcast({
   podcast,
   className = "",
@@ -233,7 +372,7 @@ function PullQuote({
   className?: string;
 }) {
   return (
-    <BorderGlow className={className}>
+    <BorderGlow className={`max-w-2xl ${className}`}>
       <div className="p-6 sm:p-7">
         <p className="font-semibold">{heading}</p>
         <p className="mt-2 text-sm text-muted-foreground">{body}</p>
@@ -273,7 +412,7 @@ function Section({ section }: { section: NewsletterSection }) {
 
     case "timeline":
       return (
-        <div>
+        <div className="max-w-3xl">
           <SectionHeader number={section.number} heading={section.heading} intro={section.intro} />
           <div className="mt-6 space-y-4 border-l-2 border-primary/25 pl-5 sm:pl-6">
             {section.items.map((item) => (
@@ -296,7 +435,7 @@ function Section({ section }: { section: NewsletterSection }) {
 
     case "dev":
       return (
-        <div>
+        <div className="max-w-3xl">
           <SectionHeader number={section.number} heading={section.heading} intro={section.intro} />
           <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{section.paragraph}</p>
 
@@ -330,7 +469,9 @@ function Section({ section }: { section: NewsletterSection }) {
       return (
         <div>
           <SectionHeader number={section.number} heading={section.heading} intro={section.intro} />
-          <p className="mt-6 text-sm leading-relaxed text-muted-foreground">{section.paragraph}</p>
+          <p className="mt-6 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+            {section.paragraph}
+          </p>
           <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {section.items.map((item) => (
               <Card key={item.title}>

@@ -23,6 +23,7 @@ export type SiteContent = {
     items: { client: string; challenge: string; result: string }[];
   };
   stack: { heading: string; logoAlt: (name: string) => string };
+  newsTeaser: { eyebrow: string; cta: string };
   people: {
     heading: string;
     statement: string;
@@ -36,14 +37,20 @@ export type SiteContent = {
   contact: {
     heading: string;
     subtitle: string;
+    typeLabels: { company: string; candidate: string; general: string };
     fields: {
       name: string;
       email: string;
+      phone: string;
       company: string;
       country: string;
       projectType: string;
+      position: string;
+      positionOther: string;
+      resume: string;
       message: string;
     };
+    countries: string[];
     projectOptions: string[];
     submit: string;
     success: string;
@@ -84,8 +91,11 @@ export type SiteContent = {
     positionCtaLabel: string;
     mustHaveLabel: string;
     niceToHaveLabel: string;
+    filterAllLabel: string;
+    filterEmptyMessage: string;
     positions: {
       title: string;
+      category: string;
       location: string;
       modality: string;
       seniority: string;
@@ -187,6 +197,7 @@ const ES: SiteContent = {
     ],
   },
   stack: { heading: "Stack con el que trabajamos", logoAlt: (n) => `Logo de ${n}` },
+  newsTeaser: { eyebrow: "Novedades de IA", cta: "Leer boletín completo" },
   people: {
     heading: "Nuestra gente",
     statement:
@@ -225,14 +236,53 @@ const ES: SiteContent = {
   contact: {
     heading: "Contanos tu proyecto",
     subtitle: "Respondemos con una propuesta de equipo, no con un folleto.",
+    typeLabels: {
+      company: "Soy una empresa",
+      candidate: "Busco trabajar con ustedes",
+      general: "Otra consulta",
+    },
     fields: {
       name: "Nombre",
       email: "Email",
+      phone: "Teléfono",
       company: "Empresa",
       country: "País",
       projectType: "Tipo de proyecto",
+      position: "Puesto de interés",
+      positionOther: "Otro / no está en la lista",
+      resume: "Currículum (PDF o Word)",
       message: "Mensaje",
     },
+    countries: [
+      "Argentina",
+      "Paraguay",
+      "Estados Unidos",
+      "España",
+      "Uruguay",
+      "Chile",
+      "Brasil",
+      "Bolivia",
+      "Perú",
+      "Colombia",
+      "Ecuador",
+      "Venezuela",
+      "México",
+      "Panamá",
+      "Costa Rica",
+      "Guatemala",
+      "Honduras",
+      "El Salvador",
+      "Nicaragua",
+      "República Dominicana",
+      "Cuba",
+      "Canadá",
+      "Reino Unido",
+      "Alemania",
+      "Francia",
+      "Italia",
+      "Portugal",
+      "Otro",
+    ],
     projectOptions: [
       "Desarrollo web/mobile",
       "Data & BI",
@@ -289,9 +339,12 @@ const ES: SiteContent = {
     positionCtaLabel: "Postularme",
     mustHaveLabel: "¿Qué buscamos?",
     niceToHaveLabel: "Valoramos",
+    filterAllLabel: "Todas",
+    filterEmptyMessage: "No hay búsquedas abiertas para esta categoría por ahora.",
     positions: [
       {
         title: "Desarrollador/a .NET Senior",
+        category: "Full Stack",
         location: "Córdoba, Argentina",
         modality: "Híbrida (remoto + oficina cuando se requiera)",
         seniority: "Senior",
@@ -313,6 +366,7 @@ const ES: SiteContent = {
       },
       {
         title: "Data Engineer",
+        category: "Data",
         location: "Remoto (Argentina)",
         modality: "100% remoto",
         seniority: "Semi Senior / Senior",
@@ -334,6 +388,7 @@ const ES: SiteContent = {
       },
       {
         title: "QA Automation Engineer",
+        category: "QA",
         location: "Córdoba, Argentina",
         modality: "Híbrida (remoto + oficina cuando se requiera)",
         seniority: "Semi Senior",
@@ -355,6 +410,7 @@ const ES: SiteContent = {
       },
       {
         title: "Mobile Developer (iOS / Android)",
+        category: "Mobile",
         location: "Remoto (Argentina / LatAm)",
         modality: "100% remoto",
         seniority: "Semi Senior",
@@ -375,6 +431,7 @@ const ES: SiteContent = {
       },
       {
         title: "DevOps Engineer",
+        category: "DevOps",
         location: "Córdoba, Argentina",
         modality: "Híbrida (remoto + oficina cuando se requiera)",
         seniority: "Senior",
@@ -489,6 +546,7 @@ const EN: SiteContent = {
     ],
   },
   stack: { heading: "The stack we work with", logoAlt: (n) => `${n} logo` },
+  newsTeaser: { eyebrow: "AI Newsletter", cta: "Read the full issue" },
   people: {
     heading: "Our people",
     statement:
@@ -527,14 +585,53 @@ const EN: SiteContent = {
   contact: {
     heading: "Tell us about your project",
     subtitle: "We reply with a team proposal, not a brochure.",
+    typeLabels: {
+      company: "I'm a company",
+      candidate: "I'm looking to join the team",
+      general: "Other inquiry",
+    },
     fields: {
       name: "Name",
       email: "Email",
+      phone: "Phone",
       company: "Company",
       country: "Country",
       projectType: "Project type",
+      position: "Position of interest",
+      positionOther: "Other / not listed",
+      resume: "Resume (PDF or Word)",
       message: "Message",
     },
+    countries: [
+      "Argentina",
+      "Paraguay",
+      "United States",
+      "Spain",
+      "Uruguay",
+      "Chile",
+      "Brazil",
+      "Bolivia",
+      "Peru",
+      "Colombia",
+      "Ecuador",
+      "Venezuela",
+      "Mexico",
+      "Panama",
+      "Costa Rica",
+      "Guatemala",
+      "Honduras",
+      "El Salvador",
+      "Nicaragua",
+      "Dominican Republic",
+      "Cuba",
+      "Canada",
+      "United Kingdom",
+      "Germany",
+      "France",
+      "Italy",
+      "Portugal",
+      "Other",
+    ],
     projectOptions: [
       "Web/mobile development",
       "Data & BI",
@@ -591,9 +688,12 @@ const EN: SiteContent = {
     positionCtaLabel: "Apply",
     mustHaveLabel: "What we're looking for",
     niceToHaveLabel: "Nice to have",
+    filterAllLabel: "All",
+    filterEmptyMessage: "No open positions in this category right now.",
     positions: [
       {
         title: "Senior .NET Developer",
+        category: "Full Stack",
         location: "Córdoba, Argentina",
         modality: "Hybrid (remote + office when required)",
         seniority: "Senior",
@@ -615,6 +715,7 @@ const EN: SiteContent = {
       },
       {
         title: "Data Engineer",
+        category: "Data",
         location: "Remote (Argentina)",
         modality: "100% remote",
         seniority: "Mid / Senior",
@@ -636,6 +737,7 @@ const EN: SiteContent = {
       },
       {
         title: "QA Automation Engineer",
+        category: "QA",
         location: "Córdoba, Argentina",
         modality: "Hybrid (remote + office when required)",
         seniority: "Mid-level",
@@ -657,6 +759,7 @@ const EN: SiteContent = {
       },
       {
         title: "Mobile Developer (iOS / Android)",
+        category: "Mobile",
         location: "Remote (Argentina / LatAm)",
         modality: "100% remote",
         seniority: "Mid-level",
@@ -677,6 +780,7 @@ const EN: SiteContent = {
       },
       {
         title: "DevOps Engineer",
+        category: "DevOps",
         location: "Córdoba, Argentina",
         modality: "Hybrid (remote + office when required)",
         seniority: "Senior",

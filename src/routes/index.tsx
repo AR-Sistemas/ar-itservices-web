@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
@@ -19,8 +19,10 @@ import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
+import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
+import { NEWSLETTER_ISSUE } from "@/data/newsletter";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,12 +67,40 @@ const TECH = [
 
 /* ---- Página ---- */
 
+type ContactType = "empresa" | "postulante" | "consulta";
+
 function Home() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const [sent, setSent] = useState(false);
+  const [contactType, setContactType] = useState<ContactType>("empresa");
+  const [selectedPosition, setSelectedPosition] = useState("");
+  // Levantados a estado (en vez de no controlados) para que no se pierdan si
+  // el visitante cambia de pestaña de tipo de consulta y vuelve.
+  const [empresaValue, setEmpresaValue] = useState("");
+  const [paisValue, setPaisValue] = useState("");
+  const [tipoValue, setTipoValue] = useState("");
+  const [telefonoValue, setTelefonoValue] = useState("");
   const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
+
+  // Si venimos de "Postularme" en /trabaja-con-nosotros, precargamos el
+  // formulario en modo postulante con el puesto ya seleccionado.
+  useEffect(() => {
+    const puesto = new URLSearchParams(window.location.search).get("puesto");
+    if (puesto) {
+      setContactType("postulante");
+      setSelectedPosition(puesto);
+    }
+  }, []);
+
+  // El puesto puede venir de un link generado en otro idioma (o de una
+  // posición que ya no existe): si no matchea ninguna opción actual del
+  // idioma activo, mostramos "otro" en vez de dejar el select en blanco.
+  const puestoSelectValue =
+    selectedPosition && !c.careers.positions.some((p) => p.title === selectedPosition)
+      ? "otro"
+      : selectedPosition;
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
@@ -253,6 +283,21 @@ function Home() {
           </div>
         </section>
 
+        {/* Portada del boletín de novedades */}
+        <section className="px-5 py-24 sm:py-32">
+          <div className="mx-auto max-w-4xl">
+            <AnimatedContent>
+              <NewsMagazineCover
+                kicker={NEWSLETTER_ISSUE.kicker}
+                title={NEWSLETTER_ISSUE.title}
+                subtitle={NEWSLETTER_ISSUE.subtitle}
+                eyebrow={c.newsTeaser.eyebrow}
+                cta={c.newsTeaser.cta}
+              />
+            </AnimatedContent>
+          </div>
+        </section>
+
         {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
         <section className="px-5 py-24 sm:py-32">
           <AnimatedContent className="mx-auto max-w-3xl text-center">
@@ -302,8 +347,32 @@ function Home() {
             <AnimatedContent>
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.contact.heading}</h2>
               <p className="mt-3 text-muted-foreground">{c.contact.subtitle}</p>
+
+              <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-full border border-border bg-card p-1.5">
+                {(
+                  [
+                    ["empresa", c.contact.typeLabels.company],
+                    ["postulante", c.contact.typeLabels.candidate],
+                    ["consulta", c.contact.typeLabels.general],
+                  ] as const
+                ).map(([value, label]) => (
+                  <button
+                    key={value}
+                    type="button"
+                    onClick={() => setContactType(value)}
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                      contactType === value
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
+              </div>
+
               <form
-                className="mt-10 grid gap-5 sm:grid-cols-2"
+                className="mt-8 grid gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   setSent(true);
@@ -311,22 +380,80 @@ function Home() {
               >
                 <Field id="nombre" label={c.contact.fields.name} />
                 <Field id="email" label={c.contact.fields.email} type="email" />
-                <Field id="empresa" label={c.contact.fields.company} />
-                <Field id="pais" label={c.contact.fields.country} />
-                <div className="sm:col-span-2">
-                  <label htmlFor="tipo" className="text-sm font-medium">
-                    {c.contact.fields.projectType}
-                  </label>
-                  <select
-                    id="tipo"
-                    name="tipo"
-                    className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-                  >
-                    {c.contact.projectOptions.map((opt) => (
-                      <option key={opt}>{opt}</option>
-                    ))}
-                  </select>
-                </div>
+
+                {contactType === "empresa" && (
+                  <Field id="empresa" label={c.contact.fields.company} value={empresaValue} onChange={setEmpresaValue} />
+                )}
+                {contactType === "postulante" && (
+                  <Field id="telefono" label={c.contact.fields.phone} type="tel" value={telefonoValue} onChange={setTelefonoValue} />
+                )}
+
+                {contactType !== "consulta" && (
+                  <SelectField
+                    id="pais"
+                    label={c.contact.fields.country}
+                    options={c.contact.countries}
+                    value={paisValue}
+                    onChange={setPaisValue}
+                  />
+                )}
+
+                {contactType === "empresa" && (
+                  <div className="sm:col-span-2">
+                    <label htmlFor="tipo" className="text-sm font-medium">
+                      {c.contact.fields.projectType}
+                    </label>
+                    <select
+                      id="tipo"
+                      name="tipo"
+                      value={tipoValue || c.contact.projectOptions[0]}
+                      onChange={(e) => setTipoValue(e.target.value)}
+                      className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+                    >
+                      {c.contact.projectOptions.map((opt) => (
+                        <option key={opt}>{opt}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {contactType === "postulante" && (
+                  <>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="puesto" className="text-sm font-medium">
+                        {c.contact.fields.position}
+                      </label>
+                      <select
+                        id="puesto"
+                        name="puesto"
+                        value={puestoSelectValue}
+                        onChange={(e) => setSelectedPosition(e.target.value)}
+                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+                      >
+                        <option value="">—</option>
+                        {c.careers.positions.map((p) => (
+                          <option key={p.title} value={p.title}>
+                            {p.title}
+                          </option>
+                        ))}
+                        <option value="otro">{c.contact.fields.positionOther}</option>
+                      </select>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label htmlFor="cv" className="text-sm font-medium">
+                        {c.contact.fields.resume}
+                      </label>
+                      <input
+                        id="cv"
+                        name="cv"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
+                      />
+                    </div>
+                  </>
+                )}
+
                 <div className="sm:col-span-2">
                   <label htmlFor="mensaje" className="text-sm font-medium">
                     {c.contact.fields.message}
@@ -334,7 +461,8 @@ function Home() {
                   <textarea
                     id="mensaje"
                     name="mensaje"
-                    rows={5}
+                    rows={contactType === "consulta" ? 4 : 5}
+                    required={contactType !== "postulante"}
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   />
                 </div>
@@ -401,7 +529,19 @@ function Home() {
   );
 }
 
-function Field({ id, label, type = "text" }: { id: string; label: string; type?: string }) {
+function Field({
+  id,
+  label,
+  type = "text",
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  type?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+}) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium">
@@ -412,8 +552,47 @@ function Field({ id, label, type = "text" }: { id: string; label: string; type?:
         name={id}
         type={type}
         required
+        value={value}
+        onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
       />
+    </div>
+  );
+}
+
+function SelectField({
+  id,
+  label,
+  options,
+  value,
+  onChange,
+}: {
+  id: string;
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <div>
+      <label htmlFor={id} className="text-sm font-medium">
+        {label}
+      </label>
+      <select
+        id={id}
+        name={id}
+        required
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+      >
+        <option value="" disabled>
+          —
+        </option>
+        {options.map((opt) => (
+          <option key={opt}>{opt}</option>
+        ))}
+      </select>
     </div>
   );
 }

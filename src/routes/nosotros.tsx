@@ -1,5 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
+import { BackButton } from "@/components/site/BackButton";
 import { TiltedCard } from "@/components/site/TiltedCard";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
@@ -86,15 +87,10 @@ function PeoplePage() {
       />
 
       <main className="px-5 pt-20 pb-8 sm:pt-24">
-        <div className="mx-auto max-w-5xl">
+        <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <Link
-              to="/"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              ← {c.people.backLink}
-            </Link>
-            <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+            <BackButton label={c.people.backLink} />
+            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
               {c.people.heading}
             </h1>
             <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.people.statement}</p>

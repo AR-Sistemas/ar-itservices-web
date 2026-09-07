@@ -1,5 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { useMemo, useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
+import { BackButton } from "@/components/site/BackButton";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
@@ -47,6 +49,15 @@ function CareersPage() {
   );
   const hasPositions = c.careers.positions.length > 0;
 
+  const categories = useMemo(
+    () => Array.from(new Set(c.careers.positions.map((p) => p.category))),
+    [c.careers.positions],
+  );
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const visiblePositions = activeCategory
+    ? c.careers.positions.filter((p) => p.category === activeCategory)
+    : c.careers.positions;
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
       <FloatingNav
@@ -86,15 +97,10 @@ function CareersPage() {
       />
 
       <main className="px-5 pt-20 pb-8 sm:pt-24">
-        <div className="mx-auto max-w-3xl">
+        <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <Link
-              to="/"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-            >
-              ← {c.careers.backLink}
-            </Link>
-            <h1 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
+            <BackButton label={c.careers.backLink} />
+            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
               {c.careers.heading}
             </h1>
             <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.careers.intro}</p>
@@ -105,23 +111,60 @@ function CareersPage() {
               {c.careers.positionsHeading}
             </h2>
 
-            {hasPositions ? (
-              <div className="mt-5 space-y-5">
-                {c.careers.positions.map((p, i) => (
+            {hasPositions && categories.length > 1 && (
+              <div className="mt-4 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => setActiveCategory(null)}
+                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                    activeCategory === null
+                      ? "border-primary bg-primary text-primary-foreground"
+                      : "border-border text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {c.careers.filterAllLabel}
+                </button>
+                {categories.map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => setActiveCategory(cat)}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
+                      activeCategory === cat
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {visiblePositions.length === 0 && hasPositions && (
+              <p className="mt-5 text-sm text-muted-foreground">{c.careers.filterEmptyMessage}</p>
+            )}
+
+            {visiblePositions.length > 0 ? (
+              <div className="mt-5 grid gap-5 lg:grid-cols-2">
+                {visiblePositions.map((p, i) => (
                   <AnimatedContent key={p.title} delay={Math.min(i, 4) * 60}>
                     <SpotlightCard
                       as="article"
-                      className="rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40"
+                      className="h-full rounded-2xl border border-border bg-card p-7 transition-colors hover:border-primary/40"
                     >
                       <div className="flex flex-wrap items-start justify-between gap-3">
                         <div>
-                          <h3 className="text-lg font-semibold">{p.title}</h3>
+                          <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
+                            {p.category}
+                          </p>
+                          <h3 className="mt-1 text-lg font-semibold">{p.title}</h3>
                           <p className="mt-1 text-sm text-muted-foreground">
                             {p.location} · {p.modality} · {p.seniority}
                           </p>
                         </div>
                         <a
-                          href="/#contacto"
+                          href={`/?puesto=${encodeURIComponent(p.title)}#contacto`}
                           className="inline-flex shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
                         >
                           {c.careers.positionCtaLabel}
@@ -180,18 +223,20 @@ function CareersPage() {
                 ))}
               </div>
             ) : (
-              <div className="mt-5 rounded-2xl border border-border bg-card p-8 sm:p-10">
-                <p className="text-lg font-semibold">{c.careers.emptyHeading}</p>
-                <p className="mt-2 max-w-xl text-sm text-muted-foreground">
-                  {c.careers.emptyBody}
-                </p>
-                <a
-                  href="/#contacto"
-                  className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-                >
-                  {c.careers.applyCta}
-                </a>
-              </div>
+              !hasPositions && (
+                <div className="mt-5 rounded-2xl border border-border bg-card p-8 sm:p-10">
+                  <p className="text-lg font-semibold">{c.careers.emptyHeading}</p>
+                  <p className="mt-2 max-w-xl text-sm text-muted-foreground">
+                    {c.careers.emptyBody}
+                  </p>
+                  <a
+                    href="/#contacto"
+                    className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                  >
+                    {c.careers.applyCta}
+                  </a>
+                </div>
+              )
             )}
           </AnimatedContent>
         </div>

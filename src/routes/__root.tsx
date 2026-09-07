@@ -128,6 +128,30 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const router = useRouter();
+
+  // El router tiene scrollRestoration activado, que en cada navegación (incluida
+  // la carga inicial) fuerza el scroll a (0,0) — pisando el salto nativo del
+  // navegador a un #hash de la URL. Lo reintentamos a mano un instante después
+  // (afecta a links cross-page como "Postularme" o "Hablemos" que llegan con
+  // #contacto ya en la URL).
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const scrollToHash = () => {
+      const hash = window.location.hash;
+      if (!hash) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    };
+    scrollToHash();
+    const unsubscribe = router.subscribe("onResolved", scrollToHash);
+    return () => {
+      clearTimeout(timer);
+      unsubscribe();
+    };
+  }, [router]);
 
   return (
     <QueryClientProvider client={queryClient}>
