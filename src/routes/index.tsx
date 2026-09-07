@@ -20,6 +20,7 @@ import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
+import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
@@ -104,6 +105,7 @@ function Home() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
+      <CodeGridSpotlight />
       <FloatingNav
         items={c.nav}
         ctaLabel={c.cta.talk}
