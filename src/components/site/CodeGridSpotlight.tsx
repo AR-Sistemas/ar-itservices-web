@@ -97,7 +97,7 @@ export function CodeGridSpotlight() {
       el.style.transform = `translate3d(${e.clientX - SPOTLIGHT_SIZE / 2}px, ${
         e.clientY - SPOTLIGHT_SIZE / 2
       }px, 0)`;
-      el.style.opacity = "1";
+      el.style.opacity = "0.5";
     };
     const onLeave = () => {
       el.style.opacity = "0";
