@@ -16,54 +16,59 @@ import { useEffect, useRef } from "react";
  * de código que se iluminan en un halo suave alrededor del cursor.
  */
 
-const SNIPPETS = [
-  "</>",
-  "{ }",
-  "=>",
-  "if()",
-  "[ ]",
-  "//",
-  "<div>",
-  "git",
-  "npm",
-  "&&",
-  "();",
-  "const",
-  "async",
-  "0101",
-  "#!/",
-  "map()",
+// Fragmentos de código (CSS/JS) que se van concatenando para armar líneas
+// densas y continuas, como un dump de código minificado — no son fragmentos
+// sueltos, es una pared de texto.
+const TOKENS = [
+  "display:flex;", "padding:0 24px;", "border-radius:12px;", "position:absolute;",
+  "transform:rotate(-45deg);", "transition:all .3s ease;", "background:#0f0f14;",
+  "@keyframes fade-in{", "from{opacity:0}", "to{opacity:1}}", "animation:spin 2s linear infinite;",
+  "const handleClick=()=>{", "setState(true)}", "grid-template-columns:repeat(4,1fr);",
+  "async function fetchData(){", "await res.json()}", "box-shadow:0 4px 12px rgba(0,0,0,.4);",
+  "if(user&&user.isActive){", "return true}", "z-index:10;overflow:hidden;",
+  "for(let i=0;i<arr.length;i++){", "export default function App(){",
+  ".nav a{text-decoration:none;", "color:#fff}", "width:100%;height:100vh;",
+  "backdrop-filter:blur(8px);", "cursor:pointer;user-select:none;",
+  "flex-direction:column;align-items:center;", "letter-spacing:-.02em;",
+  "font-family:monospace;font-size:14px;", "border:1px solid rgba(255,255,255,.1);",
+  "import{useState}from 'react';", "export const App=()=>{",
+  "return(<div className=", "onClick={()=>setOpen(!open)}",
+  "margin:0 auto;max-width:1200px;", "opacity:.85;mix-blend-mode:screen;",
+  "@media (min-width:768px){", "overflow-y:auto;scroll-behavior:smooth;}",
 ];
 
-// Posiciones dispersas (no una grilla perfecta) dentro de un tile que se
-// repite en toda la pantalla.
-const TILE_SIZE = 280;
-const POSITIONS: { x: number; y: number; r: number }[] = [
-  { x: 16, y: 34, r: -6 },
-  { x: 132, y: 20, r: 4 },
-  { x: 236, y: 44, r: -3 },
-  { x: 58, y: 92, r: 8 },
-  { x: 176, y: 100, r: -8 },
-  { x: 22, y: 156, r: 5 },
-  { x: 122, y: 168, r: -4 },
-  { x: 244, y: 150, r: 6 },
-  { x: 76, y: 210, r: -7 },
-  { x: 206, y: 224, r: 3 },
-  { x: 12, y: 252, r: -5 },
-  { x: 140, y: 254, r: 7 },
-  { x: 256, y: 260, r: -2 },
-];
+const TILE_W = 480;
+const TILE_H = 420;
+const LINE_HEIGHT = 16;
+const LINE_COUNT = 24;
+const FONT_SIZE = 10;
 
 function escapeXml(s: string): string {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
+function buildLines(count: number): string[] {
+  const lines: string[] = [];
+  for (let i = 0; i < count; i++) {
+    const start = i * 3;
+    const parts = [0, 1, 2].map((offset) => TOKENS[(start + offset) % TOKENS.length] ?? "");
+    lines.push(parts.join(""));
+  }
+  return lines;
+}
+
 function buildTileMask(): string {
-  const glyphs = POSITIONS.map(({ x, y, r }, i) => {
-    const text = escapeXml(SNIPPETS[i % SNIPPETS.length] ?? "//");
-    return `<text x="${x}" y="${y}" transform="rotate(${r} ${x} ${y})" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="15" fill="#fff">${text}</text>`;
-  }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE_SIZE}" height="${TILE_SIZE}" viewBox="0 0 ${TILE_SIZE} ${TILE_SIZE}">${glyphs}</svg>`;
+  const lines = buildLines(LINE_COUNT);
+  const glyphs = lines
+    .map((line, i) => {
+      // Alterna un pequeño corrimiento horizontal para que no quede todo
+      // alineado a la misma columna, como un texto que sigue wrappeando.
+      const x = i % 3 === 0 ? -8 : i % 3 === 1 ? 0 : -16;
+      const y = LINE_HEIGHT * (i + 1);
+      return `<text x="${x}" y="${y}" font-family="ui-monospace,SFMono-Regular,Menlo,monospace" font-size="${FONT_SIZE}" xml:space="preserve" fill="#fff">${escapeXml(line)}</text>`;
+    })
+    .join("");
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${TILE_W}" height="${TILE_H}" viewBox="0 0 ${TILE_W} ${TILE_H}">${glyphs}</svg>`;
   return `url("data:image/svg+xml,${encodeURIComponent(svg)}")`;
 }
 
@@ -72,8 +77,8 @@ const TILE_MASK = buildTileMask();
 const tileMaskStyle = {
   maskImage: TILE_MASK,
   WebkitMaskImage: TILE_MASK,
-  maskSize: `${TILE_SIZE}px ${TILE_SIZE}px`,
-  WebkitMaskSize: `${TILE_SIZE}px ${TILE_SIZE}px`,
+  maskSize: `${TILE_W}px ${TILE_H}px`,
+  WebkitMaskSize: `${TILE_W}px ${TILE_H}px`,
   maskRepeat: "repeat",
   WebkitMaskRepeat: "repeat",
 } as React.CSSProperties;
