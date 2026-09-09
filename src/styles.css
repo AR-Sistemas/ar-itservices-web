@@ -397,6 +397,29 @@
   }
 }
 
+/* Epicentros de noticias sobre el mapamundi de fondo en /novedades. */
+@keyframes epicenter-pulse {
+  0% {
+    transform: scale(0.4);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+.epicenter-ring {
+  animation: epicenter-pulse 2.6s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .epicenter-ring {
+    animation: none;
+    opacity: 0.25;
+  }
+}
+
 /* ---- Scroll suave al navegar por anclas (#servicios, #casos, etc.) ---- */
 @media (prefers-reduced-motion: no-preference) {
   html {

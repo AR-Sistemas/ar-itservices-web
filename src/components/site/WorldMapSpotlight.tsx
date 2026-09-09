@@ -12,6 +12,33 @@ import { useEffect, useRef } from "react";
 
 const SPOTLIGHT_SIZE = 520;
 
+// Puntos de "noticia" sobre el mapa (posición en % del viewport), inspirados
+// en los pulsos de la placa de referencia que pasó el cliente.
+const EPICENTERS: { top: number; left: number; delay?: number }[] = [
+  { top: 30, left: 19 },
+  { top: 62, left: 27, delay: 0.6 },
+  { top: 22, left: 51, delay: 1.2 },
+  { top: 50, left: 56, delay: 0.3 },
+  { top: 33, left: 70, delay: 0.9 },
+  { top: 68, left: 83, delay: 1.5 },
+];
+
+function EpicenterPulse({ top, left, delay = 0 }: { top: number; left: number; delay?: number }) {
+  return (
+    <div
+      className="absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+      style={{ top: `${top}%`, left: `${left}%` }}
+    >
+      <span className="epicenter-ring absolute inset-0 rounded-full border border-primary/70" style={{ animationDelay: `${delay}s` }} />
+      <span
+        className="epicenter-ring absolute inset-0 rounded-full border border-primary/70"
+        style={{ animationDelay: `${delay + 0.9}s` }}
+      />
+      <span className="relative block h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_6px_2px_rgba(255,0,13,0.55)]" />
+    </div>
+  );
+}
+
 export function WorldMapSpotlight() {
   const spotRef = useRef<HTMLDivElement>(null);
 
@@ -45,9 +72,14 @@ export function WorldMapSpotlight() {
         <img
           src="/images/world-map-bg.jpg"
           alt=""
-          className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-screen"
+          className="absolute inset-0 h-full w-full object-cover opacity-20 mix-blend-screen"
         />
       </picture>
+
+      {/* Epicentros de noticias, pulsando sobre el mapa */}
+      {EPICENTERS.map((p, i) => (
+        <EpicenterPulse key={i} top={p.top} left={p.left} delay={p.delay ?? 0} />
+      ))}
 
       {/* Halo que sigue al mouse, misma interacción que el fondo del home */}
       <div
