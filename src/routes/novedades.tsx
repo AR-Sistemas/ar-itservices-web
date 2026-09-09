@@ -52,11 +52,18 @@ function NewsletterPage() {
   const [pageIndex, setPageIndex] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
   const touchStartX = useRef<number | null>(null);
+  const pagerRef = useRef<HTMLDivElement>(null);
 
   const goTo = (i: number) => {
     const clamped = Math.max(0, Math.min(pageCount - 1, i));
     setDir(clamped >= pageIndex ? 1 : -1);
     setPageIndex(clamped);
+    // Al cambiar de página, volvemos al inicio del paginado — si no, el
+    // lector queda a la altura de donde tocó "Siguiente" (abajo del todo) y
+    // tiene que scrollear para arriba para empezar a leer la página nueva.
+    if (clamped !== pageIndex) {
+      pagerRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   };
 
   useEffect(() => {
@@ -154,7 +161,7 @@ function NewsletterPage() {
               </div>
             </AnimatedContent>
           ) : (
-            <div className="mt-10">
+            <div ref={pagerRef} className="mt-10 scroll-mt-28">
               {/* Índice — tabs de página, como las solapas de una revista */}
               <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Páginas del boletín">
                 <PageTab label="Portada" active={pageIndex === 0} onClick={() => goTo(0)} />
