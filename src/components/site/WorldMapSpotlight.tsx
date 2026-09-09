@@ -89,7 +89,7 @@ function buildOfficesOverlaySvg(): string {
     .join("");
   const cities = [cordoba, dallas, asuncion];
   const pinGlow = cities
-    .map(({ x, y }) => `<circle cx="${x}" cy="${y}" r="2.1" fill="#FF000D" opacity="0.45"/>`)
+    .map(({ x, y }) => `<circle cx="${x}" cy="${y}" r="1.6" fill="#FF000D" opacity="0.28"/>`)
     .join("");
   const pinCore = cities.map(({ x, y }) => `<circle cx="${x}" cy="${y}" r="0.6" fill="#fff"/>`).join("");
   const stars = AMBIENT_STARS.map(
@@ -141,7 +141,7 @@ export function WorldMapSpotlight() {
 
       {/* Líneas que conectan las 3 oficinas de AR, sutiles y fijas */}
       <div
-        className="absolute inset-0 opacity-70"
+        className="absolute inset-0 opacity-50"
         style={{
           backgroundImage: OFFICES_OVERLAY,
           backgroundSize: `${MAP_DISPLAY_WIDTH}px auto`,

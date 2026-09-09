@@ -14,7 +14,7 @@ export function useSpringPress<T extends HTMLElement>() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     animate(el, {
       scale: [1, 0.96, 1.03, 1],
-      ease: createSpring({ bounce: 1.25 }),
+      ease: createSpring({ bounce: 0.35 }),
       duration: 500,
     });
   }, []);
