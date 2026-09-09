@@ -29,9 +29,9 @@ function EpicenterPulse({ top, left, delay = 0 }: { top: number; left: number; d
       className="absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
       style={{ top: `${top}%`, left: `${left}%` }}
     >
-      <span className="epicenter-ring absolute inset-0 rounded-full border border-primary/40" style={{ animationDelay: `${delay}s` }} />
+      <span className="epicenter-ring absolute inset-0 rounded-full border border-primary/65" style={{ animationDelay: `${delay}s` }} />
       <span
-        className="epicenter-ring absolute inset-0 rounded-full border border-primary/40"
+        className="epicenter-ring absolute inset-0 rounded-full border border-primary/65"
         style={{ animationDelay: `${delay + 0.9}s` }}
       />
       <span className="relative block h-1.5 w-1.5 rounded-full bg-primary/70 shadow-[0_0_4px_1px_rgba(255,0,13,0.35)]" />
