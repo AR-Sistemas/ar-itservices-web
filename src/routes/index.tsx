@@ -24,6 +24,7 @@ import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
+import { isIntermedio } from "@/lib/site-mode";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -206,13 +207,15 @@ function Home() {
         </section>
 
         {/* Sección firma */}
-        <section className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <TeamBuilder />
-            </AnimatedContent>
-          </div>
-        </section>
+        {!isIntermedio && (
+          <section className="px-5 py-24 sm:py-32">
+            <div className="mx-auto max-w-6xl">
+              <AnimatedContent>
+                <TeamBuilder />
+              </AnimatedContent>
+            </div>
+          </section>
+        )}
 
         {/* Casos */}
         <section id="casos" className="px-5 py-24 sm:py-32">
@@ -286,19 +289,21 @@ function Home() {
         </section>
 
         {/* Portada del boletín de novedades */}
-        <section className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-4xl">
-            <AnimatedContent>
-              <NewsMagazineCover
-                kicker={NEWSLETTER_ISSUE.kicker}
-                title={NEWSLETTER_ISSUE.title}
-                subtitle={NEWSLETTER_ISSUE.subtitle}
-                eyebrow={c.newsTeaser.eyebrow}
-                cta={c.newsTeaser.cta}
-              />
-            </AnimatedContent>
-          </div>
-        </section>
+        {!isIntermedio && (
+          <section className="px-5 py-24 sm:py-32">
+            <div className="mx-auto max-w-4xl">
+              <AnimatedContent>
+                <NewsMagazineCover
+                  kicker={NEWSLETTER_ISSUE.kicker}
+                  title={NEWSLETTER_ISSUE.title}
+                  subtitle={NEWSLETTER_ISSUE.subtitle}
+                  eyebrow={c.newsTeaser.eyebrow}
+                  cta={c.newsTeaser.cta}
+                />
+              </AnimatedContent>
+            </div>
+          </section>
+        )}
 
         {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
         <section className="px-5 py-24 sm:py-32">
@@ -316,12 +321,14 @@ function Home() {
               >
                 {c.people.ctaLink}
               </Link>
-              <Link
-                to="/trabaja-con-nosotros"
-                className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
-              >
-                {c.people.careersLink} →
-              </Link>
+              {!isIntermedio && (
+                <Link
+                  to="/trabaja-con-nosotros"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                >
+                  {c.people.careersLink} →
+                </Link>
+              )}
             </div>
           </AnimatedContent>
         </section>

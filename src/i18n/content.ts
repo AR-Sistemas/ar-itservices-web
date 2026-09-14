@@ -1,5 +1,6 @@
 import type { BentoCard } from "@/components/site/MagicBento";
 import type { Lang } from "./language";
+import { isIntermedio } from "@/lib/site-mode";
 
 export type NavItem = { label: string; href: string };
 
@@ -810,6 +811,12 @@ const EN: SiteContent = {
   },
 };
 
+// Rutas que la versión "intermedia" no expone en el menú ni en el footer
+// (los archivos de ruta y su contenido siguen intactos en el repo).
+const HIDDEN_IN_INTERMEDIO = ["/novedades", "/trabaja-con-nosotros"];
+
 export function getContent(lang: Lang): SiteContent {
-  return lang === "EN" ? EN : ES;
+  const base = lang === "EN" ? EN : ES;
+  if (!isIntermedio) return base;
+  return { ...base, nav: base.nav.filter((n) => !HIDDEN_IN_INTERMEDIO.includes(n.href)) };
 }
