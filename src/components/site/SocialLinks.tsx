@@ -14,6 +14,10 @@ export function SocialLinks() {
       name: "WhatsApp",
       href: "https://wa.me/5493512349619",
       icon: WhatsAppIcon,
+      // El ícono de contorno de WhatsApp trae más margen interno en su viewBox
+      // que los otros dos (que son sólidos), así que a igual h-6/w-6 se ve más
+      // chico — lo agrandamos un toque para que el dibujo pese lo mismo.
+      iconClassName: "h-7 w-7",
     },
   ];
 
@@ -28,7 +32,7 @@ export function SocialLinks() {
             aria-label={link.name}
             className="flex items-center justify-center rounded-full bg-background p-2 text-muted-foreground transition-colors hover:text-primary"
           >
-            <link.icon className="h-6 w-6" />
+            <link.icon className={link.iconClassName ?? "h-6 w-6"} />
           </a>
         </li>
       ))}
