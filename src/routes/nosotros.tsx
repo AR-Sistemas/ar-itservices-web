@@ -38,7 +38,14 @@ export const Route = createFileRoute("/nosotros")({
   component: PeoplePage,
 });
 
-const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url];
+// Estas fotos son "asset pointers" de Lovable: su `.url` es una ruta relativa
+// (/__l5e/assets-v1/...) que solo el hosting de Lovable sabe resolver. En
+// cualquier otro host (Vercel, local, etc.) esa ruta no existe, así que la
+// resolvemos siempre contra el dominio real de Lovable.
+const LOVABLE_ASSETS_ORIGIN = "https://ar-talent-forge.lovable.app";
+const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url].map(
+  (url) => `${LOVABLE_ASSETS_ORIGIN}${url}`,
+);
 
 function PeoplePage() {
   const { lang, setLang } = useLang();
