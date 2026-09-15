@@ -9,3 +9,4 @@ export const SITE_MODE: SiteMode =
   import.meta.env.VITE_SITE_MODE === "intermedio" ? "intermedio" : "full";
 
 export const isIntermedio = SITE_MODE === "intermedio";
+
