@@ -26,7 +26,7 @@ export function SocialLinks() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={link.name}
-            className="text-muted-foreground transition-colors hover:text-primary"
+            className="flex items-center justify-center rounded-full bg-background p-2 text-muted-foreground transition-colors hover:text-primary"
           >
             <link.icon className="h-6 w-6" />
           </a>
