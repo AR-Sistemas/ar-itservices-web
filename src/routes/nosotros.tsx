@@ -10,10 +10,10 @@ import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-import felixPhoto from "@/assets/felix-melinsky.png.asset.json";
-import josePhoto from "@/assets/jose-romanutti.png.asset.json";
-import adrianPhoto from "@/assets/adrian-ferrari.png.asset.json";
-import constanzaPhoto from "@/assets/constanza-giordano.png.asset.json";
+import felixPhoto from "@/assets/team/felix-melinsky.png";
+import josePhoto from "@/assets/team/jose-romanutti.png";
+import adrianPhoto from "@/assets/team/adrian-ferrari.png";
+import constanzaPhoto from "@/assets/team/constanza-giordano.png";
 
 export const Route = createFileRoute("/nosotros")({
   head: () => ({
@@ -38,14 +38,7 @@ export const Route = createFileRoute("/nosotros")({
   component: PeoplePage,
 });
 
-// Estas fotos son "asset pointers" de Lovable: su `.url` es una ruta relativa
-// (/__l5e/assets-v1/...) que solo el hosting de Lovable sabe resolver. En
-// cualquier otro host (Vercel, local, etc.) esa ruta no existe, así que la
-// resolvemos siempre contra el dominio real de Lovable.
-const LOVABLE_ASSETS_ORIGIN = "https://ar-talent-forge.lovable.app";
-const PHOTOS = [felixPhoto.url, josePhoto.url, adrianPhoto.url, constanzaPhoto.url].map(
-  (url) => `${LOVABLE_ASSETS_ORIGIN}${url}`,
-);
+const PHOTOS = [felixPhoto, josePhoto, adrianPhoto, constanzaPhoto];
 
 function PeoplePage() {
   const { lang, setLang } = useLang();
