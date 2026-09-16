@@ -240,12 +240,12 @@ function Home() {
               {CLIENTS.map((cl, i) => (
                 <AnimatedContent key={cl.name} delay={i * 80}>
                   <StarBorderCard>
-                    <SpotlightCard className="flex h-40 items-center justify-center rounded-2xl border border-border bg-card p-8">
+                    <SpotlightCard className="flex h-40 items-center justify-center rounded-2xl border border-border bg-card p-6">
                       <img
                         src={cl.src}
                         alt={c.clients.logoAlt(cl.name)}
                         loading="lazy"
-                        className="max-h-20 w-full object-contain"
+                        className="max-h-24 w-full object-contain"
                       />
                     </SpotlightCard>
                   </StarBorderCard>
