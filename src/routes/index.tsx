@@ -21,6 +21,7 @@ import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
+import { DepthCarousel } from "@/components/site/DepthCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
@@ -236,22 +237,17 @@ function Home() {
                 {c.clients.heading}
               </h2>
             </AnimatedContent>
-            <div className="mt-12 grid gap-6 sm:grid-cols-2">
-              {CLIENTS.map((cl, i) => (
-                <AnimatedContent key={cl.name} delay={i * 80}>
-                  <StarBorderCard>
-                    <SpotlightCard className="flex h-40 items-center justify-center rounded-2xl border border-border bg-card p-6">
-                      <img
-                        src={cl.src}
-                        alt={c.clients.logoAlt(cl.name)}
-                        loading="lazy"
-                        className="max-h-24 w-full object-contain"
-                      />
-                    </SpotlightCard>
-                  </StarBorderCard>
-                </AnimatedContent>
-              ))}
-            </div>
+            <AnimatedContent className="mt-12" distance={30}>
+              <div className="h-[420px]">
+                <DepthCarousel
+                  items={CLIENTS.map((cl) => ({ image: cl.src, alt: c.clients.logoAlt(cl.name) }))}
+                  cardWidth={280}
+                  cardHeight={200}
+                  autoplay
+                  autoplayDelay={2800}
+                />
+              </div>
+            </AnimatedContent>
           </div>
         </section>
 
