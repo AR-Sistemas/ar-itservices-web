@@ -244,7 +244,7 @@ function Home() {
                   cardWidth={280}
                   cardHeight={200}
                   autoplay
-                  autoplayDelay={2800}
+                  autoplayDelay={4500}
                 />
               </div>
             </AnimatedContent>
