@@ -25,6 +25,10 @@ import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
 import { isIntermedio } from "@/lib/site-mode";
+import claroLogo from "@/assets/clients/claro.png";
+import naranjaLogo from "@/assets/clients/naranja.png";
+import stellantisLogo from "@/assets/clients/stellantis.png";
+import agdLogo from "@/assets/clients/agd.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,6 +69,13 @@ const TECH = [
   { name: "Azure", src: "/logos/azure.svg" },
   { name: "GCP", src: "/logos/gcp.svg" },
   { name: "Jira", src: "/logos/jira.svg" },
+];
+
+const CLIENTS = [
+  { name: "Claro", src: claroLogo },
+  { name: "Naranja", src: naranjaLogo },
+  { name: "Stellantis", src: stellantisLogo },
+  { name: "AGD", src: agdLogo },
 ];
 
 /* ---- Página ---- */
@@ -253,6 +264,37 @@ function Home() {
                 </AnimatedContent>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Clientes */}
+        <section className="px-5 py-20">
+          <div className="mx-auto max-w-5xl">
+            <AnimatedContent>
+              <h2 className="text-2xl font-bold tracking-tight">{c.clients.heading}</h2>
+              <div className="mt-8">
+                <LogoLoop
+                  speed={40}
+                  direction="left"
+                  pauseOnHover
+                  fadeOut
+                  fadeOutColor="var(--background)"
+                  logos={CLIENTS.map((cl) => (
+                    <span
+                      key={cl.name}
+                      className="inline-flex h-16 w-40 items-center justify-center rounded-xl border border-border bg-card px-6"
+                    >
+                      <img
+                        src={cl.src}
+                        alt={c.clients.logoAlt(cl.name)}
+                        loading="lazy"
+                        className="h-10 w-full object-contain"
+                      />
+                    </span>
+                  ))}
+                />
+              </div>
+            </AnimatedContent>
           </div>
         </section>
 

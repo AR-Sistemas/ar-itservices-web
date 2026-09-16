@@ -24,6 +24,7 @@ export type SiteContent = {
     items: { client: string; challenge: string; result: string }[];
   };
   stack: { heading: string; logoAlt: (name: string) => string };
+  clients: { heading: string; logoAlt: (name: string) => string };
   newsTeaser: { eyebrow: string; cta: string };
   people: {
     heading: string;
@@ -198,6 +199,7 @@ const ES: SiteContent = {
     ],
   },
   stack: { heading: "Stack con el que trabajamos", logoAlt: (n) => `Logo de ${n}` },
+  clients: { heading: "Nuestros clientes", logoAlt: (n) => `Logo de ${n}` },
   newsTeaser: { eyebrow: "Novedades de IA", cta: "Leer boletín completo" },
   people: {
     heading: "Nuestra gente",
@@ -547,6 +549,7 @@ const EN: SiteContent = {
     ],
   },
   stack: { heading: "The stack we work with", logoAlt: (n) => `${n} logo` },
+  clients: { heading: "Our clients", logoAlt: (n) => `${n} logo` },
   newsTeaser: { eyebrow: "AI Newsletter", cta: "Read the full issue" },
   people: {
     heading: "Our people",
