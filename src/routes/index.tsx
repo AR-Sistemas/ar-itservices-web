@@ -228,6 +228,33 @@ function Home() {
           </section>
         )}
 
+        {/* Clientes */}
+        <section className="px-5 py-24 sm:py-32">
+          <div className="mx-auto max-w-5xl">
+            <AnimatedContent>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                {c.clients.heading}
+              </h2>
+            </AnimatedContent>
+            <div className="mt-12 grid gap-6 sm:grid-cols-2">
+              {CLIENTS.map((cl, i) => (
+                <AnimatedContent key={cl.name} delay={i * 80}>
+                  <StarBorderCard>
+                    <SpotlightCard className="flex h-40 items-center justify-center rounded-2xl border border-border bg-card p-8">
+                      <img
+                        src={cl.src}
+                        alt={c.clients.logoAlt(cl.name)}
+                        loading="lazy"
+                        className="max-h-20 w-full object-contain"
+                      />
+                    </SpotlightCard>
+                  </StarBorderCard>
+                </AnimatedContent>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Casos */}
         <section id="casos" className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-5xl">
@@ -264,37 +291,6 @@ function Home() {
                 </AnimatedContent>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Clientes */}
-        <section className="px-5 py-20">
-          <div className="mx-auto max-w-5xl">
-            <AnimatedContent>
-              <h2 className="text-2xl font-bold tracking-tight">{c.clients.heading}</h2>
-              <div className="mt-8">
-                <LogoLoop
-                  speed={40}
-                  direction="left"
-                  pauseOnHover
-                  fadeOut
-                  fadeOutColor="var(--background)"
-                  logos={CLIENTS.map((cl) => (
-                    <span
-                      key={cl.name}
-                      className="inline-flex h-16 w-40 items-center justify-center rounded-xl border border-border bg-card px-6"
-                    >
-                      <img
-                        src={cl.src}
-                        alt={c.clients.logoAlt(cl.name)}
-                        loading="lazy"
-                        className="h-10 w-full object-contain"
-                      />
-                    </span>
-                  ))}
-                />
-              </div>
-            </AnimatedContent>
           </div>
         </section>
 
