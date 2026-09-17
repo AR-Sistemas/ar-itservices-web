@@ -118,7 +118,7 @@ function Home() {
       : selectedPosition;
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background">
+    <div className="min-h-screen overflow-x-clip bg-background">
       <CodeGridSpotlight />
       <FloatingNav
         items={c.nav}
