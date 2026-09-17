@@ -14,6 +14,12 @@ import {
  *
  * Cada frase puede marcar la parte a resaltar en rojo envolviéndola entre
  * `**dobles asteriscos**`, ej: "somos **empresas nativas de IA** de verdad".
+ *
+ * Interacciones:
+ *  - Autoplay + swipe lateral (arrastrando con mouse/touch) + puntos.
+ *  - Rueda del mouse sobre el titular: cambia de frase. Cuando ya está en la
+ *    primera/última frase, deja pasar el scroll para que la página siga bajando.
+ *  - El texto no es seleccionable, para que el arrastre no marque las palabras.
  */
 function renderHighlighted(phrase: string) {
   const parts = phrase.split(/(\*\*[^*]+\*\*)/g);
@@ -41,6 +47,8 @@ export function HeroHeadlineCarousel({
   const [paused, setPaused] = useState(false);
   const dragRef = useRef<{ x: number; dragging: boolean } | null>(null);
   const reducedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const wheelLockRef = useRef(0);
 
   useEffect(() => {
     reducedRef.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -62,6 +70,31 @@ export function HeroHeadlineCarousel({
     return () => clearInterval(id);
   }, [index, paused, intervalMs, phrases.length, goTo]);
 
+  // Rueda del mouse: navega entre frases mientras haya una en esa dirección.
+  // En la primera/última frase no intercepta, así el scroll de la página fluye.
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el || phrases.length < 2) return;
+
+    const onWheel = (e: WheelEvent) => {
+      // Ignoramos gestos horizontales (trackpad) y deltas mínimos.
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const atStart = index === 0;
+      const atEnd = index === phrases.length - 1;
+      if ((e.deltaY > 0 && atEnd) || (e.deltaY < 0 && atStart)) return;
+
+      e.preventDefault();
+
+      const now = Date.now();
+      if (now - wheelLockRef.current < 650) return;
+      wheelLockRef.current = now;
+      goTo(index + (e.deltaY > 0 ? 1 : -1));
+    };
+
+    el.addEventListener("wheel", onWheel, { passive: false });
+    return () => el.removeEventListener("wheel", onWheel);
+  }, [index, goTo, phrases.length]);
+
   const onPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
     dragRef.current = { x: e.clientX, dragging: true };
   };
@@ -76,7 +109,8 @@ export function HeroHeadlineCarousel({
 
   return (
     <div
-      className={`relative touch-pan-y ${className}`}
+      ref={containerRef}
+      className={`relative touch-pan-y select-none ${className}`}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onPointerDown={onPointerDown}
