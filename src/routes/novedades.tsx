@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
-import { Globe } from "@/components/site/Globe";
+import { WorldMapSpotlight } from "@/components/site/WorldMapSpotlight";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
 import { BorderGlow } from "@/components/site/BorderGlow";
 import { FloatingNav } from "@/components/site/FloatingNav";
@@ -101,9 +101,7 @@ function NewsletterPage() {
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-        <Globe className="absolute top-1/2 left-1/2 w-[min(90vw,800px)] -translate-x-1/2 -translate-y-1/2 opacity-70" />
-      </div>
+      <WorldMapSpotlight />
       <FloatingNav
         items={navItems}
         ctaLabel={c.cta.talk}
