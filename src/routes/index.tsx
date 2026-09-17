@@ -13,6 +13,8 @@ import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { MagicBento } from "@/components/site/MagicBento";
+import { ServiceCarousel } from "@/components/site/ServiceCarousel";
+import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
@@ -213,6 +215,12 @@ function Home() {
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
               <MagicBento cards={c.services.cards} />
+            </AnimatedContent>
+            <AnimatedContent className="mt-4" distance={30}>
+              <ServiceCarousel cards={c.services.highlightCards} />
+            </AnimatedContent>
+            <AnimatedContent className="mt-4" distance={30}>
+              <FrameworkHighlight card={c.services.framework} />
             </AnimatedContent>
           </div>
         </section>

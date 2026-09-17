@@ -4,6 +4,14 @@ import { isIntermedio } from "@/lib/site-mode";
 
 export type NavItem = { label: string; href: string };
 
+export type ServiceLinkCard = {
+  label: string;
+  title: string;
+  desc: string;
+  cta: string;
+  href: string;
+};
+
 export type SiteContent = {
   nav: NavItem[];
   cta: { talk: string };
@@ -17,7 +25,12 @@ export type SiteContent = {
     phrases: string[];
   };
   metrics: { value: number; suffix: string; label: string }[];
-  services: { heading: string; cards: BentoCard[] };
+  services: {
+    heading: string;
+    cards: BentoCard[];
+    highlightCards: ServiceLinkCard[];
+    framework: ServiceLinkCard;
+  };
   cases: {
     heading: string;
     challengeLabel: string;
@@ -182,6 +195,43 @@ const ES: SiteContent = {
         desc: "Planificamos, medimos y reportamos avance con números, no con impresiones.",
       },
     ],
+    highlightCards: [
+      {
+        label: "Tecnología",
+        title: "AI Gateway & Governance",
+        desc: "Control centralizado del uso de IA en tu empresa: seguridad de datos, costos por equipo y trazabilidad completa para auditoría.",
+        cta: "Conocé más",
+        href: "#contacto",
+      },
+      {
+        label: "Tecnología",
+        title: "AI Agents",
+        desc: "Agentes que ejecutan tareas y procesos con autonomía, con el nivel de supervisión humana que cada caso de uso requiere.",
+        cta: "Conocé más",
+        href: "#contacto",
+      },
+      {
+        label: "Tecnología",
+        title: "Data Architecture & RAG",
+        desc: "La base de datos que permite escalar IA más allá de un piloto: RAG, embeddings y datos tratados como producto interno.",
+        cta: "Conocé más",
+        href: "#contacto",
+      },
+      {
+        label: "Tecnología",
+        title: "AI-Native Engineering / MLOps-LLMOps",
+        desc: "Arquitectura, CI/CD y componentes reusables para llevar agentes e IA de un piloto a producción de forma sostenible.",
+        cta: "Conocé más",
+        href: "#contacto",
+      },
+    ],
+    framework: {
+      label: "Framework propio",
+      title: "ARIA",
+      desc: "Adopción Responsable de Inteligencia Artificial: nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo — no un catálogo de herramientas para el corto plazo.",
+      cta: "Descubrí el framework",
+      href: "#contacto",
+    },
   },
   cases: {
     heading: "Casos de éxito",
@@ -537,6 +587,43 @@ const EN: SiteContent = {
         desc: "We plan, measure and report progress with numbers, not impressions.",
       },
     ],
+    highlightCards: [
+      {
+        label: "Technology",
+        title: "AI Gateway & Governance",
+        desc: "Centralized control over AI usage in your company: data security, cost per team and full traceability for auditing.",
+        cta: "Learn more",
+        href: "#contacto",
+      },
+      {
+        label: "Technology",
+        title: "AI Agents",
+        desc: "Agents that execute tasks and processes autonomously, with the level of human oversight each use case requires.",
+        cta: "Learn more",
+        href: "#contacto",
+      },
+      {
+        label: "Technology",
+        title: "Data Architecture & RAG",
+        desc: "The data foundation that lets AI scale beyond a pilot: RAG, embeddings and data treated as an internal product.",
+        cta: "Learn more",
+        href: "#contacto",
+      },
+      {
+        label: "Technology",
+        title: "AI-Native Engineering / MLOps-LLMOps",
+        desc: "Architecture, CI/CD and reusable components to take agents and AI from pilot to production sustainably.",
+        cta: "Learn more",
+        href: "#contacto",
+      },
+    ],
+    framework: {
+      label: "Our framework",
+      title: "ARIA",
+      desc: "Responsible AI Adoption: our 9-block framework to design the AI-Native company for the medium and long term — not a catalog of tools for the short term.",
+      cta: "Discover the framework",
+      href: "#contacto",
+    },
   },
   cases: {
     heading: "Success stories",

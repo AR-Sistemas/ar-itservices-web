@@ -7,11 +7,13 @@ import { useRef, type MouseEvent, type ReactNode } from "react";
 export function SpotlightCard({
   children,
   className = "",
+  contentClassName = "",
   spotlightColor = "rgba(255, 0, 13, 0.12)",
   as: Tag = "div",
 }: {
   children: ReactNode;
   className?: string;
+  contentClassName?: string;
   spotlightColor?: string;
   as?: "div" | "article" | "li";
 }) {
@@ -34,7 +36,7 @@ export function SpotlightCard({
       className={`spotlight-card group relative overflow-hidden ${className}`}
     >
       <span className="spotlight-card-glow" aria-hidden="true" />
-      <div className="relative">{children}</div>
+      <div className={`relative ${contentClassName}`}>{children}</div>
     </Tag>
   );
 }
