@@ -14,6 +14,7 @@ export type SiteContent = {
     subtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    phrases: string[];
   };
   metrics: { value: number; suffix: string; label: string }[];
   services: { heading: string; cards: BentoCard[] };
@@ -131,6 +132,11 @@ const ES: SiteContent = {
       "25 años desarrollando software, modelos de datos y equipos dedicados para empresas y gobiernos, desde tres países.",
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver casos de éxito",
+    phrases: [
+      "Ayudamos a las organizaciones a convertirse en **empresas nativas de IA**, desde la estrategia hasta la implementación y la expansión.",
+      "Creamos el equipo que tu producto realmente necesita: **datos e inteligencia artificial** que se integran en el proceso, no solo en teoría.",
+      "Los datos son el punto de partida de la IA: transformamos la información sin procesar en **modelos, conocimientos y decisiones** en las que puedes confiar.",
+    ],
   },
   metrics: [
     { value: 25, suffix: "+", label: "años de trayectoria" },
@@ -481,6 +487,11 @@ const EN: SiteContent = {
       "25 years building software, data models and dedicated teams for companies and governments, from three countries.",
     ctaPrimary: "Let's talk about your project",
     ctaSecondary: "See success stories",
+    phrases: [
+      "We help organizations become **AI-native companies**, from strategy to implementation and scale.",
+      "We build the team your product really needs: **data and artificial intelligence** integrated into the workflow, not just in theory.",
+      "Data is where AI begins — we turn raw information into **models, insights, and decisions** you can rely on.",
+    ],
   },
   metrics: [
     { value: 25, suffix: "+", label: "years in business" },

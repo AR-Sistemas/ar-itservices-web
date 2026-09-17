@@ -79,15 +79,6 @@ const CLIENTS = [
   { name: "AGD", src: agdLogo },
 ];
 
-// Frases del titular del hero, pedidas puntualmente por gerencia (una queda
-// en inglés a propósito) — rotan igual sin importar el idioma ES/EN del sitio.
-const HERO_PHRASES = [
-  "Ayudamos a las organizaciones a convertirse en **empresas nativas de IA**, desde la estrategia hasta la implementación y la expansión.",
-  "Creamos el equipo que tu producto realmente necesita: **datos e inteligencia artificial** que se integran en el proceso, no solo en teoría.",
-  "Data is where AI begins — we turn raw information into **models, insights, and decisions** you can rely on.",
-  "Los datos son el punto de partida de la IA: transformamos la información sin procesar en **modelos, conocimientos y decisiones** en las que puedes confiar.",
-];
-
 /* ---- Página ---- */
 
 type ContactType = "empresa" | "postulante" | "consulta";
@@ -173,7 +164,8 @@ function Home() {
             <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
               {c.hero.eyebrow}
             </p>
-            <HeroHeadlineCarousel phrases={HERO_PHRASES} className="mt-6" />
+            {/* Frases pedidas por gerencia: rotan y se traducen con el idioma del sitio */}
+            <HeroHeadlineCarousel phrases={c.hero.phrases} className="mt-6" />
             <AnimatedContent delay={400} distance={24}>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
                 {c.hero.subtitle}
