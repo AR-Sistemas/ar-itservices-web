@@ -22,6 +22,7 @@ import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { DepthCarousel } from "@/components/site/DepthCarousel";
+import { Globe } from "@/components/site/Globe";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
@@ -324,8 +325,9 @@ function Home() {
 
         {/* Portada del boletín de novedades */}
         {!isIntermedio && (
-          <section className="px-5 py-24 sm:py-32">
-            <div className="mx-auto max-w-4xl">
+          <section className="relative overflow-hidden px-5 py-24 sm:py-32">
+            <Globe className="pointer-events-none absolute top-1/2 left-1/2 z-0 w-[min(140vw,900px)] -translate-x-1/2 -translate-y-1/2 opacity-60" />
+            <div className="relative z-10 mx-auto max-w-4xl">
               <AnimatedContent>
                 <NewsMagazineCover
                   kicker={NEWSLETTER_ISSUE.kicker}
