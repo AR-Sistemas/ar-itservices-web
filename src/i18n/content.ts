@@ -167,7 +167,7 @@ const ES: SiteContent = {
     { value: 25, suffix: "+", label: "años de trayectoria" },
     { value: 2000, suffix: "+", label: "proyectos entregados" },
     { value: 3, suffix: "", label: "países con oficina propia" },
-    { value: 2, suffix: "M+", label: "horas-hombre con Claro" },
+    { value: 2, suffix: "M+", label: "horas-hombre" },
   ],
   services: {
     heading: "Qué hacemos",
@@ -580,7 +580,7 @@ const EN: SiteContent = {
     { value: 25, suffix: "+", label: "years in business" },
     { value: 2000, suffix: "+", label: "projects delivered" },
     { value: 3, suffix: "", label: "countries with our own office" },
-    { value: 2, suffix: "M+", label: "man-hours with Claro" },
+    { value: 2, suffix: "M+", label: "man-hours" },
   ],
   services: {
     heading: "What we do",

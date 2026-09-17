@@ -246,11 +246,11 @@ function Home() {
               </h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
-              <div className="h-[500px]">
+              <div className="h-[420px]">
                 <DepthCarousel
                   items={CLIENTS.map((cl) => ({ image: cl.src, alt: c.clients.logoAlt(cl.name) }))}
-                  cardWidth={380}
-                  cardHeight={280}
+                  cardWidth={320}
+                  cardHeight={240}
                   autoplay
                   autoplayDelay={4500}
                 />
