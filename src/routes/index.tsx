@@ -6,7 +6,6 @@ import { SpotlightCard } from "@/components/site/SpotlightCard";
 
 import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
-import { BlurText } from "@/components/site/BlurText";
 import { LogoDraw } from "@/components/site/LogoDraw";
 import { LogoMark } from "@/components/site/LogoMark";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
@@ -22,6 +21,7 @@ import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { DepthCarousel } from "@/components/site/DepthCarousel";
+import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { NEWSLETTER_ISSUE } from "@/data/newsletter";
@@ -77,6 +77,15 @@ const CLIENTS = [
   { name: "Naranja", src: naranjaLogo },
   { name: "Stellantis", src: stellantisLogo },
   { name: "AGD", src: agdLogo },
+];
+
+// Frases del titular del hero, pedidas puntualmente por gerencia (una queda
+// en inglés a propósito) — rotan igual sin importar el idioma ES/EN del sitio.
+const HERO_PHRASES = [
+  "Ayudamos a las organizaciones a convertirse en **empresas nativas de IA**, desde la estrategia hasta la implementación y la expansión.",
+  "Creamos el equipo que tu producto realmente necesita: **datos e inteligencia artificial** que se integran en el proceso, no solo en teoría.",
+  "Data is where AI begins — we turn raw information into **models, insights, and decisions** you can rely on.",
+  "Los datos son el punto de partida de la IA: transformamos la información sin procesar en **modelos, conocimientos y decisiones** en las que puedes confiar.",
 ];
 
 /* ---- Página ---- */
@@ -164,9 +173,7 @@ function Home() {
             <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
               {c.hero.eyebrow}
             </p>
-            <h1 className="mt-6 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance sm:text-6xl">
-              <BlurText text={c.hero.h1} highlightFrom={8} highlightTo={15} />
-            </h1>
+            <HeroHeadlineCarousel phrases={HERO_PHRASES} className="mt-6" />
             <AnimatedContent delay={400} distance={24}>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
                 {c.hero.subtitle}
