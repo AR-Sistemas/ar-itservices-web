@@ -325,8 +325,8 @@ function Home() {
 
         {/* Portada del boletín de novedades */}
         {!isIntermedio && (
-          <section className="relative overflow-hidden px-5 py-24 sm:py-32">
-            <Globe className="pointer-events-none absolute top-1/2 left-1/2 z-0 w-[min(140vw,900px)] -translate-x-1/2 -translate-y-1/2 opacity-60" />
+          <section className="relative overflow-hidden px-5 py-32 sm:py-48">
+            <Globe className="pointer-events-none absolute top-1/2 left-1/2 z-0 w-[min(180vw,1300px)] -translate-x-1/2 -translate-y-1/2 opacity-90" />
             <div className="relative z-10 mx-auto max-w-4xl">
               <AnimatedContent>
                 <NewsMagazineCover

@@ -44,13 +44,13 @@ export function Globe({ className = "" }: { className?: string }) {
       phi: 0,
       theta: 0.3,
       dark: 1,
-      diffuse: 1.1,
-      mapSamples: 14000,
-      mapBrightness: 3.5,
-      baseColor: [0.16, 0.16, 0.23], // --ink #232234
-      markerColor: [1, 0, 0.05], // --brand #FF000D
-      glowColor: [0.6, 0.06, 0.11], // --brand-dark #990F1B
-      opacity: 0.9,
+      diffuse: 2.2,
+      mapSamples: 16000,
+      mapBrightness: 6,
+      baseColor: [0.3, 0.15, 0.17],
+      markerColor: [1, 0.1, 0.15], // --brand #FF000D
+      glowColor: [0.9, 0.08, 0.15], // --brand más brillante para que se note detrás de la card
+      opacity: 1,
       markers: OFFICE_MARKERS.map((m) => ({ location: m.location, size: m.size })),
       onRender: (state) => {
         if (!reducedMotion) phiRef.current += 0.0032;
