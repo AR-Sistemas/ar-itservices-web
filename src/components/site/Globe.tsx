@@ -3,9 +3,14 @@ import createGlobe from "cobe";
 
 /**
  * Fondo de globo 3D (cobe — https://github.com/shuding/cobe), restyleado a la
- * paleta AR: base oscura (--ink), marcadores y glow en rojo de marca
- * (--brand). Marca las 3 oficinas reales (Dallas, Córdoba, Asunción).
- * Respeta prefers-reduced-motion (no rota, se queda fija).
+ * paleta AR: marcadores y glow en rojo de marca (--brand). Marca las 3
+ * oficinas reales (Dallas, Córdoba, Asunción). Respeta prefers-reduced-motion
+ * (no rota, se queda fija).
+ *
+ * OJO con dark:1 — con ese flag el baseColor tiene que seguir siendo un gris
+ * medio (~0.3), si se oscurece demasiado los puntos del mapa (los que dibujan
+ * los continentes) pierden contraste contra el fondo y quedan invisibles,
+ * dejando solo el aro de glow y los markers — así quedó roto la primera vez.
  */
 
 const OFFICE_MARKERS = [
@@ -44,12 +49,12 @@ export function Globe({ className = "" }: { className?: string }) {
       phi: 0,
       theta: 0.3,
       dark: 1,
-      diffuse: 2.2,
+      diffuse: 1.2,
       mapSamples: 16000,
       mapBrightness: 6,
-      baseColor: [0.3, 0.15, 0.17],
-      markerColor: [1, 0.1, 0.15], // --brand #FF000D
-      glowColor: [0.9, 0.08, 0.15], // --brand más brillante para que se note detrás de la card
+      baseColor: [0.32, 0.28, 0.29], // gris medio, apenas tibio — necesario para que los puntos del mapa se vean con dark:1
+      markerColor: [1, 0.08, 0.11], // --brand #FF000D
+      glowColor: [1, 0.55, 0.55], // glow cálido/rojizo pero brillante (glow oscuro = globo se apaga entero)
       opacity: 1,
       markers: OFFICE_MARKERS.map((m) => ({ location: m.location, size: m.size })),
       onRender: (state) => {
