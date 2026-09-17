@@ -1,8 +1,20 @@
-import type { BentoCard } from "@/components/site/MagicBento";
 import type { Lang } from "./language";
 import { isIntermedio } from "@/lib/site-mode";
 
 export type NavItem = { label: string; href: string };
+
+export type ServiceItem = {
+  title: string;
+  desc: string;
+  cta: string;
+  href: string;
+};
+
+export type ServiceGroup = {
+  id: string;
+  label: string;
+  items: ServiceItem[];
+};
 
 export type ServiceLinkCard = {
   label: string;
@@ -27,8 +39,8 @@ export type SiteContent = {
   metrics: { value: number; suffix: string; label: string }[];
   services: {
     heading: string;
-    cards: BentoCard[];
-    highlightCards: ServiceLinkCard[];
+    hint: string;
+    groups: ServiceGroup[];
     framework: ServiceLinkCard;
   };
   cases: {
@@ -159,70 +171,91 @@ const ES: SiteContent = {
   ],
   services: {
     heading: "Qué hacemos",
-    cards: [
+    hint: "// seleccioná un servicio para ver el detalle",
+    groups: [
       {
-        title: "IA Aplicada & Agentes",
-        desc: "Sumamos IA generativa y agentes al producto del cliente: menos tiempo de desarrollo, misma calidad, sin sumar headcount.",
-        label: "IA",
-        span: "large",
+        id: "ai",
+        label: "IA & Agentes",
+        items: [
+          {
+            title: "AI Gateway & Governance",
+            desc: "Control centralizado del uso de IA en tu empresa: seguridad de datos, costos por equipo y trazabilidad completa para auditoría.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "AI Agents",
+            desc: "Agentes que ejecutan tareas y procesos con autonomía, con el nivel de supervisión humana que cada caso de uso requiere.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "AI-Native Engineering / MLOps-LLMOps",
+            desc: "Arquitectura, CI/CD y componentes reusables para llevar agentes e IA de un piloto a producción de forma sostenible.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Ciencia de Datos & BI",
-        desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI que se usan todos los días.",
-        label: "Datos & BI",
-        span: "large",
+        id: "data",
+        label: "Datos & Analítica",
+        items: [
+          {
+            title: "Data Architecture & RAG",
+            desc: "La base de datos que permite escalar IA más allá de un piloto: RAG, embeddings y datos tratados como producto interno.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "Ciencia de Datos & BI",
+            desc: "Modelos predictivos, machine learning aplicado y tableros en Power BI que se usan todos los días.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Equipos dedicados & Scrum",
-        desc: "Perfiles seleccionados, on-boarding rápido y ceremonias que se cumplen.",
-        label: "Talento",
-        span: "large",
+        id: "engineering",
+        label: "Ingeniería de Producto",
+        items: [
+          {
+            title: "Desarrollo Web & Mobile",
+            desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "QA & Testing",
+            desc: "Automatización de pruebas y control de calidad integrado al ciclo de desarrollo.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "Automatización & DevOps",
+            desc: "Flujos con n8n, pipelines de CI/CD y despliegues repetibles.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Desarrollo Web & Mobile",
-        desc: ".NET, React, iOS y Android. Productos que salen a producción y se mantienen, con equipos que conocen el negocio del cliente.",
-      },
-      {
-        title: "QA & Testing",
-        desc: "Automatización de pruebas y control de calidad integrado al ciclo de desarrollo.",
-      },
-      {
-        title: "Automatización",
-        desc: "Flujos con n8n, pipelines de DevOps y despliegues repetibles.",
-      },
-      {
-        title: "Consultoría & Project Management",
-        desc: "Planificamos, medimos y reportamos avance con números, no con impresiones.",
-      },
-    ],
-    highlightCards: [
-      {
-        label: "Tecnología",
-        title: "AI Gateway & Governance",
-        desc: "Control centralizado del uso de IA en tu empresa: seguridad de datos, costos por equipo y trazabilidad completa para auditoría.",
-        cta: "Conocé más",
-        href: "#contacto",
-      },
-      {
-        label: "Tecnología",
-        title: "AI Agents",
-        desc: "Agentes que ejecutan tareas y procesos con autonomía, con el nivel de supervisión humana que cada caso de uso requiere.",
-        cta: "Conocé más",
-        href: "#contacto",
-      },
-      {
-        label: "Tecnología",
-        title: "Data Architecture & RAG",
-        desc: "La base de datos que permite escalar IA más allá de un piloto: RAG, embeddings y datos tratados como producto interno.",
-        cta: "Conocé más",
-        href: "#contacto",
-      },
-      {
-        label: "Tecnología",
-        title: "AI-Native Engineering / MLOps-LLMOps",
-        desc: "Arquitectura, CI/CD y componentes reusables para llevar agentes e IA de un piloto a producción de forma sostenible.",
-        cta: "Conocé más",
-        href: "#contacto",
+        id: "teams",
+        label: "Equipos & Gestión",
+        items: [
+          {
+            title: "Equipos dedicados & Scrum",
+            desc: "Perfiles seleccionados, on-boarding rápido y ceremonias que se cumplen.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+          {
+            title: "Consultoría & Project Management",
+            desc: "Planificamos, medimos y reportamos avance con números, no con impresiones.",
+            cta: "Conocé más",
+            href: "#contacto",
+          },
+        ],
       },
     ],
     framework: {
@@ -551,70 +584,91 @@ const EN: SiteContent = {
   ],
   services: {
     heading: "What we do",
-    cards: [
+    hint: "// select a service to see the details",
+    groups: [
       {
-        title: "AI Applied & Agents",
-        desc: "We embed generative AI and agents into the client's product: less development time, same quality, no added headcount.",
-        label: "AI",
-        span: "large",
+        id: "ai",
+        label: "AI & Agents",
+        items: [
+          {
+            title: "AI Gateway & Governance",
+            desc: "Centralized control over AI usage in your company: data security, cost per team and full traceability for auditing.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "AI Agents",
+            desc: "Agents that execute tasks and processes autonomously, with the level of human oversight each use case requires.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "AI-Native Engineering / MLOps-LLMOps",
+            desc: "Architecture, CI/CD and reusable components to take agents and AI from pilot to production sustainably.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Data Science & BI",
-        desc: "Predictive models, applied machine learning and Power BI dashboards used every day.",
-        label: "Data & BI",
-        span: "large",
+        id: "data",
+        label: "Data & Analytics",
+        items: [
+          {
+            title: "Data Architecture & RAG",
+            desc: "The data foundation that lets AI scale beyond a pilot: RAG, embeddings and data treated as an internal product.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "Data Science & BI",
+            desc: "Predictive models, applied machine learning and Power BI dashboards used every day.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Dedicated teams & Scrum",
-        desc: "Hand-picked profiles, fast onboarding and ceremonies that actually happen.",
-        label: "Talent",
-        span: "large",
+        id: "engineering",
+        label: "Product Engineering",
+        items: [
+          {
+            title: "Web & Mobile Development",
+            desc: ".NET, React, iOS and Android. Products that ship to production and are maintained, with teams that understand the client's business.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "QA & Testing",
+            desc: "Test automation and quality control integrated into the development cycle.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "Automation & DevOps",
+            desc: "n8n workflows, CI/CD pipelines and repeatable deployments.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+        ],
       },
       {
-        title: "Web & Mobile Development",
-        desc: ".NET, React, iOS and Android. Products that ship to production and are maintained, with teams that understand the client's business.",
-      },
-      {
-        title: "QA & Testing",
-        desc: "Test automation and quality control integrated into the development cycle.",
-      },
-      {
-        title: "Automation",
-        desc: "n8n workflows, DevOps pipelines and repeatable deployments.",
-      },
-      {
-        title: "Consulting & Project Management",
-        desc: "We plan, measure and report progress with numbers, not impressions.",
-      },
-    ],
-    highlightCards: [
-      {
-        label: "Technology",
-        title: "AI Gateway & Governance",
-        desc: "Centralized control over AI usage in your company: data security, cost per team and full traceability for auditing.",
-        cta: "Learn more",
-        href: "#contacto",
-      },
-      {
-        label: "Technology",
-        title: "AI Agents",
-        desc: "Agents that execute tasks and processes autonomously, with the level of human oversight each use case requires.",
-        cta: "Learn more",
-        href: "#contacto",
-      },
-      {
-        label: "Technology",
-        title: "Data Architecture & RAG",
-        desc: "The data foundation that lets AI scale beyond a pilot: RAG, embeddings and data treated as an internal product.",
-        cta: "Learn more",
-        href: "#contacto",
-      },
-      {
-        label: "Technology",
-        title: "AI-Native Engineering / MLOps-LLMOps",
-        desc: "Architecture, CI/CD and reusable components to take agents and AI from pilot to production sustainably.",
-        cta: "Learn more",
-        href: "#contacto",
+        id: "teams",
+        label: "Teams & Management",
+        items: [
+          {
+            title: "Dedicated teams & Scrum",
+            desc: "Hand-picked profiles, fast onboarding and ceremonies that actually happen.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+          {
+            title: "Consulting & Project Management",
+            desc: "We plan, measure and report progress with numbers, not impressions.",
+            cta: "Learn more",
+            href: "#contacto",
+          },
+        ],
       },
     ],
     framework: {
