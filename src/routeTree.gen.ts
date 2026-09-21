@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EffectPreviewRouteImport } from './routes/effect-preview'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as NovedadesRouteImport } from './routes/novedades'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
@@ -17,6 +18,11 @@ import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nos
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EffectPreviewRoute = EffectPreviewRouteImport.update({
+  id: '/effect-preview',
+  path: '/effect-preview',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NosotrosRoute = NosotrosRouteImport.update({
@@ -37,12 +43,14 @@ const TrabajaConNosotrosRoute = TrabajaConNosotrosRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/effect-preview': typeof EffectPreviewRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/effect-preview': typeof EffectPreviewRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
@@ -50,20 +58,38 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/effect-preview': typeof EffectPreviewRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/nosotros' | '/novedades' | '/trabaja-con-nosotros'
+  fullPaths:
+    | '/'
+    | '/effect-preview'
+    | '/nosotros'
+    | '/novedades'
+    | '/trabaja-con-nosotros'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/nosotros' | '/novedades' | '/trabaja-con-nosotros'
-  id: '__root__' | '/' | '/nosotros' | '/novedades' | '/trabaja-con-nosotros'
+  to:
+    | '/'
+    | '/effect-preview'
+    | '/nosotros'
+    | '/novedades'
+    | '/trabaja-con-nosotros'
+  id:
+    | '__root__'
+    | '/'
+    | '/effect-preview'
+    | '/nosotros'
+    | '/novedades'
+    | '/trabaja-con-nosotros'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EffectPreviewRoute: typeof EffectPreviewRoute
   NosotrosRoute: typeof NosotrosRoute
   NovedadesRoute: typeof NovedadesRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
@@ -76,6 +102,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/effect-preview': {
+      id: '/effect-preview'
+      path: '/effect-preview'
+      fullPath: '/effect-preview'
+      preLoaderRoute: typeof EffectPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nosotros': {
@@ -104,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EffectPreviewRoute: EffectPreviewRoute,
   NosotrosRoute: NosotrosRoute,
   NovedadesRoute: NovedadesRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
