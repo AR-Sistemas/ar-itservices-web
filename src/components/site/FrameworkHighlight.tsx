@@ -1,11 +1,16 @@
+import { useState } from "react";
 import { StarBorderCard } from "./StarBorderCard";
+import { FrameworkRequestModal } from "./FrameworkRequestModal";
 import type { ServiceLinkCard } from "@/i18n/content";
 
 /**
  * Bloque destacado a lo ancho para el framework propio (ARIA): borde animado
  * de StarBorderCard y layout en dos columnas, similar a los casos de éxito.
+ * El CTA abre un modal para solicitarlo por mail en vez de ir a #contacto.
  */
 export function FrameworkHighlight({ card }: { card: ServiceLinkCard }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <StarBorderCard>
       <div className="grid gap-6 rounded-2xl bg-card p-8 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:items-center md:p-10">
@@ -19,14 +24,17 @@ export function FrameworkHighlight({ card }: { card: ServiceLinkCard }) {
         </div>
         <div>
           <p className="text-muted-foreground">{card.desc}</p>
-          <a
-            href={card.href}
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
             className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
           >
             {card.cta} →
-          </a>
+          </button>
         </div>
       </div>
+
+      <FrameworkRequestModal open={open} onClose={() => setOpen(false)} frameworkTitle={card.title} />
     </StarBorderCard>
   );
 }
