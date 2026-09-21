@@ -64,18 +64,17 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
             >
               <SpotlightCard
                 as="div"
-                className={`h-full rounded-2xl border p-6 transition-colors ${
-                  isActive ? "border-primary bg-card" : "border-border bg-card hover:border-white/25"
+                className={`h-full rounded-2xl border p-6 transition-all duration-300 ease-out ${
+                  isActive
+                    ? "border-primary/40 bg-card -translate-y-1 scale-[1.03] shadow-[0_16px_32px_-16px_rgba(255,0,13,0.35)]"
+                    : "border-border bg-card hover:border-white/25"
                 }`}
               >
                 <Icon
-                  className={`h-7 w-7 ${isActive ? "text-primary" : "text-muted-foreground"}`}
+                  className={`h-7 w-7 ${isActive ? "text-primary/70" : "text-muted-foreground"}`}
                   strokeWidth={1.75}
                 />
                 <h3 className="mt-4 text-lg font-bold tracking-tight">{group.label}</h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {group.items.length} {group.items.length === 1 ? "servicio" : "servicios"}
-                </p>
               </SpotlightCard>
             </button>
           );
