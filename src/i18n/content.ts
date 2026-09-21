@@ -171,7 +171,7 @@ const ES: SiteContent = {
   ],
   services: {
     heading: "Qué hacemos",
-    hint: "// seleccioná un servicio para ver el detalle",
+    hint: "// elegí un área para ver los servicios",
     groups: [
       {
         id: "ai",
@@ -584,7 +584,7 @@ const EN: SiteContent = {
   ],
   services: {
     heading: "What we do",
-    hint: "// select a service to see the details",
+    hint: "// pick an area to see the services",
     groups: [
       {
         id: "ai",
@@ -968,7 +968,7 @@ const EN: SiteContent = {
 
 // Rutas que la versión "intermedia" no expone en el menú ni en el footer
 // (los archivos de ruta y su contenido siguen intactos en el repo).
-const HIDDEN_IN_INTERMEDIO = ["/novedades", "/trabaja-con-nosotros"];
+const HIDDEN_IN_INTERMEDIO = ["/novedades", "/trabaja-con-nosotros", "#casos"];
 
 export function getContent(lang: Lang): SiteContent {
   const base = lang === "EN" ? EN : ES;

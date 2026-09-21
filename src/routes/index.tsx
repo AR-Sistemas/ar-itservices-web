@@ -12,7 +12,7 @@ import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
-import { CapabilitiesSelector } from "@/components/site/CapabilitiesSelector";
+import { ServiceAreaCards } from "@/components/site/ServiceAreaCards";
 import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
@@ -175,12 +175,14 @@ function Home() {
                 <StarBorder href="#contacto" className="group">
                   {c.hero.ctaPrimary}
                 </StarBorder>
-                <a
-                  href="#casos"
-                  className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
-                >
-                  {c.hero.ctaSecondary}
-                </a>
+                {!isIntermedio && (
+                  <a
+                    href="#casos"
+                    className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
+                  >
+                    {c.hero.ctaSecondary}
+                  </a>
+                )}
               </div>
             </AnimatedContent>
           </div>
@@ -217,7 +219,7 @@ function Home() {
                 {c.services.hint}
               </p>
               <div className="mt-8">
-                <CapabilitiesSelector groups={c.services.groups} />
+                <ServiceAreaCards groups={c.services.groups} />
               </div>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
@@ -260,43 +262,47 @@ function Home() {
         </section>
 
         {/* Casos */}
-        <section id="casos" className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-5xl">
-            <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.cases.heading}</h2>
-            </AnimatedContent>
-            <div className="mt-12 space-y-14">
-              {c.cases.items.map((cs, i) => (
-                <AnimatedContent key={cs.client} delay={i * 80}>
-                  <StarBorderCard>
-                    <SpotlightCard
-                      as="article"
-                      className="rounded-2xl border border-border bg-card p-8"
-                    >
-                      <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-                        <h3 className="text-xl font-bold">{cs.client}</h3>
-                        <div className="space-y-5">
-                          <div>
-                            <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                              {c.cases.challengeLabel}
-                            </p>
-                            <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
-                          </div>
-                          <div>
-                            <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                              {c.cases.resultLabel}
-                            </p>
-                            <p className="mt-2 text-foreground">{cs.result}</p>
+        {!isIntermedio && (
+          <section id="casos" className="px-5 py-24 sm:py-32">
+            <div className="mx-auto max-w-5xl">
+              <AnimatedContent>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                  {c.cases.heading}
+                </h2>
+              </AnimatedContent>
+              <div className="mt-12 space-y-14">
+                {c.cases.items.map((cs, i) => (
+                  <AnimatedContent key={cs.client} delay={i * 80}>
+                    <StarBorderCard>
+                      <SpotlightCard
+                        as="article"
+                        className="rounded-2xl border border-border bg-card p-8"
+                      >
+                        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                          <h3 className="text-xl font-bold">{cs.client}</h3>
+                          <div className="space-y-5">
+                            <div>
+                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                                {c.cases.challengeLabel}
+                              </p>
+                              <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
+                            </div>
+                            <div>
+                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                                {c.cases.resultLabel}
+                              </p>
+                              <p className="mt-2 text-foreground">{cs.result}</p>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </SpotlightCard>
-                  </StarBorderCard>
-                </AnimatedContent>
-              ))}
+                      </SpotlightCard>
+                    </StarBorderCard>
+                  </AnimatedContent>
+                ))}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         {/* Stack */}
         <section className="border-y border-border px-5 py-20">
