@@ -2,23 +2,18 @@ import { useEffect, useRef, useState } from "react";
 import { Bot, Database, Code2, Users2, X, type LucideIcon } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-import type { ServiceGroup, ServiceItem } from "@/i18n/content";
+import type { ServiceGroup } from "@/i18n/content";
 
 /**
- * "Qué hacemos" en 3 niveles, todo con cards (pedido puntual de gerencia:
- * nada de listas):
+ * "Qué hacemos" en 2 niveles, todo con cards (pedido puntual de gerencia):
  *  1. 4 cards grandes, una por área — es todo lo que se ve al entrar.
- *  2. Al pasar el mouse o tocar/clickear una de esas cards, se despliega
- *     abajo una grilla de cards chicas con los servicios de esa área.
- *  3. Al elegir un servicio, esa card se "expande" en una card grande
- *     (modal) con su descripción y CTA — inspirado en el patrón
- *     "expandable card" de Aceternity, pero animado con CSS puro
- *     (`tailwindcss-animate`, igual que el resto del sitio) en vez de
- *     `motion`/`AnimatePresence`: esa combinación se quedaba "trabada" sin
- *     desmontar al cerrar en este entorno (React 19 + motion 13), así que
- *     se descartó a favor de algo simple y confiable.
- * El hover-preview solo se activa en dispositivos con mouse real
- * (`(hover: hover)`) — en touch, todo funciona a tap.
+ *  2. Al clickear una de esas cards, se "expande" en una card grande tipo
+ *     modal (overlay + X + click afuera/Escape para cerrar) que agrupa
+ *     ADENTRO los servicios de esa área — nucleados en una sola card, no
+ *     sueltos por separado.
+ * Animado con CSS puro (`tailwindcss-animate`, igual que el resto del
+ * sitio) — se descartó `motion`/`AnimatePresence` porque esa combinación se
+ * quedaba trabada sin desmontar en este proyecto.
  */
 
 const GROUP_ICONS: Record<string, LucideIcon> = {
@@ -29,41 +24,22 @@ const GROUP_ICONS: Record<string, LucideIcon> = {
 };
 
 export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
-  const [canHover, setCanHover] = useState(false);
   const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
-  const [activeItem, setActiveItem] = useState<ServiceItem | null>(null);
   const expandedRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setCanHover(window.matchMedia("(hover: hover)").matches);
-  }, []);
-
-  useOutsideClick(expandedRef, () => setActiveItem(null));
+  useOutsideClick(expandedRef, () => setActiveGroupId(null));
 
   useEffect(() => {
-    document.body.style.overflow = activeItem ? "hidden" : "";
-    if (!activeItem) return;
+    document.body.style.overflow = activeGroupId ? "hidden" : "";
+    if (!activeGroupId) return;
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActiveItem(null);
+      if (e.key === "Escape") setActiveGroupId(null);
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [activeItem]);
+  }, [activeGroupId]);
 
   const activeGroup = groups.find((g) => g.id === activeGroupId) ?? null;
-
-  const selectGroup = (id: string) => {
-    // No alterna a cerrado si ya está abierta (p.ej. por hover) — un click
-    // siempre "fija" esa área abierta, nunca la cierra a sí misma.
-    setActiveGroupId(id);
-    setActiveItem(null);
-  };
-
-  const hoverGroup = (id: string) => {
-    if (!canHover) return;
-    setActiveGroupId(id);
-    setActiveItem(null);
-  };
 
   return (
     <div>
@@ -75,10 +51,9 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
             <button
               key={group.id}
               type="button"
-              onClick={() => selectGroup(group.id)}
-              onMouseEnter={() => hoverGroup(group.id)}
+              onClick={() => setActiveGroupId(group.id)}
+              aria-haspopup="dialog"
               aria-expanded={isActive}
-              aria-controls={`service-group-${group.id}`}
               className="text-left"
             >
               <SpotlightCard
@@ -102,54 +77,48 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
 
       {activeGroup && (
         <div
-          id={`service-group-${activeGroup.id}`}
-          className="mt-6 animate-in fade-in-0 slide-in-from-top-2 duration-300 motion-reduce:animate-none"
-        >
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {activeGroup.items.map((item) => (
-              <button key={item.title} type="button" onClick={() => setActiveItem(item)} className="text-left">
-                <SpotlightCard
-                  as="div"
-                  className="h-full rounded-xl border border-border bg-card/60 p-5 transition-colors hover:border-white/25"
-                >
-                  <h4 className="font-semibold">{item.title}</h4>
-                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">{item.desc}</p>
-                </SpotlightCard>
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeItem && activeGroup && (
-        <div
           className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
           role="dialog"
           aria-modal="true"
         >
           <div
             ref={expandedRef}
-            className="relative w-full max-w-lg rounded-2xl border border-primary/40 bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] animate-in fade-in-0 zoom-in-95 duration-300 motion-reduce:animate-none"
+            className="relative max-h-[85vh] w-full max-w-xl overflow-y-auto rounded-2xl border border-primary/40 bg-card p-8 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.6)] animate-in fade-in-0 zoom-in-95 duration-300 motion-reduce:animate-none"
           >
             <button
               type="button"
-              onClick={() => setActiveItem(null)}
+              onClick={() => setActiveGroupId(null)}
               aria-label="Cerrar"
               className="absolute top-4 right-4 grid h-8 w-8 place-items-center rounded-full border border-white/15 text-muted-foreground transition-colors hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>
-            <p className="font-mono text-[11px] tracking-widest text-primary uppercase">{activeGroup.label}</p>
-            <h3 className="mt-3 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
-              {activeItem.title}
+
+            {(() => {
+              const Icon = GROUP_ICONS[activeGroup.id] ?? Bot;
+              return <Icon className="h-8 w-8 text-primary" strokeWidth={1.75} />;
+            })()}
+            <h3 className="mt-4 font-display text-2xl font-extrabold tracking-tight sm:text-3xl">
+              {activeGroup.label}
             </h3>
-            <p className="mt-4 leading-relaxed text-muted-foreground">{activeItem.desc}</p>
-            <a
-              href={activeItem.href}
-              className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
-            >
-              {activeItem.cta} →
-            </a>
+
+            <div className="mt-6 divide-y divide-border">
+              {activeGroup.items.map((item) => (
+                <div key={item.title} className="py-5 first:pt-0 last:pb-0">
+                  <h4 className="font-semibold">{item.title}</h4>
+                  <p className="mt-1.5 leading-relaxed text-muted-foreground">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            {activeGroup.items[0] && (
+              <a
+                href={activeGroup.items[0].href}
+                className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+              >
+                {activeGroup.items[0].cta} →
+              </a>
+            )}
           </div>
         </div>
       )}
