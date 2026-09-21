@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Bot, Database, Code2, Users2, X, type LucideIcon } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import { useOutsideClick } from "@/hooks/use-outside-click";
@@ -25,7 +26,16 @@ const GROUP_ICONS: Record<string, LucideIcon> = {
 
 export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
   const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const expandedRef = useRef<HTMLDivElement>(null);
+
+  // El modal se porta directo a <body> (ver más abajo) para escapar de
+  // ancestros con `will-change`/`transform` (p.ej. AnimatedContent) que lo
+  // dejaban atrapado detrás de otras secciones de la página. createPortal
+  // necesita `document`, así que recién se activa una vez montado en cliente.
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useOutsideClick(expandedRef, () => setActiveGroupId(null));
 
@@ -75,7 +85,7 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
         })}
       </div>
 
-      {activeGroup && (
+      {mounted && activeGroup && createPortal(
         <div
           className="fixed inset-0 z-50 grid place-items-center bg-black/60 p-4 animate-in fade-in-0 duration-200 motion-reduce:animate-none"
           role="dialog"
@@ -120,7 +130,8 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
               </a>
             )}
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </div>
   );
