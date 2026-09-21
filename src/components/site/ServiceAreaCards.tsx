@@ -124,6 +124,7 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
             {activeGroup.items[0] && (
               <a
                 href={activeGroup.items[0].href}
+                onClick={() => setActiveGroupId(null)}
                 className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
               >
                 {activeGroup.items[0].cta} →
