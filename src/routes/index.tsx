@@ -259,17 +259,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Sección firma */}
-        {!isIntermedio && (
-          <section className="px-5 py-24 sm:py-32">
-            <div className="mx-auto max-w-6xl">
-              <AnimatedContent>
-                <TeamBuilder />
-              </AnimatedContent>
-            </div>
-          </section>
-        )}
-
         {/* Clientes */}
         <section className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-5xl">
@@ -299,6 +288,15 @@ function Home() {
                   </span>
                 ))}
               />
+            </AnimatedContent>
+          </div>
+        </section>
+
+        {/* Sección firma */}
+        <section className="px-5 py-24 sm:py-32">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <TeamBuilder />
             </AnimatedContent>
           </div>
         </section>
