@@ -288,13 +288,13 @@ function Home() {
                 logos={CLIENTS.map((cl) => (
                   <span
                     key={cl.name}
-                    className="inline-flex h-24 w-48 items-center justify-center rounded-2xl border border-border bg-card px-6"
+                    className="inline-flex h-16 w-32 items-center justify-center rounded-xl border border-border bg-card px-4"
                   >
                     <img
                       src={cl.src}
                       alt={c.clients.logoAlt(cl.name)}
                       loading="lazy"
-                      className="max-h-14 w-auto object-contain"
+                      className="max-h-10 w-auto object-contain"
                     />
                   </span>
                 ))}
