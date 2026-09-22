@@ -21,7 +21,6 @@ import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
-import { DepthCarousel } from "@/components/site/DepthCarousel";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
@@ -31,6 +30,22 @@ import claroLogo from "@/assets/clients/claro.png";
 import naranjaLogo from "@/assets/clients/naranja.png";
 import stellantisLogo from "@/assets/clients/stellantis.png";
 import agdLogo from "@/assets/clients/agd.png";
+import aguasCordobesasLogo from "@/assets/clients/aguas-cordobesas-logo-png_seeklogo-4739.png";
+import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
+import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
+import firenzeLogo from "@/assets/clients/Firenze.svg";
+import fcaLogo from "@/assets/clients/Logo_Fiat_Chrysler_Automobiles.png";
+import fiatLogo from "@/assets/clients/2-clients-fiat-uai-516x234.png";
+import gamaLogo from "@/assets/clients/15-clients-gama-uai-516x234.png";
+import gobCordobaLogo from "@/assets/clients/16-clients-gobierno-de-cordoba-uai-516x234.png";
+import holcimLogo from "@/assets/clients/6-clients-holcim-uai-516x234.png";
+import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
+import mcafeeLogo from "@/assets/clients/3-clients-mcafee-uai-516x234.png";
+import minettiLogo from "@/assets/clients/9-clients-minetti-uai-516x234.png";
+import prittyLogo from "@/assets/clients/12-clients-pritty-uai-516x234.png";
+import tipsLogo from "@/assets/clients/18-clients-tips-uai-258x117.png";
+import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
+import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -78,6 +93,22 @@ const CLIENTS = [
   { name: "Naranja", src: naranjaLogo },
   { name: "Stellantis", src: stellantisLogo },
   { name: "AGD", src: agdLogo },
+  { name: "Aguas Cordobesas", src: aguasCordobesasLogo },
+  { name: "América Móvil", src: americaMovilLogo },
+  { name: "Ecogas", src: ecogasLogo },
+  { name: "Firenze", src: firenzeLogo },
+  { name: "FCA", src: fcaLogo },
+  { name: "Fiat", src: fiatLogo },
+  { name: "Gama", src: gamaLogo },
+  { name: "Gobierno de Córdoba", src: gobCordobaLogo },
+  { name: "Holcim", src: holcimLogo },
+  { name: "La Voz del Interior", src: laVozLogo },
+  { name: "McAfee", src: mcafeeLogo },
+  { name: "Minetti", src: minettiLogo },
+  { name: "Pritty", src: prittyLogo },
+  { name: "Tips", src: tipsLogo },
+  { name: "Vitopel", src: vitopelLogo },
+  { name: "Klöckner Pentaplast", src: klocknerLogo },
 ];
 
 /* ---- Página ---- */
@@ -248,15 +279,26 @@ function Home() {
               </h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
-              <div className="h-[420px]">
-                <DepthCarousel
-                  items={CLIENTS.map((cl) => ({ image: cl.src, alt: c.clients.logoAlt(cl.name) }))}
-                  cardWidth={320}
-                  cardHeight={240}
-                  autoplay
-                  autoplayDelay={4500}
-                />
-              </div>
+              <LogoLoop
+                speed={32}
+                direction="left"
+                pauseOnHover
+                fadeOut
+                fadeOutColor="var(--background)"
+                logos={CLIENTS.map((cl) => (
+                  <span
+                    key={cl.name}
+                    className="inline-flex h-24 w-48 items-center justify-center rounded-2xl border border-border bg-card px-6"
+                  >
+                    <img
+                      src={cl.src}
+                      alt={c.clients.logoAlt(cl.name)}
+                      loading="lazy"
+                      className="max-h-14 w-auto object-contain"
+                    />
+                  </span>
+                ))}
+              />
             </AnimatedContent>
           </div>
         </section>
