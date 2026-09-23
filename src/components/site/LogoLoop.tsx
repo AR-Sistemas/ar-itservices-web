@@ -24,15 +24,42 @@ export function LogoLoop({
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [duration, setDuration] = useState(20);
+  // Arranca oculto: recién mostramos el marquee (y largamos la animación)
+  // una vez que el ancho real ya está resuelto. Antes de eso, cada imagen
+  // suelta que termina de cargar (más notorio en un host/CDN más lento)
+  // cambia el ancho del track a mitad de la animación, y el navegador
+  // reinterpreta cuánto recorrido lleva con la nueva duración: se ve como
+  // un salto o traba. Mostrar recién cuando ya está estable evita eso.
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     const el = trackRef.current;
     if (!el) return;
+    let lastWidth = 0;
     const measure = () => {
       const w = el.scrollWidth / 2;
-      if (w > 0) setDuration(w / Math.max(speed, 1));
+      if (w <= 0) return;
+      if (Math.abs(w - lastWidth) < 1) return;
+      lastWidth = w;
+      setDuration(w / Math.max(speed, 1));
     };
+
+    const imgs = Array.from(el.querySelectorAll("img"));
+    const pending = imgs.filter((img) => !img.complete);
+    const waits = pending.map(
+      (img) =>
+        new Promise<void>((resolve) => {
+          img.addEventListener("load", () => resolve(), { once: true });
+          img.addEventListener("error", () => resolve(), { once: true });
+        }),
+    );
+
     measure();
+    Promise.all(waits).then(() => {
+      measure();
+      setReady(true);
+    });
+
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
@@ -49,6 +76,12 @@ export function LogoLoop({
           gap: `${gap}px`,
           animationDuration: `${duration}s`,
           animationDirection: direction === "right" ? "reverse" : "normal",
+          // Solo forzamos "paused" mientras carga; una vez lista se lo
+          // dejamos a la regla CSS de :hover (si fijáramos "running" acá,
+          // por especificidad ganaría siempre a la pausa por hover).
+          animationPlayState: ready ? undefined : "paused",
+          opacity: ready ? 1 : 0,
+          transition: "opacity 0.3s ease-out",
         }}
       >
         {items.map((node, i) => (

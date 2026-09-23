@@ -88,14 +88,14 @@ const TECH = [
   { name: "Jira", src: "/logos/jira.svg" },
 ];
 
-const CLIENTS = [
+const CLIENTS: { name: string; src: string; scale?: number }[] = [
   { name: "Claro", src: claroLogo },
   { name: "Naranja", src: naranjaLogo },
   { name: "Stellantis", src: stellantisLogo },
   { name: "AGD", src: agdLogo },
   { name: "Aguas Cordobesas", src: aguasCordobesasLogo },
   { name: "América Móvil", src: americaMovilLogo },
-  { name: "Ecogas", src: ecogasLogo },
+  { name: "Ecogas", src: ecogasLogo, scale: 1.35 },
   { name: "Firenze", src: firenzeLogo },
   { name: "FCA", src: fcaLogo },
   { name: "Fiat", src: fiatLogo },
@@ -282,8 +282,8 @@ function Home() {
                     <img
                       src={cl.src}
                       alt={c.clients.logoAlt(cl.name)}
-                      loading="lazy"
                       className="max-h-14 w-auto max-w-[12rem] object-contain"
+                      style={cl.scale ? { transform: `scale(${cl.scale})` } : undefined}
                     />
                   </span>
                 ))}
@@ -364,7 +364,6 @@ function Home() {
                       <img
                         src={t.src}
                         alt={c.stack.logoAlt(t.name)}
-                        loading="lazy"
                         className="h-6 w-6 shrink-0 object-contain"
                       />
                       {t.name}
