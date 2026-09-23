@@ -32,20 +32,20 @@ import stellantisLogo from "@/assets/clients/Stellantis-canva.png";
 import agdLogo from "@/assets/clients/AGD-canva.png";
 import aguasCordobesasLogo from "@/assets/clients/AguasCordobesas-canva.png";
 import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
-import ecogasLogo from "@/assets/clients/Ecogas-canva.png";
+import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
 import firenzeLogo from "@/assets/clients/Firenze.svg";
 import fcaLogo from "@/assets/clients/FCA-canva.png";
 import fiatLogo from "@/assets/clients/2-clients-fiat-uai-516x234.png";
 import gamaLogo from "@/assets/clients/Gama-canva.png";
-import gobCordobaLogo from "@/assets/clients/GobCordoba-canva.png";
+import gobCordobaLogo from "@/assets/clients/16-clients-gobierno-de-cordoba-uai-516x234.png";
 import holcimLogo from "@/assets/clients/Holcim-canva.png";
-import laVozLogo from "@/assets/clients/LaVoz-canva.png";
+import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
 import mcafeeLogo from "@/assets/clients/McAfee-canva.png";
 import minettiLogo from "@/assets/clients/Minetti-canva.png";
 import prittyLogo from "@/assets/clients/Pritty-canva.png";
 import tipsLogo from "@/assets/clients/Tips-canva.png";
-import vitopelLogo from "@/assets/clients/Vitopel-canva.png";
-import klocknerLogo from "@/assets/clients/Klockner-canva.png";
+import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
+import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
