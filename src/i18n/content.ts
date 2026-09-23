@@ -158,9 +158,9 @@ const ES: SiteContent = {
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver casos de éxito",
     phrases: [
-      "Ayudamos a las organizaciones a convertirse en **empresas nativas de IA**, desde la estrategia hasta la implementación y la expansión.",
-      "Creamos el equipo que tu producto realmente necesita: **datos e inteligencia artificial** que se integran en el proceso, no solo en teoría.",
-      "Los datos son el punto de partida de la IA: transformamos la información sin procesar en **modelos, conocimientos y decisiones** en las que puedes confiar.",
+      "Ayudamos a las organizaciones a evolucionar hacia un modelo **AI-Native** — desde la estrategia hasta la implementación.",
+      "Creamos el equipo que tu producto realmente necesita — **datos e IA** integrados en el proceso.",
+      "Todo comienza con los datos — convertimos información en **modelos, insights y decisiones** en las que podés confiar.",
     ],
   },
   metrics: [

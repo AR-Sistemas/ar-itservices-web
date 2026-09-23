@@ -124,7 +124,7 @@ export function HeroHeadlineCarousel({
         {phrases.map((phrase, i) => (
           <h1
             key={phrase}
-            className="col-start-1 row-start-1 text-4xl leading-[1.05] font-extrabold tracking-tight text-balance transition-all duration-500 ease-out sm:text-6xl"
+            className="col-start-1 row-start-1 text-3xl leading-[1.05] font-extrabold tracking-tight text-balance transition-all duration-500 ease-out sm:text-5xl"
             style={{
               opacity: i === index ? 1 : 0,
               transform: i === index ? "translateX(0)" : `translateX(${dir * 24}px)`,
