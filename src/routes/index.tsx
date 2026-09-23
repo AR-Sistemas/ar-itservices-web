@@ -30,7 +30,7 @@ import claroLogo from "@/assets/clients/claro.png";
 import naranjaLogo from "@/assets/clients/naranja.png";
 import stellantisLogo from "@/assets/clients/stellantis.png";
 import agdLogo from "@/assets/clients/agd.png";
-import aguasCordobesasLogo from "@/assets/clients/aguas-cordobesas-logo-png_seeklogo-4739.png";
+import aguasCordobesasLogo from "@/assets/clients/AguasCordobesas-cropped.svg";
 import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
 import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
 import firenzeLogo from "@/assets/clients/Firenze.svg";
@@ -41,9 +41,9 @@ import gobCordobaLogo from "@/assets/clients/16-clients-gobierno-de-cordoba-uai-
 import holcimLogo from "@/assets/clients/6-clients-holcim-uai-516x234.png";
 import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
 import mcafeeLogo from "@/assets/clients/3-clients-mcafee-uai-516x234.png";
-import minettiLogo from "@/assets/clients/9-clients-minetti-uai-516x234.png";
+import minettiLogo from "@/assets/clients/Minetti-cropped.svg";
 import prittyLogo from "@/assets/clients/12-clients-pritty-uai-516x234.png";
-import tipsLogo from "@/assets/clients/18-clients-tips-uai-258x117.png";
+import tipsLogo from "@/assets/clients/Tips-cropped.svg";
 import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
 
