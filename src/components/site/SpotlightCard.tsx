@@ -10,12 +10,14 @@ export function SpotlightCard({
   contentClassName = "",
   spotlightColor = "rgba(255, 0, 13, 0.12)",
   as: Tag = "div",
+  style,
 }: {
   children: ReactNode;
   className?: string;
   contentClassName?: string;
   spotlightColor?: string;
   as?: "div" | "article" | "li";
+  style?: React.CSSProperties;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -32,7 +34,7 @@ export function SpotlightCard({
       // @ts-expect-error polymorphic ref
       ref={ref}
       onMouseMove={onMove}
-      style={{ "--spotlight-color": spotlightColor } as React.CSSProperties}
+      style={{ "--spotlight-color": spotlightColor, ...style } as React.CSSProperties}
       className={`spotlight-card group relative overflow-hidden ${className}`}
     >
       <span className="spotlight-card-glow" aria-hidden="true" />
