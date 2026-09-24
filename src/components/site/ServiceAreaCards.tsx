@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Bot, Database, Code2, Users2, ChevronDown, type LucideIcon } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import type { ServiceGroup } from "@/i18n/content";
@@ -6,9 +6,15 @@ import type { ServiceGroup } from "@/i18n/content";
 /**
  * "Qué hacemos" en 2 niveles, todo con cards (pedido puntual de gerencia):
  *  1. 4 cards grandes, una por área — es todo lo que se ve al entrar.
- *  2. Al clickear una de esas cards, se despliega un panel horizontal
- *     ocupando el ancho completo, debajo de la fila de las 4 cards, con los
+ *  2. Al clickear una de esas cards, se despliega un panel con los
  *     servicios de esa área en columnas.
+ *
+ * En pantallas normales (2/4 columnas) el panel ocupa el ancho completo,
+ * debajo de TODA la fila de cards. En mobile (1 columna) eso quedaba raro
+ * — el panel podía aparecer varias cards más abajo de la que lo abrió —
+ * así que ahí el panel se renderiza pegado a su propia card (usamos dos
+ * versiones, una por breakpoint, alternadas con clases `sm:hidden` /
+ * `hidden sm:block`; no hace falta JS para detectar el breakpoint).
  *
  * Las cards y el panel quedan como piezas SEPARADAS: la card activa tiene
  * una "ficha" triangular que sobresale de su propio borde inferior
@@ -30,10 +36,11 @@ import type { ServiceGroup } from "@/i18n/content";
  * card, para que se vea como continuación de su contorno) posicionado
  * justo debajo, con "overflow visible" en el contenedor.
  *
- * La posición horizontal de la ranura del panel se mide a mano (con
- * getBoundingClientRect) porque la columna de la card activa cambia según
- * breakpoint (1/2/4 columnas); la ficha de la card en cambio va siempre
- * centrada en su propio ancho.
+ * La posición horizontal de la ranura del panel "de escritorio" se mide a
+ * mano (con getBoundingClientRect) porque la columna de la card activa
+ * cambia según breakpoint (2/4 columnas). La versión mobile, en cambio,
+ * siempre va centrada en su propio ancho (misma card, mismo ancho), así
+ * que no necesita esa medición cruzada.
  */
 
 const NOTCH_HALF = 14;
@@ -132,6 +139,84 @@ function CardTab() {
   );
 }
 
+/** Servicios de un área + link "saber más", compartido por las dos versiones del panel. */
+function PanelItems({ group }: { group: ServiceGroup }) {
+  return (
+    <>
+      <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
+        {group.items.map((item) => (
+          <div key={item.title}>
+            <h4 className="font-semibold text-primary">{item.title}</h4>
+            <p className="mt-1.5 leading-relaxed text-muted-foreground">{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {group.items[0] && (
+        <a
+          href={group.items[0].href}
+          className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+        >
+          {group.items[0].cta} →
+        </a>
+      )}
+    </>
+  );
+}
+
+/**
+ * Versión mobile (1 columna): el panel va pegado a su propia card, así
+ * que la ranura siempre queda centrada en su propio ancho — no necesita
+ * medir nada fuera de sí mismo.
+ */
+function MobilePanel({ group, isOpen }: { group: ServiceGroup; isOpen: boolean }) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [size, setSize] = useState<{ width: number; height: number } | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setSize(null);
+      return;
+    }
+    const updateSize = () => {
+      const el = panelRef.current;
+      if (!el) return;
+      const r = el.getBoundingClientRect();
+      setSize({ width: r.width, height: r.height });
+    };
+    updateSize();
+    window.addEventListener("resize", updateSize);
+    return () => window.removeEventListener("resize", updateSize);
+  }, [isOpen]);
+
+  const notch = size ? panelNotchGeometry(size.width, size.height, size.width / 2) : null;
+
+  return (
+    <div
+      className={`grid transition-[grid-template-rows] duration-500 ease-out sm:hidden ${
+        isOpen ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]"
+      }`}
+    >
+      <div className="overflow-hidden">
+        {isOpen && (
+          <div ref={panelRef} className="relative">
+            <SpotlightCard
+              as="div"
+              className="animate-in fade-in-0 slide-in-from-top-8 rounded-2xl border border-primary/40 bg-card p-6 duration-700 motion-reduce:animate-none sm:p-8"
+              style={notch ? { clipPath: notch.clipPath } : undefined}
+            >
+              <PanelItems group={group} />
+            </SpotlightCard>
+            {notch && (
+              <NotchStroke width={notch.width} height={notch.height} strokeD={notch.strokeD} />
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
   const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
   const [panelMetrics, setPanelMetrics] = useState<{
@@ -169,6 +254,10 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
     return () => window.removeEventListener("resize", updateMetrics);
   }, [activeGroupId]);
 
+  const desktopPanelNotch = panelMetrics
+    ? panelNotchGeometry(panelMetrics.width, panelMetrics.height, panelMetrics.notchX)
+    : null;
+
   return (
     <div>
       <div ref={gridRef} className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -176,95 +265,76 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
           const Icon = GROUP_ICONS[group.id] ?? Bot;
           const isActive = activeGroupId === group.id;
           return (
-            <button
-              key={group.id}
-              ref={(el) => {
-                cardRefs.current[group.id] = el;
-              }}
-              type="button"
-              onClick={() => toggle(group.id)}
-              aria-expanded={isActive}
-              aria-controls="service-panel"
-              className="group relative overflow-visible text-left"
-            >
-              <SpotlightCard
-                as="div"
-                className={`h-full rounded-2xl border p-6 transition-colors duration-300 ease-out ${
-                  isActive
-                    ? "border-primary/40 bg-card"
-                    : "border-border bg-card hover:border-white/25"
-                }`}
+            <Fragment key={group.id}>
+              <button
+                ref={(el) => {
+                  cardRefs.current[group.id] = el;
+                }}
+                type="button"
+                onClick={() => toggle(group.id)}
+                aria-expanded={isActive}
+                aria-controls="service-panel"
+                className="group relative overflow-visible text-left"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <Icon
-                    className={`h-7 w-7 ${isActive ? "text-primary/70" : "text-muted-foreground"}`}
-                    strokeWidth={1.75}
-                  />
-                  <ChevronDown
-                    className={`h-6 w-6 shrink-0 transition-transform duration-300 ${
-                      isActive ? "rotate-180 text-primary/70" : "text-muted-foreground"
-                    }`}
-                    strokeWidth={2}
-                  />
-                </div>
-                <h3 className="mt-4 text-lg font-bold tracking-tight">{group.label}</h3>
-              </SpotlightCard>
-              {isActive && <CardTab />}
-            </button>
+                <SpotlightCard
+                  as="div"
+                  className={`h-full rounded-2xl border p-6 transition-colors duration-300 ease-out ${
+                    isActive
+                      ? "border-primary/40 bg-card"
+                      : "border-border bg-card hover:border-white/25"
+                  }`}
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <Icon
+                      className={`h-7 w-7 ${isActive ? "text-primary/70" : "text-muted-foreground"}`}
+                      strokeWidth={1.75}
+                    />
+                    <ChevronDown
+                      className={`h-6 w-6 shrink-0 transition-transform duration-300 ${
+                        isActive ? "rotate-180 text-primary/70" : "text-muted-foreground"
+                      }`}
+                      strokeWidth={2}
+                    />
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold tracking-tight">{group.label}</h3>
+                </SpotlightCard>
+                {isActive && <CardTab />}
+              </button>
+
+              {/* Mobile (1 columna): panel pegado a esta misma card. */}
+              <MobilePanel group={group} isOpen={isActive} />
+            </Fragment>
           );
         })}
       </div>
 
+      {/* sm+ (2/4 columnas): panel compartido debajo de toda la fila. */}
       <div
         id="service-panel"
-        className={`grid transition-[grid-template-rows] duration-500 ease-out ${
+        className={`hidden transition-[grid-template-rows] duration-500 ease-out sm:grid ${
           activeGroup ? "mt-4 grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
         <div className="overflow-hidden">
-          {activeGroup &&
-            (() => {
-              const panelNotch = panelMetrics
-                ? panelNotchGeometry(panelMetrics.width, panelMetrics.height, panelMetrics.notchX)
-                : null;
-              return (
-                <div ref={panelRef} className="relative">
-                  <SpotlightCard
-                    key={activeGroup.id}
-                    as="div"
-                    className="animate-in fade-in-0 slide-in-from-top-8 rounded-2xl border border-primary/40 bg-card p-6 duration-700 motion-reduce:animate-none sm:p-8"
-                    style={panelNotch ? { clipPath: panelNotch.clipPath } : undefined}
-                  >
-                    <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
-                      {activeGroup.items.map((item) => (
-                        <div key={item.title}>
-                          <h4 className="font-semibold text-primary">{item.title}</h4>
-                          <p className="mt-1.5 leading-relaxed text-muted-foreground">
-                            {item.desc}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-
-                    {activeGroup.items[0] && (
-                      <a
-                        href={activeGroup.items[0].href}
-                        className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
-                      >
-                        {activeGroup.items[0].cta} →
-                      </a>
-                    )}
-                  </SpotlightCard>
-                  {panelNotch && (
-                    <NotchStroke
-                      width={panelNotch.width}
-                      height={panelNotch.height}
-                      strokeD={panelNotch.strokeD}
-                    />
-                  )}
-                </div>
-              );
-            })()}
+          {activeGroup && (
+            <div ref={panelRef} className="relative">
+              <SpotlightCard
+                key={activeGroup.id}
+                as="div"
+                className="animate-in fade-in-0 slide-in-from-top-8 rounded-2xl border border-primary/40 bg-card p-6 duration-700 motion-reduce:animate-none sm:p-8"
+                style={desktopPanelNotch ? { clipPath: desktopPanelNotch.clipPath } : undefined}
+              >
+                <PanelItems group={activeGroup} />
+              </SpotlightCard>
+              {desktopPanelNotch && (
+                <NotchStroke
+                  width={desktopPanelNotch.width}
+                  height={desktopPanelNotch.height}
+                  strokeD={desktopPanelNotch.strokeD}
+                />
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
