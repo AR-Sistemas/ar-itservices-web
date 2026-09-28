@@ -405,7 +405,7 @@ function Home() {
             <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
               {c.people.heading}
             </h2>
-            <p className="mt-6 text-3xl leading-snug font-bold tracking-tight text-balance sm:text-4xl">
+            <p className="mt-6 text-4xl leading-snug font-bold tracking-tight text-balance sm:text-5xl">
               {c.people.statement}
             </p>
             <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
