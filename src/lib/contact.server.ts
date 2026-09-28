@@ -12,6 +12,17 @@ import { Resend } from "resend";
  *
  * Requiere la env var RESEND_API_KEY en el servidor (nunca con prefijo
  * VITE_, que la expondría al bundle del cliente).
+ *
+ * Anti-spam (pedido de gerencia, sept. 2026): sin captcha de terceros (no
+ * hacía falta sumar otra cuenta/servicio para esto), dos chequeos simples
+ * del lado del servidor que filtran la enorme mayoría de bots de spam:
+ *  - Honeypot: un campo oculto para humanos (CSS) que los bots que
+ *    autocompletan todo el formulario sí llenan.
+ *  - Trampa de tiempo: un bot que llena y manda el formulario en menos de
+ *    ~1.5s no es una persona escribiendo. El timestamp de inicio lo manda
+ *    el cliente, pero se valida contra el reloj del servidor.
+ * En ambos casos se responde como si el envío fuera exitoso (sin mandar
+ * el mail) para no darle pistas al bot de que fue detectado.
  */
 
 const RECIPIENTS: Record<string, string> = {
@@ -21,6 +32,8 @@ const RECIPIENTS: Record<string, string> = {
 };
 
 const FROM_ADDRESS = "Sitio AR IT Services <no-responder@arconsultores.com.ar>";
+
+const MIN_FILL_TIME_MS = 1500;
 
 function buildBody(data: ContactFormData) {
   const lines = [
@@ -50,6 +63,7 @@ interface ContactFormData {
   puesto: string;
   mensaje: string;
   cv: File | null;
+  isLikelyBot: boolean;
 }
 
 export const sendContactEmail = createServerFn({ method: "POST" })
@@ -59,6 +73,15 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     }
     const get = (key: string) => (data.get(key)?.toString() ?? "").trim();
     const cv = data.get("cv");
+
+    // Honeypot: nombre pensado para que los bots que rellenan "todo" un
+    // formulario lo completen (ver el input oculto en el form). Cualquier
+    // valor acá es señal de bot.
+    const honeypot = get("sitio_web");
+    const startedAt = Number(get("formStartedAt"));
+    const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
+    const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
+
     return {
       contactType: get("contactType") || "consulta",
       nombre: get("nombre"),
@@ -70,9 +93,16 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       puesto: get("puesto"),
       mensaje: get("mensaje"),
       cv: cv instanceof File && cv.size > 0 ? cv : null,
+      isLikelyBot,
     };
   })
   .handler(async ({ data }) => {
+    // Se responde éxito sin enviar nada — no le damos pistas al bot de que
+    // fue detectado, para no incentivarlo a adaptarse.
+    if (data.isLikelyBot) {
+      return { ok: true as const };
+    }
+
     const apiKey = process.env.RESEND_API_KEY;
     if (!apiKey) {
       throw new Error(

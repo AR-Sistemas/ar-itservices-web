@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { sendContactEmail } from "@/lib/contact.server";
+import { toast } from "sonner";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
@@ -130,6 +131,9 @@ function Home() {
   const [paisValue, setPaisValue] = useState("");
   const [tipoValue, setTipoValue] = useState("");
   const [telefonoValue, setTelefonoValue] = useState("");
+  // Trampa de tiempo anti-bot: momento en que se montó el formulario, para
+  // comparar contra cuándo se envía (ver src/lib/contact.server.ts).
+  const [formStartedAt] = useState(() => Date.now());
   const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
 
@@ -474,17 +478,41 @@ function Home() {
                 className="mt-8 grid gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
+                  const formEl = e.currentTarget;
+                  const formData = new FormData(formEl);
                   setSendState("sending");
                   sendContact({ data: formData })
-                    .then(() => setSendState("sent"))
+                    .then(() => {
+                      setSendState("sent");
+                      toast.success(c.contact.success);
+                      formEl.reset();
+                      setContactType("empresa");
+                      setSelectedPosition("");
+                      setEmpresaValue("");
+                      setPaisValue("");
+                      setTipoValue("");
+                      setTelefonoValue("");
+                    })
                     .catch((err) => {
                       console.error(err);
                       setSendState("error");
+                      toast.error(c.contact.error);
                     });
                 }}
               >
                 <input type="hidden" name="contactType" value={contactType} />
+                <input type="hidden" name="formStartedAt" value={formStartedAt} />
+                {/* Honeypot anti-bot: invisible para personas, los bots que
+                    autocompletan todo el formulario sí lo llenan (ver
+                    src/lib/contact.server.ts). */}
+                <input
+                  type="text"
+                  name="sitio_web"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+                />
                 <Field id="nombre" label={c.contact.fields.name} />
                 <Field id="email" label={c.contact.fields.email} type="email" />
 
@@ -583,16 +611,6 @@ function Home() {
                   >
                     {sendState === "sending" ? c.contact.submitting : c.contact.submit}
                   </button>
-                  {sendState === "sent" && (
-                    <p className="mt-4 text-sm text-muted-foreground" role="status">
-                      {c.contact.success}
-                    </p>
-                  )}
-                  {sendState === "error" && (
-                    <p className="mt-4 text-sm text-destructive" role="alert">
-                      {c.contact.error}
-                    </p>
-                  )}
                 </div>
               </form>
             </AnimatedContent>
