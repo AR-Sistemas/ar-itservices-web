@@ -20,11 +20,7 @@ const RECIPIENTS: Record<string, string> = {
   consulta: "arconsultores@arconsultores.com.ar",
 };
 
-// TODO: una vez verificado el dominio arconsultores.com.ar en Resend,
-// cambiar por algo como "Sitio AR IT Services <contacto@arconsultores.com.ar>".
-// Hasta entonces, Resend solo permite enviar "from" su propio dominio de
-// pruebas (funciona igual, el remitente visible es distinto).
-const FROM_ADDRESS = "Sitio AR IT Services <onboarding@resend.dev>";
+const FROM_ADDRESS = "Sitio AR IT Services <no-responder@arconsultores.com.ar>";
 
 function buildBody(data: ContactFormData) {
   const lines = [
