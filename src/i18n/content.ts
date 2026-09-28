@@ -295,7 +295,7 @@ const ES: SiteContent = {
   people: {
     heading: "Nuestra gente",
     statement:
-      "Detrás de cada proyecto hay personas que se quedan. 25 años, un mismo equipo de socios al frente.",
+      "Pensamos cómo queremos hacer las cosas. La tecnología nos ayuda a hacerlas realidad.",
     ctaLink: "Conocé a nuestra gente",
     backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
