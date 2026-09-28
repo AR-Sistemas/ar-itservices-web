@@ -3,14 +3,13 @@ import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useOutsideClick } from "@/hooks/use-outside-click";
 
-const REQUEST_EMAIL = "jromanutti@arconsultores.com.ar";
+const REQUEST_EMAIL = "arconsultores@arconsultores.com.ar";
 
 /**
- * Modal chico para solicitar el framework ARIA por mail. No hay backend de
- * formularios en el sitio (ver el de #contacto: tampoco envía nada), así que
- * en vez de simular un envío, arma un `mailto:` con los datos cargados y
- * abre el cliente de correo del propio visitante — el mail sale de verdad,
- * sin necesitar servidor.
+ * Modal chico para solicitar el framework ARIA por mail. Arma un `mailto:`
+ * con los datos cargados y abre el cliente de correo del propio visitante
+ * — no pasa por el backend de #contacto (que sí envía por Resend), así que
+ * depende de que el visitante tenga un cliente de mail configurado.
  */
 export function FrameworkRequestModal({
   open,

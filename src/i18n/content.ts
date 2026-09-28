@@ -81,7 +81,9 @@ export type SiteContent = {
     countries: string[];
     projectOptions: string[];
     submit: string;
+    submitting: string;
     success: string;
+    error: string;
   };
   footer: {
     tagline: string;
@@ -382,7 +384,9 @@ const ES: SiteContent = {
       "Otro",
     ],
     submit: "Enviar consulta",
+    submitting: "Enviando…",
     success: "Gracias. Te vamos a contactar a la brevedad.",
+    error: "No pudimos enviar tu mensaje. Probá de nuevo en unos minutos.",
   },
   footer: {
     tagline: "Software, datos y equipos dedicados desde 2001.",
@@ -795,7 +799,9 @@ const EN: SiteContent = {
       "Other",
     ],
     submit: "Send inquiry",
+    submitting: "Sending…",
     success: "Thanks. We'll get in touch shortly.",
+    error: "We couldn't send your message. Please try again in a few minutes.",
   },
   footer: {
     tagline: "Software, data and dedicated teams since 2001.",

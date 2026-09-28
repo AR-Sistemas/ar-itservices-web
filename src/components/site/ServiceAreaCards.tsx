@@ -218,7 +218,8 @@ function MobilePanel({ group, isOpen }: { group: ServiceGroup; isOpen: boolean }
 }
 
 export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
-  const [activeGroupId, setActiveGroupId] = useState<string | null>(null);
+  // "IA & Agentes" arranca desplegada por defecto (pedido de gerencia).
+  const [activeGroupId, setActiveGroupId] = useState<string | null>("ai");
   const [panelMetrics, setPanelMetrics] = useState<{
     width: number;
     height: number;

@@ -1,5 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
+import { sendContactEmail } from "@/lib/contact.server";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
@@ -118,7 +120,8 @@ type ContactType = "empresa" | "postulante" | "consulta";
 function Home() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
-  const [sent, setSent] = useState(false);
+  const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const sendContact = useServerFn(sendContactEmail);
   const [contactType, setContactType] = useState<ContactType>("empresa");
   const [selectedPosition, setSelectedPosition] = useState("");
   // Levantados a estado (en vez de no controlados) para que no se pierdan si
@@ -471,9 +474,17 @@ function Home() {
                 className="mt-8 grid gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  setSent(true);
+                  const formData = new FormData(e.currentTarget);
+                  setSendState("sending");
+                  sendContact({ data: formData })
+                    .then(() => setSendState("sent"))
+                    .catch((err) => {
+                      console.error(err);
+                      setSendState("error");
+                    });
                 }}
               >
+                <input type="hidden" name="contactType" value={contactType} />
                 <Field id="nombre" label={c.contact.fields.name} />
                 <Field id="email" label={c.contact.fields.email} type="email" />
 
@@ -567,13 +578,19 @@ function Home() {
                     ref={submitCta.ref}
                     onMouseDown={submitCta.press}
                     type="submit"
-                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                    disabled={sendState === "sending"}
+                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    {c.contact.submit}
+                    {sendState === "sending" ? c.contact.submitting : c.contact.submit}
                   </button>
-                  {sent && (
+                  {sendState === "sent" && (
                     <p className="mt-4 text-sm text-muted-foreground" role="status">
                       {c.contact.success}
+                    </p>
+                  )}
+                  {sendState === "error" && (
+                    <p className="mt-4 text-sm text-destructive" role="alert">
+                      {c.contact.error}
                     </p>
                   )}
                 </div>
