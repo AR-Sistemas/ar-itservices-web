@@ -295,7 +295,7 @@ const ES: SiteContent = {
   people: {
     heading: "Nuestra gente",
     statement:
-      "Pensamos cómo queremos hacer las cosas. La tecnología nos ayuda a hacerlas realidad.",
+      "Detrás de cada proyecto hay personas — respaldadas por más de 25 años de experiencia.",
     ctaLink: "Conocé a nuestra gente",
     backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
@@ -710,7 +710,7 @@ const EN: SiteContent = {
   people: {
     heading: "Our people",
     statement:
-      "Behind every project there are people who stay. 25 years, the same team of partners in charge.",
+      "Behind every project, there are people — backed by more than 25 years of experience.",
     ctaLink: "Meet our people",
     backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
