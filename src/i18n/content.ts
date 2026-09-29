@@ -85,6 +85,18 @@ export type SiteContent = {
     success: string;
     error: string;
   };
+  frameworkModal: {
+    eyebrow: string;
+    requestTitle: (frameworkTitle: string) => string;
+    subtitle: string;
+    fields: { name: string; email: string; company: string; companyOptional: string };
+    submit: string;
+    submitting: string;
+    footnote: string;
+    closeLabel: string;
+    successToast: (frameworkTitle: string) => string;
+    errorToast: string;
+  };
   footer: {
     tagline: string;
     officesHeading: string;
@@ -387,6 +399,23 @@ const ES: SiteContent = {
     submitting: "Enviando…",
     success: "Gracias. Te vamos a contactar a la brevedad.",
     error: "No pudimos enviar tu mensaje. Probá de nuevo en unos minutos.",
+  },
+  frameworkModal: {
+    eyebrow: "Framework propio",
+    requestTitle: (frameworkTitle) => `Solicitá ${frameworkTitle}`,
+    subtitle: "Dejanos tus datos y te mandamos el material completo por mail.",
+    fields: {
+      name: "Nombre",
+      email: "Email",
+      company: "Empresa",
+      companyOptional: "(opcional)",
+    },
+    submit: "Solicitar por mail",
+    submitting: "Enviando…",
+    footnote: "Te va a llegar un mail con el material adjunto en un momento.",
+    closeLabel: "Cerrar",
+    successToast: (frameworkTitle) => `Listo, te enviamos ${frameworkTitle} por mail.`,
+    errorToast: "No pudimos enviar el material. Probá de nuevo en unos minutos.",
   },
   footer: {
     tagline: "Software, datos y equipos dedicados desde 2001.",
@@ -802,6 +831,23 @@ const EN: SiteContent = {
     submitting: "Sending…",
     success: "Thanks. We'll get in touch shortly.",
     error: "We couldn't send your message. Please try again in a few minutes.",
+  },
+  frameworkModal: {
+    eyebrow: "Proprietary framework",
+    requestTitle: (frameworkTitle) => `Request ${frameworkTitle}`,
+    subtitle: "Leave us your details and we'll send you the full material by email.",
+    fields: {
+      name: "Name",
+      email: "Email",
+      company: "Company",
+      companyOptional: "(optional)",
+    },
+    submit: "Request by email",
+    submitting: "Sending…",
+    footnote: "You'll get an email with the material attached in a moment.",
+    closeLabel: "Close",
+    successToast: (frameworkTitle) => `Done — we sent you ${frameworkTitle} by email.`,
+    errorToast: "We couldn't send the material. Please try again in a few minutes.",
   },
   footer: {
     tagline: "Software, data and dedicated teams since 2001.",
