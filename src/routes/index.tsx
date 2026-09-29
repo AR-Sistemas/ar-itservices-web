@@ -451,7 +451,7 @@ function Home() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.contact.heading}</h2>
               <p className="mt-3 text-muted-foreground">{c.contact.subtitle}</p>
 
-              <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-full border border-border bg-card p-1.5">
+              <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-2xl border border-border bg-card p-1.5">
                 {(
                   [
                     ["empresa", c.contact.typeLabels.company],
