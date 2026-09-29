@@ -1,15 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useServerFn } from "@tanstack/react-start";
 import { X } from "lucide-react";
+import { toast } from "sonner";
 import { useOutsideClick } from "@/hooks/use-outside-click";
-
-const REQUEST_EMAIL = "arconsultores@arconsultores.com.ar";
+import { sendFrameworkRequest } from "@/lib/framework-request.server";
 
 /**
- * Modal chico para solicitar el framework ARIA por mail. Arma un `mailto:`
- * con los datos cargados y abre el cliente de correo del propio visitante
- * — no pasa por el backend de #contacto (que sí envía por Resend), así que
- * depende de que el visitante tenga un cliente de mail configurado.
+ * Modal chico para solicitar el framework ARIA. Envía por mail (vía Resend,
+ * ver framework-request.server.ts) el PDF del framework directo al
+ * visitante, más un aviso interno al equipo — antes esto era un `mailto:`
+ * client-side (dependía del cliente de correo del visitante y no adjuntaba
+ * nada); ahora es automático.
  */
 export function FrameworkRequestModal({
   open,
@@ -24,7 +26,13 @@ export function FrameworkRequestModal({
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [mounted, setMounted] = useState(false);
+  const [sendState, setSendState] = useState<"idle" | "sending">("idle");
+  // Trampa de tiempo anti-bot (ver contact.server.ts): se resetea cada vez
+  // que el modal se abre, no en el mount del componente (que puede vivir
+  // montado bastante antes de que alguien lo abra).
+  const [openedAt, setOpenedAt] = useState(() => Date.now());
   const ref = useRef<HTMLDivElement>(null);
+  const sendRequest = useServerFn(sendFrameworkRequest);
 
   useEffect(() => setMounted(true), []);
   useOutsideClick(ref, onClose);
@@ -32,6 +40,7 @@ export function FrameworkRequestModal({
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     if (!open) return;
+    setOpenedAt(Date.now());
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -41,18 +50,25 @@ export function FrameworkRequestModal({
 
   if (!mounted || !open) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const subject = `Quiero el framework ${frameworkTitle}`;
-    const bodyLines = [
-      `Nombre: ${name}`,
-      `Email de contacto: ${email}`,
-      company ? `Empresa: ${company}` : null,
-      "",
-      `Hola, quiero solicitar el framework ${frameworkTitle}.`,
-    ].filter(Boolean);
-    const mailto = `mailto:${REQUEST_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
-    window.location.href = mailto;
+    const formData = new FormData(e.currentTarget);
+    formData.set("frameworkTitle", frameworkTitle);
+    setSendState("sending");
+    sendRequest({ data: formData })
+      .then(() => {
+        setSendState("idle");
+        toast.success(`Listo, te enviamos ${frameworkTitle} por mail.`);
+        setName("");
+        setEmail("");
+        setCompany("");
+        onClose();
+      })
+      .catch((err) => {
+        console.error(err);
+        setSendState("idle");
+        toast.error("No pudimos enviar el material. Probá de nuevo en unos minutos.");
+      });
   };
 
   return createPortal(
@@ -80,16 +96,27 @@ export function FrameworkRequestModal({
           Solicitá {frameworkTitle}
         </h3>
         <p className="mt-2 text-sm text-muted-foreground">
-          Dejanos tus datos y te escribimos con el material completo.
+          Dejanos tus datos y te mandamos el material completo por mail.
         </p>
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+          <input type="hidden" name="formStartedAt" value={openedAt} />
+          {/* Honeypot anti-bot: invisible para personas (ver contact.server.ts). */}
+          <input
+            type="text"
+            name="sitio_web"
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+            className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+          />
           <div>
             <label htmlFor="framework-name" className="text-sm font-medium">
               Nombre
             </label>
             <input
               id="framework-name"
+              name="nombre"
               type="text"
               required
               value={name}
@@ -103,6 +130,7 @@ export function FrameworkRequestModal({
             </label>
             <input
               id="framework-email"
+              name="email"
               type="email"
               required
               value={email}
@@ -116,6 +144,7 @@ export function FrameworkRequestModal({
             </label>
             <input
               id="framework-company"
+              name="empresa"
               type="text"
               value={company}
               onChange={(e) => setCompany(e.target.value)}
@@ -124,12 +153,13 @@ export function FrameworkRequestModal({
           </div>
           <button
             type="submit"
-            className="w-full rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+            disabled={sendState === "sending"}
+            className="w-full rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
           >
-            Solicitar por mail
+            {sendState === "sending" ? "Enviando…" : "Solicitar por mail"}
           </button>
           <p className="text-center text-xs text-muted-foreground">
-            Se abre tu cliente de correo con el mensaje ya armado, dirigido a nuestro equipo.
+            Te va a llegar un mail con el material adjunto en un momento.
           </p>
         </form>
       </div>
