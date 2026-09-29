@@ -1,15 +1,19 @@
 import { createServerFn } from "@tanstack/react-start";
 import { Resend } from "resend";
 import { ARIA_PDF_BASE64, ARIA_PDF_FILENAME } from "./framework-aria-pdf";
+import { EMAIL_LOGO_BASE64, EMAIL_LOGO_CONTENT_ID, EMAIL_LOGO_FILENAME } from "./email-logo";
+import { buildAriaFrameworkEmailHtml } from "./email-templates";
 
 /**
  * Modal de "Solicitá ARIA" (ver FrameworkRequestModal.tsx): antes armaba un
  * `mailto:` y dependía del cliente de correo del visitante. Ahora manda dos
  * mails de verdad por Resend (pedido de gerencia, sept. 2026):
- *  1. al visitante, con el PDF del framework adjunto — automático, sin que
- *     nadie del equipo tenga que hacer nada.
+ *  1. al visitante, con una plantilla HTML de marca (ver email-templates.ts)
+ *     y el PDF del framework adjunto — automático, sin que nadie del equipo
+ *     tenga que hacer nada.
  *  2. un aviso interno a arconsultores@arconsultores.com.ar con los datos
- *     cargados, para que el equipo pueda hacer seguimiento comercial.
+ *     cargados, para que el equipo pueda hacer seguimiento comercial (texto
+ *     plano, no necesita ser lindo — es para uso interno).
  *
  * Mismo anti-spam (honeypot + trampa de tiempo) que #contacto — ver
  * src/lib/contact.server.ts para el detalle de por qué funciona así.
@@ -66,9 +70,10 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
     }
 
     const resend = new Resend(apiKey);
-    const attachment = { filename: ARIA_PDF_FILENAME, content: ARIA_PDF_BASE64 };
 
-    const visitorBody = [
+    // Fallback en texto plano para clientes de correo que no rendericen
+    // HTML (o para quien lea el mail desde una vista de solo-texto).
+    const visitorText = [
       `¡Hola${data.nombre ? " " + data.nombre : ""}!`,
       "",
       `Gracias por tu interés en ${data.frameworkTitle}, nuestro framework de Adopción Responsable de IA.`,
@@ -84,8 +89,19 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
       to: data.email,
       replyTo: NOTIFY_EMAIL,
       subject: `Framework ${data.frameworkTitle} — AR IT Services`,
-      text: visitorBody,
-      attachments: [attachment],
+      text: visitorText,
+      html: buildAriaFrameworkEmailHtml({
+        nombre: data.nombre,
+        frameworkTitle: data.frameworkTitle,
+      }),
+      attachments: [
+        { filename: ARIA_PDF_FILENAME, content: ARIA_PDF_BASE64 },
+        {
+          filename: EMAIL_LOGO_FILENAME,
+          content: EMAIL_LOGO_BASE64,
+          contentId: EMAIL_LOGO_CONTENT_ID,
+        },
+      ],
     });
     if (visitorError) {
       throw new Error(visitorError.message);
