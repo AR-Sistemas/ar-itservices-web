@@ -35,6 +35,15 @@ const FROM_ADDRESS = "Sitio AR IT Services <no-responder@arconsultores.com.ar>";
 
 const MIN_FILL_TIME_MS = 1500;
 
+// Límites validados en el servidor (los `accept`/`required` del formulario solo
+// valen para el navegador y se saltean con un POST directo).
+const MAX_FIELD_LENGTH = 200;
+const MAX_MESSAGE_LENGTH = 5000;
+// Vercel corta los requests a ~4.5 MB; dejamos margen para el resto del form.
+const MAX_CV_BYTES = 4 * 1024 * 1024;
+const CV_EXTENSIONS = [".pdf", ".doc", ".docx"];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 function buildBody(data: ContactFormData) {
   const lines = [
     `Tipo de consulta: ${data.contactType}`,
@@ -81,6 +90,23 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const startedAt = Number(get("formStartedAt"));
     const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
     const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
+
+    const shortFields = ["nombre", "email", "empresa", "telefono", "pais", "tipo", "puesto"];
+    if (shortFields.some((k) => get(k).length > MAX_FIELD_LENGTH)) {
+      throw new Error("Campo demasiado largo");
+    }
+    if (get("mensaje").length > MAX_MESSAGE_LENGTH) {
+      throw new Error("Mensaje demasiado largo");
+    }
+    if (get("email") && !EMAIL_RE.test(get("email"))) {
+      throw new Error("Email inválido");
+    }
+    if (cv instanceof File && cv.size > 0) {
+      const name = cv.name.toLowerCase();
+      if (cv.size > MAX_CV_BYTES || !CV_EXTENSIONS.some((ext) => name.endsWith(ext))) {
+        throw new Error("Archivo no permitido");
+      }
+    }
 
     return {
       contactType: get("contactType") || "consulta",

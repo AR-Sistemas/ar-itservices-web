@@ -28,10 +28,10 @@ export const Route = createFileRoute("/novedades")({
       { property: "og:title", content: `${NEWSLETTER_ISSUE.title} | Novedades de IA` },
       { property: "og:description", content: NEWSLETTER_ISSUE.description },
       { property: "og:type", content: "article" },
-      { property: "og:url", content: "https://ar-talent-forge.lovable.app/novedades" },
+      { property: "og:url", content: "https://ar-itservices.com/novedades" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://ar-talent-forge.lovable.app/novedades" }],
+    links: [{ rel: "canonical", href: "https://ar-itservices.com/novedades" }],
   }),
   component: NewsletterPage,
 });

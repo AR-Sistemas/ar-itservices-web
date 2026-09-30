@@ -66,8 +66,10 @@ export const Route = createFileRoute("/")({
           "Armamos el equipo exacto que tu producto necesita, con datos e IA en el flujo de trabajo.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://ar-itservices.com/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://ar-itservices.com/" }],
   }),
   component: Home,
 });

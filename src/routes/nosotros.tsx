@@ -30,10 +30,10 @@ export const Route = createFileRoute("/nosotros")({
         content: "Conocé al equipo de socios que lidera AR IT Services desde 2001.",
       },
       { property: "og:type", content: "website" },
-      { property: "og:url", content: "https://ar-talent-forge.lovable.app/nosotros" },
+      { property: "og:url", content: "https://ar-itservices.com/nosotros" },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [{ rel: "canonical", href: "https://ar-talent-forge.lovable.app/nosotros" }],
+    links: [{ rel: "canonical", href: "https://ar-itservices.com/nosotros" }],
   }),
   component: PeoplePage,
 });

@@ -29,13 +29,11 @@ export const Route = createFileRoute("/trabaja-con-nosotros")({
       { property: "og:type", content: "website" },
       {
         property: "og:url",
-        content: "https://ar-talent-forge.lovable.app/trabaja-con-nosotros",
+        content: "https://ar-itservices.com/trabaja-con-nosotros",
       },
       { name: "twitter:card", content: "summary" },
     ],
-    links: [
-      { rel: "canonical", href: "https://ar-talent-forge.lovable.app/trabaja-con-nosotros" },
-    ],
+    links: [{ rel: "canonical", href: "https://ar-itservices.com/trabaja-con-nosotros" }],
   }),
   component: CareersPage,
 });
