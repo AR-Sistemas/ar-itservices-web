@@ -15,13 +15,13 @@ import { getContent } from "@/i18n/content";
 export const Route = createFileRoute("/trabaja-con-nosotros")({
   head: () => ({
     meta: [
-      { title: "Trabajá con nosotros — AR IT Services" },
+      { title: "Trabajá con nosotros | AR IT Services" },
       {
         name: "description",
         content:
           "Sumate al equipo de AR IT Services: 25 años armando equipos que se quedan en software, datos e IA.",
       },
-      { property: "og:title", content: "Trabajá con nosotros — AR IT Services" },
+      { property: "og:title", content: "Trabajá con nosotros | AR IT Services" },
       {
         property: "og:description",
         content: "Búsquedas abiertas y postulación espontánea en AR IT Services.",
@@ -253,7 +253,7 @@ function CareersPage() {
             <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
-                  <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
+                  <span className="text-foreground">{o.city}</span>: {o.address}, {o.country}
                 </li>
               ))}
             </ul>

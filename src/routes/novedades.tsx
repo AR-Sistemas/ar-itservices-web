@@ -20,12 +20,12 @@ type PodcastData = { title: string; spotifyEpisodeId: string };
 export const Route = createFileRoute("/novedades")({
   head: () => ({
     meta: [
-      { title: `${NEWSLETTER_ISSUE.title} — Novedades de IA · AR IT Services` },
+      { title: `${NEWSLETTER_ISSUE.title} | Novedades de IA · AR IT Services` },
       {
         name: "description",
         content: NEWSLETTER_ISSUE.description,
       },
-      { property: "og:title", content: `${NEWSLETTER_ISSUE.title} — Novedades de IA` },
+      { property: "og:title", content: `${NEWSLETTER_ISSUE.title} | Novedades de IA` },
       { property: "og:description", content: NEWSLETTER_ISSUE.description },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ar-talent-forge.lovable.app/novedades" },
@@ -96,7 +96,7 @@ function NewsletterPage() {
         ? issue.sourcesHeading
         : (() => {
             const s = issue.sections[pageIndex - 1];
-            return s ? `${s.number} — ${s.heading}` : "";
+            return s ? `${s.number}. ${s.heading}` : "";
           })();
 
   return (
@@ -273,7 +273,7 @@ function NewsletterPage() {
             <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
-                  <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
+                  <span className="text-foreground">{o.city}</span>: {o.address}, {o.country}
                 </li>
               ))}
             </ul>

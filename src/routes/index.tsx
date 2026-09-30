@@ -629,7 +629,7 @@ function Home() {
             <ul className="mt-4 space-y-3 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
-                  <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
+                  <span className="text-foreground">{o.city}</span>: {o.address}, {o.country}
                 </li>
               ))}
             </ul>

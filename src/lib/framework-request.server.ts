@@ -88,7 +88,7 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
       from: FROM_ADDRESS,
       to: data.email,
       replyTo: NOTIFY_EMAIL,
-      subject: `Framework ${data.frameworkTitle} — AR IT Services`,
+      subject: `Framework ${data.frameworkTitle} | AR IT Services`,
       text: visitorText,
       html: buildAriaFrameworkEmailHtml({
         nombre: data.nombre,
@@ -119,7 +119,7 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
       from: FROM_ADDRESS,
       to: NOTIFY_EMAIL,
       replyTo: data.email,
-      subject: `Nueva solicitud del framework ${data.frameworkTitle} — ${data.nombre || "sin nombre"}`,
+      subject: `Nueva solicitud del framework ${data.frameworkTitle} | ${data.nombre || "sin nombre"}`,
       text: internalBody,
     });
     if (internalError) {

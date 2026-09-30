@@ -18,13 +18,13 @@ import constanzaPhoto from "@/assets/team/constanza-giordano.png";
 export const Route = createFileRoute("/nosotros")({
   head: () => ({
     meta: [
-      { title: "Nuestra gente — AR IT Services" },
+      { title: "Nuestra gente | AR IT Services" },
       {
         name: "description",
         content:
           "Los socios y directores detrás de AR IT Services: 25 años de trayectoria en software, datos e IA entre Dallas, Córdoba y Asunción.",
       },
-      { property: "og:title", content: "Nuestra gente — AR IT Services" },
+      { property: "og:title", content: "Nuestra gente | AR IT Services" },
       {
         property: "og:description",
         content: "Conocé al equipo de socios que lidera AR IT Services desde 2001.",
@@ -134,7 +134,7 @@ function PeoplePage() {
             <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((o) => (
                 <li key={o.city}>
-                  <span className="text-foreground">{o.city}</span> — {o.address}, {o.country}
+                  <span className="text-foreground">{o.city}</span>: {o.address}, {o.country}
                 </li>
               ))}
             </ul>

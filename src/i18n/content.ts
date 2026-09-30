@@ -172,9 +172,9 @@ const ES: SiteContent = {
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver casos de éxito",
     phrases: [
-      "Ayudamos a las organizaciones a evolucionar hacia un modelo **AI-Native** — desde la estrategia hasta la implementación.",
-      "Creamos el equipo que tu producto realmente necesita — **datos e IA** integrados en el proceso.",
-      "Todo comienza con los datos — convertimos información en **modelos, insights y decisiones** en las que podés confiar.",
+      "Ayudamos a las organizaciones a evolucionar hacia un modelo **AI-Native**, desde la estrategia hasta la implementación.",
+      "Creamos el equipo que tu producto realmente necesita, con **datos e IA** integrados en el proceso.",
+      "Todo comienza con los datos: convertimos información en **modelos, insights y decisiones** en las que podés confiar.",
     ],
   },
   metrics: [
@@ -275,7 +275,7 @@ const ES: SiteContent = {
     framework: {
       label: "Framework propio",
       title: "ARIA",
-      desc: "Adopción Responsable de Inteligencia Artificial: nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo — no un catálogo de herramientas para el corto plazo.",
+      desc: "Adopción Responsable de Inteligencia Artificial: nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo, no un catálogo de herramientas para el corto plazo.",
       cta: "Descubrí el framework",
       href: "#contacto",
     },
@@ -307,7 +307,7 @@ const ES: SiteContent = {
   people: {
     heading: "Nuestra gente",
     statement:
-      "Detrás de cada proyecto hay personas — respaldadas por más de 25 años de experiencia.",
+      "Detrás de cada proyecto hay personas, respaldadas por más de 25 años de experiencia.",
     ctaLink: "Conocé a nuestra gente",
     backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
@@ -606,7 +606,7 @@ const EN: SiteContent = {
     phrases: [
       "We help organizations become **AI-native companies**, from strategy to implementation and scale.",
       "We build the team your product really needs: **data and artificial intelligence** integrated into the workflow, not just in theory.",
-      "Data is where AI begins — we turn raw information into **models, insights, and decisions** you can rely on.",
+      "Data is where AI begins: we turn raw information into **models, insights, and decisions** you can rely on.",
     ],
   },
   metrics: [
@@ -707,7 +707,7 @@ const EN: SiteContent = {
     framework: {
       label: "Our framework",
       title: "ARIA",
-      desc: "Responsible AI Adoption: our 9-block framework to design the AI-Native company for the medium and long term — not a catalog of tools for the short term.",
+      desc: "Responsible AI Adoption: our 9-block framework to design the AI-Native company for the medium and long term, not a catalog of tools for the short term.",
       cta: "Discover the framework",
       href: "#contacto",
     },
@@ -739,7 +739,7 @@ const EN: SiteContent = {
   people: {
     heading: "Our people",
     statement:
-      "Behind every project, there are people — backed by more than 25 years of experience.",
+      "Behind every project, there are people backed by more than 25 years of experience.",
     ctaLink: "Meet our people",
     backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
@@ -846,7 +846,7 @@ const EN: SiteContent = {
     submitting: "Sending…",
     footnote: "You'll get an email with the material attached in a moment.",
     closeLabel: "Close",
-    successToast: (frameworkTitle) => `Done — we sent you ${frameworkTitle} by email.`,
+    successToast: (frameworkTitle) => `Done. We sent you ${frameworkTitle} by email.`,
     errorToast: "We couldn't send the material. Please try again in a few minutes.",
   },
   footer: {

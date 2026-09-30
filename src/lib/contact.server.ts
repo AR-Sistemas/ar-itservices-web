@@ -122,7 +122,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       from: FROM_ADDRESS,
       to,
       replyTo: data.email || undefined,
-      subject: `Nuevo contacto (${data.contactType}) — ${data.nombre || "sin nombre"}`,
+      subject: `Nuevo contacto (${data.contactType}) | ${data.nombre || "sin nombre"}`,
       text: buildBody(data),
       attachments: attachments.length ? attachments : undefined,
     });
