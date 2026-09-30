@@ -55,11 +55,14 @@ export function Counter({
           <span
             key={`${c}-${i}`}
             className="relative inline-block overflow-hidden"
-            style={{ height: "1em", lineHeight: "1em", width: "0.62em" }}
+            style={{ height: "1em", lineHeight: "1em" }}
             aria-hidden="true"
           >
+            {/* Sizer invisible: la celda toma el ancho real del dígito en la
+                tipografía activa (con un ancho fijo, el "0" en negrita se cortaba). */}
+            <span className="invisible">{c}</span>
             <span
-              className="absolute inset-x-0 top-0 flex flex-col transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
+              className="absolute inset-x-0 top-0 flex flex-col items-center transition-transform duration-[1100ms] ease-[cubic-bezier(0.22,1,0.36,1)]"
               style={{
                 transform: `translateY(-${(play ? target + 10 : 0) * 1}em)`,
                 transitionDelay: `${i * 70}ms`,

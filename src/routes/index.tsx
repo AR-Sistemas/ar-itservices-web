@@ -242,11 +242,11 @@ function Home() {
 
         {/* Métricas */}
         <section className="relative -mt-28 px-5">
-          <AnimatedContent className="mx-auto max-w-5xl">
+          <AnimatedContent className="mx-auto max-w-6xl">
             <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-5">
               {c.metrics.map((m) => (
                 <div key={m.label}>
-                  <p className="font-display text-4xl font-extrabold text-foreground sm:text-5xl">
+                  <p className="font-display text-3xl font-extrabold text-foreground sm:whitespace-nowrap sm:text-5xl lg:text-4xl xl:text-5xl">
                     <Counter value={m.value} />
                     {m.suffix}
                   </p>
