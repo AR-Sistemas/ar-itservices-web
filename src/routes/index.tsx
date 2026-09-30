@@ -20,7 +20,7 @@ import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
-import { TeamBuilder } from "@/components/site/TeamBuilder";
+import { TeamBuilder, TEAM_PROPOSAL_EVENT } from "@/components/site/TeamBuilder";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
@@ -131,6 +131,7 @@ function Home() {
   const [paisValue, setPaisValue] = useState("");
   const [tipoValue, setTipoValue] = useState("");
   const [telefonoValue, setTelefonoValue] = useState("");
+  const [mensajeValue, setMensajeValue] = useState("");
   // Trampa de tiempo anti-bot: momento en que se montó el formulario, para
   // comparar contra cuándo se envía (ver src/lib/contact.server.ts).
   const [formStartedAt] = useState(() => Date.now());
@@ -145,6 +146,19 @@ function Home() {
       setContactType("postulante");
       setSelectedPosition(puesto);
     }
+  }, []);
+
+  // "Agendar una llamada con tu equipo propuesto" (TeamBuilder): precarga el
+  // mensaje con las tecnologías y perfiles elegidos, en modo empresa.
+  useEffect(() => {
+    const onProposal = (e: Event) => {
+      const message = (e as CustomEvent<string>).detail;
+      if (!message) return;
+      setContactType("empresa");
+      setMensajeValue(message);
+    };
+    window.addEventListener(TEAM_PROPOSAL_EVENT, onProposal);
+    return () => window.removeEventListener(TEAM_PROPOSAL_EVENT, onProposal);
   }, []);
 
   // El puesto puede venir de un link generado en otro idioma (o de una
@@ -492,6 +506,7 @@ function Home() {
                       setPaisValue("");
                       setTipoValue("");
                       setTelefonoValue("");
+                      setMensajeValue("");
                     })
                     .catch((err) => {
                       console.error(err);
@@ -596,6 +611,8 @@ function Home() {
                   <textarea
                     id="mensaje"
                     name="mensaje"
+                    value={mensajeValue}
+                    onChange={(e) => setMensajeValue(e.target.value)}
                     rows={contactType === "consulta" ? 4 : 5}
                     required={contactType !== "postulante"}
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"

@@ -116,6 +116,11 @@ export type SiteContent = {
     people: string;
     empty: string;
     cta: string;
+    proposalMessage: (
+      disciplines: string[],
+      team: { role: string; qty: number }[],
+      total: number,
+    ) => string;
     disciplines: {
       id: string;
       label: string;
@@ -441,8 +446,19 @@ const ES: SiteContent = {
     people: "personas",
     empty: "Seleccioná al menos una disciplina para ver tu equipo.",
     cta: "Agendar una llamada con tu equipo propuesto",
+    proposalMessage: (disciplines, team, total) =>
+      [
+        "Hola, me gustaría agendar una llamada para conversar sobre el siguiente equipo:",
+        "",
+        `Tecnologías / disciplinas: ${disciplines.join(", ")}`,
+        "",
+        "Perfiles:",
+        ...team.map((m) => `- ${m.role} x${m.qty}`),
+        "",
+        `Total: ${total} ${total === 1 ? "persona" : "personas"}`,
+      ].join("\n"),
     disciplines: [
-      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Dev .NET Senior", qty: 2 }, { role: "Dev React", qty: 2 }] },
+      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Dev .NET Senior", qty: 1 }, { role: "Dev React", qty: 1 }] },
       { id: "data-bi", label: "Data & Power BI", roles: [{ role: "Data Engineer", qty: 1 }, { role: "Analista Power BI", qty: 1 }] },
       { id: "qa", label: "QA & Testing", roles: [{ role: "QA Automation", qty: 1 }] },
       { id: "scrum", label: "Scrum Master", roles: [{ role: "Scrum Master", qty: 1 }] },
@@ -873,8 +889,19 @@ const EN: SiteContent = {
     people: "people",
     empty: "Select at least one discipline to see your team.",
     cta: "Book a call with your proposed team",
+    proposalMessage: (disciplines, team, total) =>
+      [
+        "Hi, I'd like to schedule a call to talk about the following team:",
+        "",
+        `Technologies / disciplines: ${disciplines.join(", ")}`,
+        "",
+        "Profiles:",
+        ...team.map((m) => `- ${m.role} x${m.qty}`),
+        "",
+        `Total: ${total} ${total === 1 ? "person" : "people"}`,
+      ].join("\n"),
     disciplines: [
-      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Senior .NET Dev", qty: 2 }, { role: "React Dev", qty: 2 }] },
+      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Senior .NET Dev", qty: 1 }, { role: "React Dev", qty: 1 }] },
       { id: "data-bi", label: "Data & Power BI", roles: [{ role: "Data Engineer", qty: 1 }, { role: "Power BI Analyst", qty: 1 }] },
       { id: "qa", label: "QA & Testing", roles: [{ role: "QA Automation", qty: 1 }] },
       { id: "scrum", label: "Scrum Master", roles: [{ role: "Scrum Master", qty: 1 }] },
