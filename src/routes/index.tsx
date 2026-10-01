@@ -27,7 +27,7 @@ import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-import { NEWSLETTER_ISSUE } from "@/data/newsletter";
+import { getPublicEditorial } from "@/lib/editorial.server";
 import { isIntermedio } from "@/lib/site-mode";
 import claroLogo from "@/assets/clients/claro.png";
 import naranjaLogo from "@/assets/clients/naranja.png";
@@ -51,6 +51,7 @@ import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
 
 export const Route = createFileRoute("/")({
+  loader: () => getPublicEditorial(),
   head: () => ({
     meta: [
       { title: "AR IT Services | Software, datos e IA con equipos dedicados" },
@@ -121,6 +122,7 @@ const CLIENTS: { name: string; src: string; scale?: number }[] = [
 type ContactType = "empresa" | "postulante" | "consulta";
 
 function Home() {
+  const editorial = Route.useLoaderData();
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -403,13 +405,20 @@ function Home() {
           <section className="px-5 py-24 sm:py-32">
             <div className="mx-auto max-w-4xl">
               <AnimatedContent>
-                <NewsMagazineCover
-                  kicker={NEWSLETTER_ISSUE.kicker}
-                  title={NEWSLETTER_ISSUE.title}
-                  subtitle={NEWSLETTER_ISSUE.subtitle}
-                  eyebrow={c.newsTeaser.eyebrow}
-                  cta={c.newsTeaser.cta}
-                />
+                {editorial.current ? (
+                  <NewsMagazineCover
+                    kicker="Boletín mensual"
+                    title={editorial.current.title}
+                    subtitle={editorial.current.period}
+                    eyebrow={c.newsTeaser.eyebrow}
+                    cta="Leer resumen editorial"
+                  />
+                ) : (
+                  <div className="rounded-3xl border border-border bg-card p-8 text-center">
+                    <p className="font-mono text-xs tracking-widest text-primary uppercase">{c.newsTeaser.eyebrow}</p>
+                    <p className="mt-4 text-sm text-muted-foreground">El resumen editorial del mes estará disponible próximamente.</p>
+                  </div>
+                )}
               </AnimatedContent>
             </div>
           </section>
