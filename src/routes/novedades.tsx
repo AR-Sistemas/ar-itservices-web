@@ -12,8 +12,17 @@ import { SocialLinks } from "@/components/site/SocialLinks";
 import { getContent } from "@/i18n/content";
 import { useLang } from "@/i18n/language";
 import { getPublicEditorial } from "@/lib/editorial.server";
+import { z } from "zod";
 
 export const Route = createFileRoute("/novedades")({
+  validateSearch: z
+    .object({
+      edicion: z
+        .string()
+        .regex(/^\d{4}-\d{2}$/)
+        .optional(),
+    })
+    .catch({}),
   loader: () => getPublicEditorial(),
   // En la versión intermedia la página no existe: se redirige al inicio.
   beforeLoad: () => {
@@ -43,6 +52,11 @@ function EditorialPage() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const editorial = Route.useLoaderData();
+  const { edicion } = Route.useSearch();
+  const selected = edicion
+    ? ([editorial.current, ...editorial.archive].find((item) => item?.slug === edicion) ??
+      editorial.current)
+    : editorial.current;
   const navItems = c.nav.map((item) =>
     item.href.startsWith("#") ? { ...item, href: `/${item.href}` } : item,
   );
@@ -60,7 +74,11 @@ function EditorialPage() {
           </span>
         )}
         rightSlot={
-          <div className="hidden items-center gap-1 text-xs font-semibold sm:flex" role="group" aria-label={c.langLabel}>
+          <div
+            className="hidden items-center gap-1 text-xs font-semibold sm:flex"
+            role="group"
+            aria-label={c.langLabel}
+          >
             {(["ES", "EN"] as const).map((language) => (
               <button
                 key={language}
@@ -85,14 +103,20 @@ function EditorialPage() {
                 <h1 className="text-2xl font-bold">{c.news.enNoticeHeading}</h1>
                 <p className="mt-3 text-muted-foreground">{c.news.enNoticeBody}</p>
               </div>
-            ) : editorial.current ? (
+            ) : selected ? (
               <div className="mt-10">
-                <PublicEditorialSummary current={editorial.current} archive={editorial.archive} />
+                <PublicEditorialSummary
+                  current={editorial.current ?? selected}
+                  selected={selected}
+                  archive={editorial.archive}
+                />
               </div>
             ) : (
               <div className="mt-10 max-w-2xl rounded-2xl border border-border bg-card p-8">
                 <h1 className="text-2xl font-bold">Resumen editorial</h1>
-                <p className="mt-3 text-muted-foreground">El resumen del mes estará disponible próximamente.</p>
+                <p className="mt-3 text-muted-foreground">
+                  El resumen del mes estará disponible próximamente.
+                </p>
               </div>
             )}
           </AnimatedContent>
@@ -109,14 +133,23 @@ function EditorialPage() {
             <h2 className="text-sm font-semibold text-foreground">{c.footer.officesHeading}</h2>
             <ul className="mt-2 space-y-1.5 text-sm">
               {c.footer.offices.map((office) => (
-                <li key={office.city}><span className="text-foreground">{office.city}</span>: {office.address}, {office.country}</li>
+                <li key={office.city}>
+                  <span className="text-foreground">{office.city}</span>: {office.address},{" "}
+                  {office.country}
+                </li>
               ))}
             </ul>
           </div>
           <div>
             <h2 className="text-sm font-semibold text-foreground">{c.footer.sectionsHeading}</h2>
             <ul className="mt-2 space-y-1.5 text-sm">
-              {navItems.map((item) => <li key={item.href}><a href={item.href} className="transition-colors hover:text-foreground">{item.label}</a></li>)}
+              {navItems.map((item) => (
+                <li key={item.href}>
+                  <a href={item.href} className="transition-colors hover:text-foreground">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>
