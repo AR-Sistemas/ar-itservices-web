@@ -134,7 +134,7 @@ export function PublicEditorialSummary({
         </div>
       </article>
 
-      {archive.length > 0 && (
+      {!isArchiveEdition && archive.length > 0 && (
         <section
           className="rounded-3xl border border-border bg-card/60 p-6 sm:p-8"
           aria-labelledby="editorial-archive-heading"
