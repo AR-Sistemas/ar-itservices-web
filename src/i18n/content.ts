@@ -41,6 +41,7 @@ export type SiteContent = {
     heading: string;
     hint: string;
     groups: ServiceGroup[];
+    inquiryMessage: (area: string, services: string[]) => string;
     framework: ServiceLinkCard;
   };
   cases: {
@@ -277,6 +278,15 @@ const ES: SiteContent = {
         ],
       },
     ],
+    inquiryMessage: (area, services) =>
+      [
+        `Hola, me gustaría conocer más sobre el área de ${area}.`,
+        "",
+        "Servicios que me interesan:",
+        ...services.map((s) => `- ${s}`),
+        "",
+        "Quedo a la espera de que me contacten para conversarlo.",
+      ].join("\n"),
     framework: {
       label: "Framework propio",
       title: "ARIA",
@@ -720,6 +730,15 @@ const EN: SiteContent = {
         ],
       },
     ],
+    inquiryMessage: (area, services) =>
+      [
+        `Hi, I'd like to learn more about your ${area} area.`,
+        "",
+        "Services I'm interested in:",
+        ...services.map((s) => `- ${s}`),
+        "",
+        "I look forward to hearing from you.",
+      ].join("\n"),
     framework: {
       label: "Our framework",
       title: "ARIA",

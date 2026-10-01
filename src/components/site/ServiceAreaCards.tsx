@@ -2,6 +2,9 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { Bot, Database, Code2, Users2, ChevronDown, type LucideIcon } from "lucide-react";
 import { SpotlightCard } from "./SpotlightCard";
 import type { ServiceGroup } from "@/i18n/content";
+import { prefillContactMessage } from "@/lib/contact-prefill";
+
+type InquiryMessage = (area: string, services: string[]) => string;
 
 /**
  * "Qué hacemos" en 2 niveles, todo con cards (pedido puntual de gerencia):
@@ -140,7 +143,13 @@ function CardTab() {
 }
 
 /** Servicios de un área + link "saber más", compartido por las dos versiones del panel. */
-function PanelItems({ group }: { group: ServiceGroup }) {
+function PanelItems({
+  group,
+  inquiryMessage,
+}: {
+  group: ServiceGroup;
+  inquiryMessage: InquiryMessage;
+}) {
   return (
     <>
       <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
@@ -155,6 +164,15 @@ function PanelItems({ group }: { group: ServiceGroup }) {
       {group.items[0] && (
         <a
           href={group.items[0].href}
+          onClick={() =>
+            // El formulario de #contacto escucha este evento y precarga el mensaje.
+            prefillContactMessage(
+              inquiryMessage(
+                group.label,
+                group.items.map((i) => i.title),
+              ),
+            )
+          }
           className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
         >
           {group.items[0].cta} →
@@ -169,7 +187,15 @@ function PanelItems({ group }: { group: ServiceGroup }) {
  * que la ranura siempre queda centrada en su propio ancho — no necesita
  * medir nada fuera de sí mismo.
  */
-function MobilePanel({ group, isOpen }: { group: ServiceGroup; isOpen: boolean }) {
+function MobilePanel({
+  group,
+  isOpen,
+  inquiryMessage,
+}: {
+  group: ServiceGroup;
+  isOpen: boolean;
+  inquiryMessage: InquiryMessage;
+}) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
 
@@ -205,7 +231,7 @@ function MobilePanel({ group, isOpen }: { group: ServiceGroup; isOpen: boolean }
               className="animate-in fade-in-0 slide-in-from-top-8 rounded-2xl border border-primary/40 bg-card p-6 duration-700 motion-reduce:animate-none sm:p-8"
               style={notch ? { clipPath: notch.clipPath } : undefined}
             >
-              <PanelItems group={group} />
+              <PanelItems group={group} inquiryMessage={inquiryMessage} />
             </SpotlightCard>
             {notch && (
               <NotchStroke width={notch.width} height={notch.height} strokeD={notch.strokeD} />
@@ -217,7 +243,13 @@ function MobilePanel({ group, isOpen }: { group: ServiceGroup; isOpen: boolean }
   );
 }
 
-export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
+export function ServiceAreaCards({
+  groups,
+  inquiryMessage,
+}: {
+  groups: ServiceGroup[];
+  inquiryMessage: InquiryMessage;
+}) {
   // "IA & Agentes" arranca desplegada por defecto (pedido de gerencia).
   const [activeGroupId, setActiveGroupId] = useState<string | null>("ai");
   const [panelMetrics, setPanelMetrics] = useState<{
@@ -303,7 +335,7 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
               </button>
 
               {/* Mobile (1 columna): panel pegado a esta misma card. */}
-              <MobilePanel group={group} isOpen={isActive} />
+              <MobilePanel group={group} isOpen={isActive} inquiryMessage={inquiryMessage} />
             </Fragment>
           );
         })}
@@ -325,7 +357,7 @@ export function ServiceAreaCards({ groups }: { groups: ServiceGroup[] }) {
                 className="animate-in fade-in-0 slide-in-from-top-8 rounded-2xl border border-primary/40 bg-card p-6 duration-700 motion-reduce:animate-none sm:p-8"
                 style={desktopPanelNotch ? { clipPath: desktopPanelNotch.clipPath } : undefined}
               >
-                <PanelItems group={activeGroup} />
+                <PanelItems group={activeGroup} inquiryMessage={inquiryMessage} />
               </SpotlightCard>
               {desktopPanelNotch && (
                 <NotchStroke

@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { isIntermedio } from "@/lib/site-mode";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
 import { FloatingNav } from "@/components/site/FloatingNav";
@@ -14,6 +15,10 @@ import { getPublicEditorial } from "@/lib/editorial.server";
 
 export const Route = createFileRoute("/novedades")({
   loader: () => getPublicEditorial(),
+  // En la versión intermedia la página no existe: se redirige al inicio.
+  beforeLoad: () => {
+    if (isIntermedio) throw redirect({ to: "/", replace: true });
+  },
   head: () => ({
     meta: [
       { title: "Resumen editorial | Novedades de IA · AR IT Services" },

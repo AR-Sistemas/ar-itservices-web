@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { isIntermedio } from "@/lib/site-mode";
 import { useMemo, useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
@@ -13,6 +14,10 @@ import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
 export const Route = createFileRoute("/trabaja-con-nosotros")({
+  // En la versión intermedia la página no existe: se redirige al inicio.
+  beforeLoad: () => {
+    if (isIntermedio) throw redirect({ to: "/", replace: true });
+  },
   head: () => ({
     meta: [
       { title: "Trabajá con nosotros | AR IT Services" },

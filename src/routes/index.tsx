@@ -20,7 +20,8 @@ import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
-import { TeamBuilder, TEAM_PROPOSAL_EVENT } from "@/components/site/TeamBuilder";
+import { TeamBuilder } from "@/components/site/TeamBuilder";
+import { CONTACT_PREFILL_EVENT } from "@/lib/contact-prefill";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
@@ -152,17 +153,17 @@ function Home() {
     }
   }, []);
 
-  // "Agendar una llamada con tu equipo propuesto" (TeamBuilder): precarga el
-  // mensaje con las tecnologías y perfiles elegidos, en modo empresa.
+  // Otras secciones (armado de equipo, "Qué hacemos") precargan el mensaje con
+  // un texto según lo que el visitante eligió, en modo empresa.
   useEffect(() => {
-    const onProposal = (e: Event) => {
+    const onPrefill = (e: Event) => {
       const message = (e as CustomEvent<string>).detail;
       if (!message) return;
       setContactType("empresa");
       setMensajeValue(message);
     };
-    window.addEventListener(TEAM_PROPOSAL_EVENT, onProposal);
-    return () => window.removeEventListener(TEAM_PROPOSAL_EVENT, onProposal);
+    window.addEventListener(CONTACT_PREFILL_EVENT, onPrefill);
+    return () => window.removeEventListener(CONTACT_PREFILL_EVENT, onPrefill);
   }, []);
 
   // El puesto puede venir de un link generado en otro idioma (o de una
@@ -275,7 +276,10 @@ function Home() {
                 {c.services.hint}
               </p>
               <div className="mt-8">
-                <ServiceAreaCards groups={c.services.groups} />
+                <ServiceAreaCards
+                  groups={c.services.groups}
+                  inquiryMessage={c.services.inquiryMessage}
+                />
               </div>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>

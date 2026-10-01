@@ -2,8 +2,7 @@ import { useMemo, useState } from "react";
 import { useSpringPress } from "./useSpringPress";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-
-export const TEAM_PROPOSAL_EVENT = "team-proposal";
+import { prefillContactMessage } from "@/lib/contact-prefill";
 
 export function TeamBuilder() {
   const { lang } = useLang();
@@ -84,11 +83,7 @@ export function TeamBuilder() {
           onClick={() => {
             // El formulario de #contacto escucha este evento y precarga el mensaje.
             const labels = t.disciplines.filter((d) => selected.includes(d.id)).map((d) => d.label);
-            window.dispatchEvent(
-              new CustomEvent(TEAM_PROPOSAL_EVENT, {
-                detail: labels.length ? t.proposalMessage(labels, team, total) : "",
-              }),
-            );
+            prefillContactMessage(labels.length ? t.proposalMessage(labels, team, total) : "");
           }}
           href="#contacto"
           className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
