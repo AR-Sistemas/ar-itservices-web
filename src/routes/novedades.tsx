@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { isIntermedio } from "@/lib/site-mode";
 import { useEffect, useRef, useState, type ReactNode, type TouchEvent } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
@@ -18,6 +19,10 @@ import { NEWSLETTER_ISSUE, type NewsletterSection } from "@/data/newsletter";
 type PodcastData = { title: string; spotifyEpisodeId: string };
 
 export const Route = createFileRoute("/novedades")({
+  // En la versión intermedia la página no existe: se redirige al inicio.
+  beforeLoad: () => {
+    if (isIntermedio) throw redirect({ to: "/", replace: true });
+  },
   head: () => ({
     meta: [
       { title: `${NEWSLETTER_ISSUE.title} | Novedades de IA · AR IT Services` },
