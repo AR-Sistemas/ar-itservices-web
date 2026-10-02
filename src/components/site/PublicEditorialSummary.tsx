@@ -35,8 +35,8 @@ export function PublicEditorialSummary({
 }) {
   const recentArchive = archive.slice(0, RECENT_ARCHIVE_LIMIT);
   const remainingArchive = archive.slice(RECENT_ARCHIVE_LIMIT);
-  const podcastUrl = selected.podcast
-    ? `https://open.spotify.com/episode/${encodeURIComponent(selected.podcast.episodeId)}`
+  const podcastEmbedUrl = selected.podcast
+    ? `https://open.spotify.com/embed/episode/${selected.podcast.episodeId}?utm_source=generator`
     : undefined;
   const isArchiveEdition = selected.slug !== current.slug;
 
@@ -78,19 +78,6 @@ export function PublicEditorialSummary({
                   →
                 </span>
               </a>
-              {podcastUrl && (
-                <a
-                  href={podcastUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center rounded-full border border-border px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary/60 hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                  Escuchar el resumen{" "}
-                  <span aria-hidden="true" className="ml-1">
-                    ↗
-                  </span>
-                </a>
-              )}
               {isArchiveEdition && (
                 <a
                   href="/novedades"
@@ -100,6 +87,20 @@ export function PublicEditorialSummary({
                 </a>
               )}
             </div>
+            {podcastEmbedUrl && (
+              <div className="mt-6 max-w-xl overflow-hidden rounded-2xl border border-border/80 bg-background/30 p-2">
+                <p className="px-2 pb-2 pt-1 font-mono text-[0.65rem] font-semibold tracking-[0.18em] text-primary uppercase">
+                  Podcast de la edición
+                </p>
+                <iframe
+                  src={podcastEmbedUrl}
+                  title={`Podcast ${selected.period}`}
+                  className="block h-[152px] w-full rounded-xl border-0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
+              </div>
+            )}
           </div>
 
           <section
