@@ -54,6 +54,9 @@ function buildBody(data: ContactFormData) {
     data.pais && `País: ${data.pais}`,
     data.tipo && `Tipo de proyecto: ${data.tipo}`,
     data.puesto && `Puesto: ${data.puesto}`,
+    // Cuando la postulación viene de una búsqueda del feed, el id permite
+    // cruzarla contra el aviso en AR Recruiting. Vacío = espontánea.
+    data.avisoId && `Aviso (AR Recruiting): ${data.avisoId}`,
     "",
     "Mensaje:",
     data.mensaje || "(sin mensaje)",
@@ -72,6 +75,7 @@ interface ContactFormData {
   puesto: string;
   mensaje: string;
   cv: File | null;
+  avisoId: string;
   isLikelyBot: boolean;
 }
 
@@ -91,7 +95,16 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
     const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
-    const shortFields = ["nombre", "email", "empresa", "telefono", "pais", "tipo", "puesto"];
+    const shortFields = [
+      "nombre",
+      "email",
+      "empresa",
+      "telefono",
+      "pais",
+      "tipo",
+      "puesto",
+      "aviso_id",
+    ];
     if (shortFields.some((k) => get(k).length > MAX_FIELD_LENGTH)) {
       throw new Error("Campo demasiado largo");
     }
@@ -119,6 +132,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       puesto: get("puesto"),
       mensaje: get("mensaje"),
       cv: cv instanceof File && cv.size > 0 ? cv : null,
+      avisoId: get("aviso_id"),
       isLikelyBot,
     };
   })
