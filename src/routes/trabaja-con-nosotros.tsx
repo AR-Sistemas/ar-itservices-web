@@ -66,6 +66,33 @@ const MAX_FACETS = 12;
 const MIN_TEXT_HITS = 2;
 
 /**
+ * Caracteres de descripción que se ven en la card del listado.
+ *
+ * El corte es por contenido, no por líneas: `line-clamp` corta después de N
+ * renglones, así que el mismo texto se cortaba en ~120 chars en una card
+ * angosta y en ~250 en una ancha, y siempre en un punto arbitrario. Con un tope
+ * de caracteres el recorte es el mismo en cualquier viewport.
+ */
+const DESCRIPCION_CARD_CHARS = 150;
+
+/**
+ * Recorta un texto a N caracteres sin partir palabras y agregando "...".
+ *
+ * Si el carácter en la posición de corte cae en medio de una palabra, retrocede
+ * hasta el último espacio: "automatización de pruebas | end-to-end" se corta en
+ * "...automatización de" y no en "...automatización de prueb".
+ */
+function recortar(texto: string, max: number): string {
+  if (texto.length <= max) return texto;
+  const parcial = texto.slice(0, max);
+  const ultimoEspacio = parcial.lastIndexOf(" ");
+  // `lastIndexOf` devuelve -1 cuando la porción es una sola palabra muy larga
+  // (un stack de 160 chars sin espacios, por ejemplo). Ahí cortamos seco.
+  const corte = ultimoEspacio > max * 0.6 ? ultimoEspacio : max;
+  return `${parcial.slice(0, corte).trimEnd()}…`;
+}
+
+/**
  * Normaliza para comparar: sin tildes, sin mayúsculas, sin signos. "Node.js",
  * "node js" y "NODE-JS" tienen que dar el mismo match.
  */
@@ -575,13 +602,21 @@ function CareersPage() {
                         </div>
 
                         {aviso.descripcion_corta && (
-                          /* line-clamp-3 acota el párrafo a 3 líneas con
-                             ellipsis. Es el otro tope de altura: sin él, el
-                             origen manda la descripción completa (324-357
-                             chars) y la card se alarga según el texto. El
-                             texto completo está en la PD del aviso. */
+                          /* Dos cortes, a propósito y con distinto propósito:
+
+                             1. `recortar` a 150 chars: es el corte de contenido
+                                que ve la persona, estable entre anchos de
+                                columna.
+                             2. `line-clamp-3`: red de seguridad. Si el
+                                viewport es angosto, 150 chars pueden ocupar 4
+                                líneas y desalinear el pie respecto de las cards
+                                vecinas. El clamp garantiza la altura aunque
+                                eso signifique recortar un poco antes.
+
+                             El texto completo está en la PD del aviso
+                             (`aviso.descripcion`, campo aparte, sin tocar). */
                           <p className="mt-4 line-clamp-3 text-sm text-muted-foreground">
-                            {aviso.descripcion_corta}
+                            {recortar(aviso.descripcion_corta, DESCRIPCION_CARD_CHARS)}
                           </p>
                         )}
 
