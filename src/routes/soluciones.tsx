@@ -7,7 +7,7 @@ import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
-import { SolutionVisual } from "@/components/site/SolutionVisual";
+import { SolutionAnimation } from "@/components/site/SolutionVisual";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
@@ -39,9 +39,7 @@ function SolutionsPage() {
   const c = getContent(lang);
   const s = c.solutions;
   // Desde esta página, los anchors del nav apuntan a la home.
-  const navItems = c.nav.map((n) =>
-    n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n,
-  );
+  const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
@@ -51,10 +49,7 @@ function SolutionsPage() {
         ctaHref="/#contacto"
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline
-              play={visible}
-              className="h-8 w-auto shrink-0 text-foreground sm:h-9"
-            />
+            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
             <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
           </span>
         )}
@@ -101,7 +96,7 @@ function SolutionsPage() {
             >
               <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
                 <AnimatedContent className="lg:sticky lg:top-28">
-                  <SolutionVisual
+                  <SolutionAnimation
                     id={p.id}
                     alt={s.logoAlt(p.name)}
                     className="max-w-md lg:max-w-none"

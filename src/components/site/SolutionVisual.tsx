@@ -38,14 +38,35 @@ const ANIM_LABELS: Record<ProductId, { ES: string; EN: string }> = {
   },
 };
 
-/**
- * Panel visual de un producto: animación SVG (loop de 10 s, 4:3, sin texto)
- * que explica a grandes rasgos cómo funciona. Las animaciones son CSS
- * puro dentro del SVG (ver src/assets/products/animations); acá solo se
- * pausan cuando el panel no está a la vista y, si la persona pidió reducir
- * el movimiento, se muestra el logo estático en su lugar.
- */
+const PANEL =
+  "flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-card/40";
+
+/** Panel con el logo del producto (tarjetas del home). */
 export function SolutionVisual({
+  id,
+  alt,
+  className = "",
+}: {
+  id: ProductId;
+  alt: string;
+  className?: string;
+}) {
+  return (
+    <div className={`${PANEL} p-6 ${className}`}>
+      <img src={LOGOS[id]} alt={alt} loading="lazy" className="h-full w-full object-contain" />
+    </div>
+  );
+}
+
+/**
+ * Panel de la ficha de cada producto: logo chico arriba y debajo la
+ * animación SVG (loop de 10 s, 4:3, sin texto) que explica a grandes rasgos
+ * cómo funciona. Las animaciones son CSS puro dentro del SVG (ver
+ * src/assets/products/animations); acá solo se pausan cuando el panel no
+ * está a la vista y, si la persona pidió reducir el movimiento, se muestra
+ * el logo estático en lugar de la animación.
+ */
+export function SolutionAnimation({
   id,
   alt,
   className = "",
@@ -72,9 +93,7 @@ export function SolutionVisual({
     if (!el) return;
     const io = new IntersectionObserver(
       (entries) => setVisible(entries.some((e) => e.isIntersecting)),
-      {
-        threshold: 0.2,
-      },
+      { threshold: 0.2 },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -84,20 +103,24 @@ export function SolutionVisual({
   const svg = ANIMATIONS[id].replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
 
   return (
-    <div
-      ref={ref}
-      data-paused={!visible}
-      className={`sol-anim flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-card/40 p-3 ${className}`}
-    >
+    <div ref={ref} data-paused={!visible} className={`sol-anim ${PANEL} flex-col p-3 ${className}`}>
       {reduceMotion ? (
         <img
           src={LOGOS[id]}
           alt={alt}
           loading="lazy"
-          className="h-full w-full object-contain p-3"
+          className="h-full w-full object-contain p-6"
         />
       ) : (
-        <div className="h-full w-full" dangerouslySetInnerHTML={{ __html: svg }} />
+        <>
+          <img
+            src={LOGOS[id]}
+            alt={alt}
+            loading="lazy"
+            className="mt-1 h-12 w-auto max-w-[60%] shrink-0 object-contain sm:h-14"
+          />
+          <div className="min-h-0 w-full flex-1" dangerouslySetInnerHTML={{ __html: svg }} />
+        </>
       )}
     </div>
   );
