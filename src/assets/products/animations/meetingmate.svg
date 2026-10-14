@@ -24,10 +24,10 @@
 </style>
 <g id="mm-escena">
 <g id="mm-personas">
-<rect x="118" y="430" width="104" height="110" rx="40" fill="#0066FF"/>
-<rect x="248" y="430" width="104" height="110" rx="40" fill="#00D4FF"/>
-<circle cx="170" cy="360" r="52" fill="#0066FF"/>
-<circle cx="300" cy="360" r="52" fill="#00D4FF"/>
+<path d="M104 548 V532 C104 478 134 444 170 444 C206 444 236 478 236 532 V548 Q236 562 222 562 H118 Q104 562 104 548 Z" fill="#0066FF"/>
+<path d="M234 548 V532 C234 478 264 444 300 444 C336 444 366 478 366 532 V548 Q366 562 352 562 H248 Q234 562 234 548 Z" fill="#00D4FF"/>
+<circle cx="170" cy="386" r="44" fill="#0066FF"/>
+<circle cx="300" cy="386" r="44" fill="#00D4FF"/>
 </g>
 <g id="mm-ondas">
 <rect class="mm-onda" x="180" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
