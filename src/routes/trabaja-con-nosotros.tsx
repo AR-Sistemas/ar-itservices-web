@@ -78,7 +78,7 @@ function CareersPage() {
         )}
         rightSlot={
           <div
-            className="hidden items-center gap-1 text-xs font-semibold sm:flex"
+            className="flex items-center gap-1 text-xs font-semibold"
             role="group"
             aria-label={c.langLabel}
           >

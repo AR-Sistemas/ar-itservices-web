@@ -54,6 +54,7 @@ function buildBody(data: ContactFormData) {
     data.pais && `País: ${data.pais}`,
     data.tipo && `Tipo de proyecto: ${data.tipo}`,
     data.puesto && `Puesto: ${data.puesto}`,
+    data.producto && `Producto de interés: ${data.producto}`,
     "",
     "Mensaje:",
     data.mensaje || "(sin mensaje)",
@@ -70,6 +71,7 @@ interface ContactFormData {
   pais: string;
   tipo: string;
   puesto: string;
+  producto: string;
   mensaje: string;
   cv: File | null;
   isLikelyBot: boolean;
@@ -117,6 +119,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       pais: get("pais"),
       tipo: get("tipo"),
       puesto: get("puesto"),
+      producto: get("producto"),
       mensaje: get("mensaje"),
       cv: cv instanceof File && cv.size > 0 ? cv : null,
       isLikelyBot,
