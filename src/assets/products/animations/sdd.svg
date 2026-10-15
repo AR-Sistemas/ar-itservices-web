@@ -30,6 +30,7 @@
 #ars-tilde{stroke-dasharray:80;animation:ars-tilde 10s ease-out infinite}
 @keyframes ars-tilde{0%,79%{stroke-dashoffset:80}86%,100%{stroke-dashoffset:0}}
 </style>
+<g transform="translate(570 393) scale(1.15) translate(-570 -393)">
 <rect x="150" y="447" width="840" height="6" rx="3" fill="#706F6F"/>
 <rect id="ars-track" x="150" y="447" width="840" height="6" rx="3" fill="#FF000D"/>
 <g id="ars-escena">
@@ -52,6 +53,7 @@
 <g id="ars-token">
 <rect x="118" y="278" width="64" height="44" rx="10" fill="#FFFFFF"/>
 <path d="M130 292 H170 M130 304 H160" stroke="#FF000D" stroke-width="4" stroke-linecap="round"/>
+</g>
 </g>
 </g>
 </svg>
