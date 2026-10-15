@@ -159,6 +159,8 @@ function Home() {
     if (prod === "ario" || prod === "meetingmate" || prod === "sdd") {
       setContactType("empresa");
       setProducto(prod);
+      const product = c.solutions.products.find((p) => p.id === prod);
+      if (product) setMensajeValue(c.contact.productMessage(product.name));
     }
   }, []);
 

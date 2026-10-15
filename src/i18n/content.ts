@@ -99,6 +99,7 @@ export type SiteContent = {
     error: string;
     productLabel: string;
     productRemove: string;
+    productMessage: (productName: string) => string;
   };
   solutions: {
     heading: string;
@@ -442,6 +443,14 @@ const ES: SiteContent = {
     error: "No pudimos enviar tu mensaje. Probá de nuevo en unos minutos.",
     productLabel: "Producto de interés",
     productRemove: "Quitar producto",
+    productMessage: (productName) =>
+      [
+        `Hola, me interesa el producto ${productName} y me gustaría conversar sobre mi proyecto.`,
+        "",
+        "Mi caso es el siguiente:",
+        "",
+        "Quedo a la espera de que me contacten para conversarlo.",
+      ].join("\n"),
   },
   solutions: {
     heading: "Tecnología que se convierte en soluciones concretas",
@@ -1045,6 +1054,14 @@ const EN: SiteContent = {
     error: "We couldn't send your message. Please try again in a few minutes.",
     productLabel: "Product of interest",
     productRemove: "Remove product",
+    productMessage: (productName) =>
+      [
+        `Hi, I'm interested in the ${productName} product and I'd like to discuss my project.`,
+        "",
+        "My case is as follows:",
+        "",
+        "I look forward to hearing from you to discuss it.",
+      ].join("\n"),
   },
   solutions: {
     heading: "Technology that turns into concrete solutions",
