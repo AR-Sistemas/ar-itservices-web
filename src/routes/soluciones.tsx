@@ -42,7 +42,7 @@ function SolutionsPage() {
   const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background">
+    <div className="min-h-screen overflow-x-clip bg-background">
       <FloatingNav
         items={navItems}
         ctaLabel={c.cta.talk}
