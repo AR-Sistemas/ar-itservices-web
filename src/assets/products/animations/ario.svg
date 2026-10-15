@@ -6,6 +6,13 @@
 @keyframes ario-scan{0%,14%{opacity:0;transform:translateY(0)}16%{opacity:1;transform:translateY(0)}30%{opacity:1;transform:translateY(322px)}31%,100%{opacity:0;transform:translateY(322px)}}
 #ario-lector{opacity:0;animation:ario-lector 10s ease-in-out infinite}
 @keyframes ario-lector{0%,32%{opacity:0;transform:translateX(-24px)}38%,82%{opacity:1;transform:translateX(0)}88%,100%{opacity:0;transform:translateX(0)}}
+#ario-pkt-1,#ario-pkt-2,#ario-pkt-3{opacity:0}
+#ario-pkt-1{animation:ario-pkt1 10s linear infinite}
+#ario-pkt-2{animation:ario-pkt2 10s linear infinite}
+#ario-pkt-3{animation:ario-pkt3 10s linear infinite}
+@keyframes ario-pkt1{0%,39%{opacity:0;transform:translateX(0)}41%{opacity:1;transform:translateX(0)}57%{opacity:1;transform:translateX(258px)}59%,100%{opacity:0;transform:translateX(258px)}}
+@keyframes ario-pkt2{0%,49%{opacity:0;transform:translateX(0)}51%{opacity:1;transform:translateX(0)}67%{opacity:1;transform:translateX(258px)}69%,100%{opacity:0;transform:translateX(258px)}}
+@keyframes ario-pkt3{0%,59%{opacity:0;transform:translateX(0)}61%{opacity:1;transform:translateX(0)}77%{opacity:1;transform:translateX(258px)}79%,100%{opacity:0;transform:translateX(258px)}}
 #ario-hl-1{opacity:0;animation:ario-hl1 10s linear infinite}
 @keyframes ario-hl1{0%,28%{opacity:0}30%,38%{opacity:1}40%,100%{opacity:0}}
 #ario-hl-2{opacity:0;animation:ario-hl2 10s linear infinite}
@@ -41,6 +48,9 @@
 <circle cx="600" cy="450" r="14" fill="#FFFFFF"/>
 <line x1="644" y1="450" x2="730" y2="450" stroke="#B9B8FF" stroke-width="6" stroke-linecap="round"/>
 <polygon points="730,434 752,450 730,466" fill="#B9B8FF"/>
+<g id="ario-pkt-1"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
+<g id="ario-pkt-2"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
+<g id="ario-pkt-3"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
 </g>
 <g id="ario-tabla">
 <rect x="760" y="280" width="300" height="280" rx="16" fill="#FFFFFF"/>
