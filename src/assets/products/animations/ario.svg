@@ -4,6 +4,8 @@
 @keyframes ario-docs{0%{opacity:0;transform:translateX(-80px)}12%{opacity:1;transform:translateX(0)}76%{opacity:1;transform:translateX(0)}86%,100%{opacity:0;transform:translateX(0)}}
 #ario-scan{opacity:0;animation:ario-scan 10s linear infinite}
 @keyframes ario-scan{0%,14%{opacity:0;transform:translateY(0)}16%{opacity:1;transform:translateY(0)}30%{opacity:1;transform:translateY(322px)}31%,100%{opacity:0;transform:translateY(322px)}}
+#ario-lector{opacity:0;animation:ario-lector 10s ease-in-out infinite}
+@keyframes ario-lector{0%,32%{opacity:0;transform:translateX(-24px)}38%,82%{opacity:1;transform:translateX(0)}88%,100%{opacity:0;transform:translateX(0)}}
 #ario-hl-1{opacity:0;animation:ario-hl1 10s linear infinite}
 @keyframes ario-hl1{0%,28%{opacity:0}30%,38%{opacity:1}40%,100%{opacity:0}}
 #ario-hl-2{opacity:0;animation:ario-hl2 10s linear infinite}
