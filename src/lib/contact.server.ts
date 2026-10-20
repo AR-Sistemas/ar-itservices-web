@@ -57,6 +57,7 @@ function buildBody(data: ContactFormData) {
     // Cuando la postulación viene de una búsqueda del feed, el id permite
     // cruzarla contra el aviso en AR Recruiting. Vacío = espontánea.
     data.avisoId && `Aviso (AR Recruiting): ${data.avisoId}`,
+    data.producto && `Producto de interés: ${data.producto}`,
     "",
     "Mensaje:",
     data.mensaje || "(sin mensaje)",
@@ -73,6 +74,7 @@ interface ContactFormData {
   pais: string;
   tipo: string;
   puesto: string;
+  producto: string;
   mensaje: string;
   cv: File | null;
   avisoId: string;
@@ -130,6 +132,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       pais: get("pais"),
       tipo: get("tipo"),
       puesto: get("puesto"),
+      producto: get("producto"),
       mensaje: get("mensaje"),
       cv: cv instanceof File && cv.size > 0 ? cv : null,
       avisoId: get("aviso_id"),

@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="MeetingMate: una reunión se transcribe y genera un resumen y las tareas acordadas">
+<style>
+#mm-escena{opacity:0;animation:mm-escena 10s ease-in-out infinite}
+@keyframes mm-escena{0%{opacity:0}4%,88%{opacity:1}96%,100%{opacity:0}}
+.mm-onda{transform-box:fill-box;transform-origin:50% 50%;animation:mm-onda 1s ease-in-out infinite}
+.mm-onda-b{animation-duration:0.5s}
+@keyframes mm-onda{0%,100%{transform:scaleY(0.35)}50%{transform:scaleY(1)}}
+#mm-l1{animation:mm-in-a 10s ease-out infinite}
+#mm-l2{animation:mm-in-b 10s ease-out infinite}
+#mm-l3{animation:mm-in-c 10s ease-out infinite}
+#mm-l4{animation:mm-in-d 10s ease-out infinite}
+#mm-resumen{animation:mm-in-e 10s ease-out infinite}
+#mm-tarea-1{animation:mm-in-f 10s ease-out infinite}
+#mm-tarea-2{animation:mm-in-g 10s ease-out infinite}
+#mm-tarea-3{animation:mm-in-h 10s ease-out infinite}
+@keyframes mm-in-a{0%,18%{opacity:0;transform:translateY(14px)}25%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-b{0%,27%{opacity:0;transform:translateY(14px)}35%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-c{0%,37%{opacity:0;transform:translateY(14px)}45%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-d{0%,47%{opacity:0;transform:translateY(14px)}55%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-e{0%,53%{opacity:0;transform:translateY(14px)}63%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-f{0%,63%{opacity:0;transform:translateY(14px)}71%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-g{0%,70%{opacity:0;transform:translateY(14px)}78%,100%{opacity:1;transform:translateY(0)}}
+@keyframes mm-in-h{0%,77%{opacity:0;transform:translateY(14px)}85%,100%{opacity:1;transform:translateY(0)}}
+</style>
+<g id="mm-escena">
+<g id="mm-personas">
+<path d="M104 548 V532 C104 478 134 444 170 444 C206 444 236 478 236 532 V548 Q236 562 222 562 H118 Q104 562 104 548 Z" fill="#0066FF"/>
+<path d="M234 548 V532 C234 478 264 444 300 444 C336 444 366 478 366 532 V548 Q366 562 352 562 H248 Q234 562 234 548 Z" fill="#00D4FF"/>
+<circle cx="170" cy="386" r="44" fill="#0066FF"/>
+<circle cx="300" cy="386" r="44" fill="#00D4FF"/>
+</g>
+<g id="mm-ondas">
+<rect class="mm-onda" x="180" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+<rect class="mm-onda mm-onda-b" x="200" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+<rect class="mm-onda" x="220" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+<rect class="mm-onda mm-onda-b" x="240" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+<rect class="mm-onda" x="260" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+<rect class="mm-onda mm-onda-b" x="280" y="190" width="10" height="60" rx="5" fill="#00D4FF"/>
+</g>
+<polygon points="372,400 396,430 372,460" fill="#00D4FF"/>
+<g id="mm-transcripcion">
+<rect x="440" y="180" width="320" height="500" rx="20" fill="#FFFFFF"/>
+<rect x="440" y="180" width="320" height="64" rx="20" fill="#0066FF"/>
+<g id="mm-l1">
+<circle cx="470" cy="288" r="10" fill="#0066FF"/>
+<rect x="492" y="280" width="230" height="16" rx="8" fill="#C8D6EE"/>
+<rect x="492" y="306" width="160" height="12" rx="6" fill="#DFE7F5"/>
+</g>
+<g id="mm-l2">
+<circle cx="470" cy="344" r="10" fill="#00D4FF"/>
+<rect x="492" y="336" width="230" height="16" rx="8" fill="#C8D6EE"/>
+<rect x="492" y="362" width="190" height="12" rx="6" fill="#DFE7F5"/>
+</g>
+<g id="mm-l3">
+<circle cx="470" cy="400" r="10" fill="#0066FF"/>
+<rect x="492" y="392" width="230" height="16" rx="8" fill="#C8D6EE"/>
+<rect x="492" y="418" width="150" height="12" rx="6" fill="#DFE7F5"/>
+</g>
+<g id="mm-l4">
+<circle cx="470" cy="456" r="10" fill="#00D4FF"/>
+<rect x="492" y="448" width="230" height="16" rx="8" fill="#C8D6EE"/>
+<rect x="492" y="474" width="170" height="12" rx="6" fill="#DFE7F5"/>
+</g>
+</g>
+<polygon points="772,400 796,430 772,460" fill="#00D4FF"/>
+<g id="mm-resumen">
+<rect x="820" y="180" width="320" height="230" rx="20" fill="#FFFFFF"/>
+<rect x="840" y="200" width="160" height="16" rx="8" fill="#0066FF"/>
+<rect x="840" y="236" width="280" height="12" rx="6" fill="#C8D6EE"/>
+<rect x="840" y="262" width="240" height="12" rx="6" fill="#C8D6EE"/>
+<rect x="840" y="288" width="260" height="12" rx="6" fill="#C8D6EE"/>
+<rect x="840" y="314" width="180" height="12" rx="6" fill="#C8D6EE"/>
+</g>
+<g id="mm-tareas">
+<rect x="820" y="440" width="320" height="240" rx="20" fill="#FFFFFF"/>
+<rect x="840" y="460" width="140" height="16" rx="8" fill="#00D4FF"/>
+<g id="mm-tarea-1">
+<rect x="844" y="500" width="30" height="30" rx="6" fill="none" stroke="#0066FF" stroke-width="4"/>
+<path d="M850 515 L858 523 L869 508" fill="none" stroke="#0066FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="892" y="507" width="210" height="16" rx="8" fill="#C8D6EE"/>
+</g>
+<g id="mm-tarea-2">
+<rect x="844" y="560" width="30" height="30" rx="6" fill="none" stroke="#0066FF" stroke-width="4"/>
+<path d="M850 575 L858 583 L869 568" fill="none" stroke="#0066FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="892" y="567" width="190" height="16" rx="8" fill="#C8D6EE"/>
+</g>
+<g id="mm-tarea-3">
+<rect x="844" y="620" width="30" height="30" rx="6" fill="none" stroke="#0066FF" stroke-width="4"/>
+<path d="M850 635 L858 643 L869 628" fill="none" stroke="#0066FF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<rect x="892" y="627" width="200" height="16" rx="8" fill="#C8D6EE"/>
+</g>
+</g>
+</g>
+</svg>

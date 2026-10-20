@@ -16,6 +16,18 @@ export type ServiceGroup = {
   items: ServiceItem[];
 };
 
+export type SolutionProduct = {
+  id: "ario" | "meetingmate" | "sdd";
+  name: string;
+  tagline: string;
+  short: string;
+  problem: string;
+  example?: string;
+  steps: string[];
+  features: { title: string; desc: string }[];
+  audience: string;
+};
+
 export type ServiceLinkCard = {
   label: string;
   title: string;
@@ -87,6 +99,20 @@ export type SiteContent = {
     error: string;
     /** Borrador del mensaje al postular a un aviso. `{puesto}` = nombre real. */
     applicationDraft: string;
+    productLabel: string;
+    productRemove: string;
+    productMessage: (productName: string) => string;
+  };
+  solutions: {
+    heading: string;
+    subtitle: string;
+    backLink: string;
+    teaserCta: string;
+    cardCta: string;
+    contactCta: string;
+    labels: { problem: string; example: string; how: string; features: string; audience: string };
+    logoAlt: (name: string) => string;
+    products: SolutionProduct[];
   };
   frameworkModal: {
     eyebrow: string;
@@ -199,6 +225,7 @@ export type SiteContent = {
 const ES: SiteContent = {
   nav: [
     { label: "Servicios", href: "#servicios" },
+    { label: "Soluciones", href: "/soluciones" },
     { label: "Casos de éxito", href: "#casos" },
     { label: "Novedades", href: "/novedades" },
     { label: "Nosotros", href: "/nosotros" },
@@ -456,6 +483,164 @@ const ES: SiteContent = {
      */
     applicationDraft:
       "Hola,\n\nMe interesa la posición de {puesto}. Soy [nombre] y trabajo con [herramientas] que me parecen un buen match.\n\nAdjunto mi CV y, si les sirve, podemos coordinar una conversación.\n\nGracias,\n[Nombre]",
+    productLabel: "Producto de interés",
+    productRemove: "Quitar producto",
+    productMessage: (productName) =>
+      [
+        `Hola, me interesa el producto ${productName} y me gustaría conversar sobre mi proyecto.`,
+        "",
+        "Mi caso es el siguiente:",
+        "",
+        "Quedo a la espera de que me contacten para conversarlo.",
+      ].join("\n"),
+  },
+  solutions: {
+    heading: "Tecnología que se convierte en soluciones concretas",
+    subtitle:
+      "Productos propios de AR IT Services para resolver problemas reales de equipos y empresas.",
+    backLink: "Volver al inicio",
+    teaserCta: "Ver todas las soluciones",
+    cardCta: "Conocer más",
+    contactCta: "Conversemos sobre tu proyecto",
+    labels: {
+      problem: "El problema",
+      example: "Un ejemplo",
+      how: "Cómo funciona",
+      features: "Qué incluye",
+      audience: "A quién está dirigido",
+    },
+    logoAlt: (n) => `Logo de ${n}`,
+    products: [
+      {
+        id: "ario",
+        name: "Ario",
+        tagline: "Tus documentos, convertidos en datos.",
+        short:
+          "Ario lee tus documentos y convierte facturas, DNI y PDFs en datos listos para usar, en segundos.",
+        problem:
+          "Muchas empresas siguen pasando a mano los datos de facturas, comprobantes y documentos de identidad. Es lento, repetitivo y genera errores.",
+        example:
+          "Una administración recibe 200 facturas de proveedores a fin de mes y alguien tiene que copiar CUIT, fecha, número e importes una por una en una planilla. Con Ario las sube todas juntas y recibe los datos ordenados.",
+        steps: [
+          "Subís uno o varios documentos (PDF o foto).",
+          "Elegís qué tipo de documento es: general, DNI, Factura ARCA o uno con tus propios campos.",
+          "Ario lee el documento y saca los datos automáticamente.",
+          "Revisás y corregís lo que haga falta.",
+          "Exportás los datos listos para usar.",
+        ],
+        features: [
+          {
+            title: "Lectura inteligente",
+            desc: "Entiende PDFs y fotos, incluso escaneados.",
+          },
+          {
+            title: "Plantillas para Argentina",
+            desc: "Reconoce Factura ARCA y DNI sin configurar nada.",
+          },
+          {
+            title: "Campos personalizados",
+            desc: "Se adapta a cualquier documento de tu negocio.",
+          },
+          { title: "Carga en lote", desc: "Procesa muchos documentos de una sola vez." },
+          {
+            title: "Validación humana",
+            desc: "Una persona revisa antes de usar los datos, así hay control y confianza.",
+          },
+          {
+            title: "Exportación",
+            desc: "Los datos salen listos para planillas u otros sistemas.",
+          },
+        ],
+        audience:
+          "PyMEs y equipos administrativos, contables y de operaciones que manejan muchos documentos.",
+      },
+      {
+        id: "meetingmate",
+        name: "MeetingMate",
+        tagline: "Tu reunión, con copiloto.",
+        short:
+          "El compañero de reunión con IA que escucha la conversación y te sugiere en pantalla preguntas, riesgos y acciones mientras la reunión sigue.",
+        problem:
+          "En las reuniones se habla rápido y lo importante se pierde: una pregunta que nadie hizo, un riesgo que quedó en el aire, un compromiso sin responsable. Hoy alguien toma notas a mano y se pierde parte de la charla, o se revisa todo recién después, cuando ya no se puede reaccionar.",
+        example:
+          "En una reunión de seguimiento de proyecto el cliente menciona de pasada que cambió un requisito. Nadie lo anota y dos semanas después aparece como un retraso. MeetingMate lo muestra en pantalla como un riesgo en el momento, cuando todavía se puede aclarar.",
+        steps: [
+          "Se prepara la reunión: se carga el proyecto, el objetivo, los participantes y los documentos de referencia.",
+          "Se graba: MeetingMate toma el audio del micrófono (reuniones presenciales) o también el de la computadora (reuniones virtuales).",
+          "Se transcribe y se analiza: la IA revisa la conversación con todo el contexto del proyecto.",
+          "Aparecen tarjetas: preguntas, riesgos y acciones, visibles para todos los presentes.",
+          "El equipo reacciona: atiende, descarta (indicando el motivo) o reabre cada tarjeta, y queda todo registrado.",
+        ],
+        features: [
+          {
+            title: "Captura en vivo",
+            desc: "Graba micrófono y audio de la computadora, así funciona en reuniones presenciales y virtuales.",
+          },
+          {
+            title: "Identificación de oradores",
+            desc: "Cada intervención queda registrada y asociable a un participante.",
+          },
+          {
+            title: "Tarjetas de pregunta, riesgo y acción",
+            desc: "Lo importante aparece en pantalla sin que nadie tenga que anotarlo.",
+          },
+          {
+            title: "Contexto del proyecto",
+            desc: "Usa objetivos, roles, participantes, documentos y reuniones previas para sugerir con criterio.",
+          },
+          {
+            title: "Seguimiento automático",
+            desc: "Evita tarjetas repetidas y marca como resueltas las que la conversación ya cerró, con historial para revisarlas o reabrirlas.",
+          },
+          {
+            title: "También con audios grabados",
+            desc: "Se puede subir un archivo de audio y obtener su transcripción.",
+          },
+        ],
+        audience:
+          "Equipos que se reparten el trabajo en reuniones recurrentes: líderes de proyecto, scrum masters, project managers, áreas comerciales y de cuentas, consultoras y equipos de producto o IT.",
+      },
+      {
+        id: "sdd",
+        name: "AR SDD",
+        tagline: "Del pedido a un cambio verificable.",
+        short:
+          "Un método de desarrollo con IA y un kit técnico para transformar pedidos de software en cambios definidos, revisados y verificables.",
+        problem:
+          "El uso de agentes de IA puede acelerar modificaciones de código, pero sin un marco compartido resulta difícil saber qué se pidió, quién lo aprobó, qué fue validado y si una evidencia sigue vigente.",
+        steps: [
+          "Contexto: se seleccionan y validan las fuentes pertinentes del proyecto para que los agentes trabajen con el contexto correcto.",
+          "Especificación: el pedido se convierte en un spec, un contrato revisable y aprobable de un cambio.",
+          "Roles: implementador, verificador, reviewer y consolidador trabajan coordinados, cada uno con su responsabilidad.",
+          "Controles: antes de avanzar, los gates comprueban los requisitos y las aprobaciones quedan vinculadas a cada versión.",
+          "Aceptación: QA conserva la validación de calidad y la decisión final queda en manos del equipo.",
+        ],
+        features: [
+          {
+            title: "Ingeniería de contexto",
+            desc: "Selección y validación de las fuentes pertinentes del proyecto.",
+          },
+          {
+            title: "Especificaciones revisables",
+            desc: "Cada cambio parte de un contrato claro que el equipo puede revisar y aprobar.",
+          },
+          {
+            title: "Roles diferenciados",
+            desc: "Implementación, verificación, revisión y consolidación, con un coordinador central.",
+          },
+          {
+            title: "Control humano",
+            desc: "Los gates y las aprobaciones por versión mantienen la autoridad en el equipo.",
+          },
+          {
+            title: "Adopción por proyecto",
+            desc: "Se incorpora de forma selectiva sobre un proyecto existente, empezando por un cambio acotado.",
+          },
+        ],
+        audience:
+          "Equipos de desarrollo internos y consultoras que ya usan asistentes de IA y necesitan más control sobre los cambios: CTO, líderes técnicos, desarrolladores y QA.",
+      },
+    ],
   },
   frameworkModal: {
     eyebrow: "Framework propio",
@@ -705,6 +890,7 @@ const ES: SiteContent = {
 const EN: SiteContent = {
   nav: [
     { label: "Services", href: "#servicios" },
+    { label: "Solutions", href: "/soluciones" },
     { label: "Success stories", href: "#casos" },
     { label: "News", href: "/novedades" },
     { label: "About us", href: "/nosotros" },
@@ -951,6 +1137,163 @@ const EN: SiteContent = {
     success: "Thanks. We'll get in touch shortly.",
     error: "We couldn't send your message. Please try again in a few minutes.",
     applicationDraft: `Hi,\n\nI'm interested in the {puesto} position. I'm [name] and I work with [tools] that seem like a good match.\n\nI'm attaching my CV and, if it works for you, we can set up a conversation.\n\nThanks,\n[Name]`,
+    productLabel: "Product of interest",
+    productRemove: "Remove product",
+    productMessage: (productName) =>
+      [
+        `Hi, I'm interested in the ${productName} product and I'd like to discuss my project.`,
+        "",
+        "My case is as follows:",
+        "",
+        "I look forward to hearing from you to discuss it.",
+      ].join("\n"),
+  },
+  solutions: {
+    heading: "Technology that turns into concrete solutions",
+    subtitle: "AR IT Services' own products, built to solve real problems for teams and companies.",
+    backLink: "Back to home",
+    teaserCta: "See all solutions",
+    cardCta: "Learn more",
+    contactCta: "Let's talk about your project",
+    labels: {
+      problem: "The problem",
+      example: "An example",
+      how: "How it works",
+      features: "What it includes",
+      audience: "Who it's for",
+    },
+    logoAlt: (n) => `${n} logo`,
+    products: [
+      {
+        id: "ario",
+        name: "Ario",
+        tagline: "Your documents, turned into data.",
+        short:
+          "Ario reads your documents and turns invoices, ID cards and PDFs into ready-to-use data, in seconds.",
+        problem:
+          "Many companies still copy data by hand from invoices, receipts and ID documents. It is slow, repetitive and error-prone.",
+        example:
+          "An accounting office receives 200 supplier invoices at the end of the month, and someone has to copy tax ID, date, number and amounts one by one into a spreadsheet. With Ario they upload them all together and get the data back, organized.",
+        steps: [
+          "You upload one or several documents (PDF or photo).",
+          "You choose the document type: general, ID card, ARCA invoice or one with your own fields.",
+          "Ario reads the document and extracts the data automatically.",
+          "You review and correct whatever is needed.",
+          "You export the data, ready to use.",
+        ],
+        features: [
+          {
+            title: "Smart reading",
+            desc: "Understands PDFs and photos, even scanned ones.",
+          },
+          {
+            title: "Templates for Argentina",
+            desc: "Recognizes ARCA invoices and ID cards with no setup.",
+          },
+          {
+            title: "Custom fields",
+            desc: "Adapts to any document in your business.",
+          },
+          { title: "Batch upload", desc: "Processes many documents at once." },
+          {
+            title: "Human validation",
+            desc: "A person reviews the data before it is used, so there is control and trust.",
+          },
+          {
+            title: "Export",
+            desc: "Data comes out ready for spreadsheets or other systems.",
+          },
+        ],
+        audience:
+          "SMEs and administrative, accounting and operations teams that handle many documents.",
+      },
+      {
+        id: "meetingmate",
+        name: "MeetingMate",
+        tagline: "Your meeting, with a copilot.",
+        short:
+          "The AI meeting companion that listens to the conversation and suggests questions, risks and actions on screen while the meeting is still going.",
+        problem:
+          "In meetings people talk fast and what matters gets lost: a question nobody asked, a risk left hanging, a commitment with no owner. Today someone takes notes by hand and misses part of the conversation, or everything is reviewed only afterwards, when it is too late to react.",
+        example:
+          "In a project follow-up meeting the client mentions in passing that a requirement changed. Nobody writes it down, and two weeks later it shows up as a delay. MeetingMate shows it on screen as a risk in the moment, while it can still be clarified.",
+        steps: [
+          "The meeting is prepared: the project, goal, participants and reference documents are loaded.",
+          "It is recorded: MeetingMate captures microphone audio (in-person meetings) and also computer audio (virtual meetings).",
+          "It is transcribed and analyzed: the AI reviews the conversation with the full project context.",
+          "Cards appear: questions, risks and actions, visible to everyone in the room.",
+          "The team reacts: it addresses, dismisses (stating the reason) or reopens each card, and everything is recorded.",
+        ],
+        features: [
+          {
+            title: "Live capture",
+            desc: "Records microphone and computer audio, so it works in in-person and virtual meetings.",
+          },
+          {
+            title: "Speaker identification",
+            desc: "Each contribution is recorded and can be linked to a participant.",
+          },
+          {
+            title: "Question, risk and action cards",
+            desc: "What matters shows up on screen without anyone having to write it down.",
+          },
+          {
+            title: "Project context",
+            desc: "Uses goals, roles, participants, documents and previous meetings to suggest with judgment.",
+          },
+          {
+            title: "Automatic follow-up",
+            desc: "Avoids repeated cards and marks as resolved those the conversation already closed, with a history to review or reopen them.",
+          },
+          {
+            title: "Works with recorded audio too",
+            desc: "You can upload an audio file and get its transcript.",
+          },
+        ],
+        audience:
+          "Teams that share work across recurring meetings: project leads, scrum masters, project managers, sales and account teams, consultancies, and product or IT teams.",
+      },
+      {
+        id: "sdd",
+        name: "AR SDD",
+        tagline: "From a request to a verifiable change.",
+        short:
+          "An AI-assisted development method and a technical kit to turn software requests into defined, reviewed and verifiable changes.",
+        problem:
+          "Using AI agents can speed up code changes, but without a shared framework it is hard to know what was requested, who approved it, what was validated and whether a piece of evidence is still valid.",
+        steps: [
+          "Context: the relevant project sources are selected and validated so agents work with the right context.",
+          "Specification: the request becomes a spec, a reviewable and approvable contract for a change.",
+          "Roles: implementer, verifier, reviewer and consolidator work in coordination, each with their own responsibility.",
+          "Controls: before moving forward, gates check the requirements and approvals are tied to each version.",
+          "Acceptance: QA keeps the quality validation and the final decision stays with the team.",
+        ],
+        features: [
+          {
+            title: "Context engineering",
+            desc: "Selection and validation of the relevant project sources.",
+          },
+          {
+            title: "Reviewable specifications",
+            desc: "Every change starts from a clear contract the team can review and approve.",
+          },
+          {
+            title: "Distinct roles",
+            desc: "Implementation, verification, review and consolidation, with a central coordinator.",
+          },
+          {
+            title: "Human control",
+            desc: "Gates and per-version approvals keep authority with the team.",
+          },
+          {
+            title: "Adopted per project",
+            desc: "Introduced selectively on an existing project, starting with a focused change.",
+          },
+        ],
+        audience:
+          "In-house development teams and consultancies already using AI assistants that need more control over changes: CTOs, tech leads, developers and QA.",
+      },
+    ],
   },
   frameworkModal: {
     eyebrow: "Proprietary framework",

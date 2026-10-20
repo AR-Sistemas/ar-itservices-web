@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="Ario: los documentos entran, se leen, se extraen los campos y salen datos ordenados en una tabla">
+<style>
+#ario-documentos{opacity:0;animation:ario-docs 10s ease-in-out infinite}
+@keyframes ario-docs{0%{opacity:0;transform:translateX(-80px)}12%{opacity:1;transform:translateX(0)}76%{opacity:1;transform:translateX(0)}86%,100%{opacity:0;transform:translateX(0)}}
+#ario-scan{opacity:0;animation:ario-scan 10s linear infinite}
+@keyframes ario-scan{0%,14%{opacity:0;transform:translateY(0)}16%{opacity:1;transform:translateY(0)}30%{opacity:1;transform:translateY(322px)}31%,100%{opacity:0;transform:translateY(322px)}}
+#ario-lector{opacity:0;animation:ario-lector 10s ease-in-out infinite}
+@keyframes ario-lector{0%,32%{opacity:0;transform:translateX(-24px)}38%,82%{opacity:1;transform:translateX(0)}88%,100%{opacity:0;transform:translateX(0)}}
+#ario-pkt-1,#ario-pkt-2,#ario-pkt-3{opacity:0}
+#ario-pkt-1{animation:ario-pkt1 10s linear infinite}
+#ario-pkt-2{animation:ario-pkt2 10s linear infinite}
+#ario-pkt-3{animation:ario-pkt3 10s linear infinite}
+@keyframes ario-pkt1{0%,39%{opacity:0;transform:translateX(0)}41%{opacity:1;transform:translateX(0)}57%{opacity:1;transform:translateX(258px)}59%,100%{opacity:0;transform:translateX(258px)}}
+@keyframes ario-pkt2{0%,49%{opacity:0;transform:translateX(0)}51%{opacity:1;transform:translateX(0)}67%{opacity:1;transform:translateX(258px)}69%,100%{opacity:0;transform:translateX(258px)}}
+@keyframes ario-pkt3{0%,59%{opacity:0;transform:translateX(0)}61%{opacity:1;transform:translateX(0)}77%{opacity:1;transform:translateX(258px)}79%,100%{opacity:0;transform:translateX(258px)}}
+#ario-hl-1{opacity:0;animation:ario-hl1 10s linear infinite}
+@keyframes ario-hl1{0%,28%{opacity:0}30%,38%{opacity:1}40%,100%{opacity:0}}
+#ario-hl-2{opacity:0;animation:ario-hl2 10s linear infinite}
+@keyframes ario-hl2{0%,38%{opacity:0}40%,48%{opacity:1}50%,100%{opacity:0}}
+#ario-hl-3{opacity:0;animation:ario-hl3 10s linear infinite}
+@keyframes ario-hl3{0%,48%{opacity:0}50%,58%{opacity:1}60%,100%{opacity:0}}
+#ario-tabla{opacity:0;animation:ario-tabla 10s ease-in-out infinite}
+@keyframes ario-tabla{0%,46%{opacity:0}54%,86%{opacity:1}94%,100%{opacity:0}}
+#ario-fila-1{opacity:0;animation:ario-fila1 10s ease-out infinite}
+@keyframes ario-fila1{0%,50%{opacity:0;transform:translateX(-30px)}56%,100%{opacity:1;transform:translateX(0)}}
+#ario-fila-2{opacity:0;animation:ario-fila2 10s ease-out infinite}
+@keyframes ario-fila2{0%,58%{opacity:0;transform:translateX(-30px)}64%,100%{opacity:1;transform:translateX(0)}}
+#ario-fila-3{opacity:0;animation:ario-fila3 10s ease-out infinite}
+@keyframes ario-fila3{0%,66%{opacity:0;transform:translateX(-30px)}72%,100%{opacity:1;transform:translateX(0)}}
+</style>
+<g id="ario-documentos">
+<rect id="ario-doc-atras" x="240" y="240" width="260" height="340" rx="18" fill="#6F6FFF"/>
+<g id="ario-doc-frente">
+<rect x="200" y="280" width="260" height="340" rx="18" fill="#FFFFFF"/>
+<rect x="230" y="306" width="120" height="12" rx="6" fill="#706F6F"/>
+<rect x="230" y="326" width="200" height="8" rx="4" fill="#C9C9D6"/>
+<rect x="230" y="500" width="200" height="8" rx="4" fill="#C9C9D6"/>
+<rect x="230" y="520" width="150" height="8" rx="4" fill="#C9C9D6"/>
+</g>
+<rect id="ario-hl-1" x="222" y="340" width="216" height="44" rx="8" fill="#5B5BFF" fill-opacity="0.25" stroke="#5B5BFF" stroke-width="3"/>
+<rect id="ario-hl-2" x="222" y="400" width="216" height="44" rx="8" fill="#5B5BFF" fill-opacity="0.25" stroke="#5B5BFF" stroke-width="3"/>
+<rect id="ario-hl-3" x="222" y="460" width="216" height="44" rx="8" fill="#5B5BFF" fill-opacity="0.25" stroke="#5B5BFF" stroke-width="3"/>
+<g id="ario-scan"><rect x="200" y="284" width="260" height="18" rx="9" fill="#5B5BFF" opacity="0.35"/><rect x="200" y="288" width="260" height="10" rx="5" fill="#5B5BFF" stroke="#FFFFFF" stroke-width="2"/></g>
+</g>
+<g id="ario-lector">
+<line x1="470" y1="450" x2="556" y2="450" stroke="#B9B8FF" stroke-width="6" stroke-linecap="round"/>
+<circle cx="600" cy="450" r="44" fill="#5B5BFF"/>
+<circle cx="600" cy="450" r="14" fill="#FFFFFF"/>
+<line x1="644" y1="450" x2="730" y2="450" stroke="#B9B8FF" stroke-width="6" stroke-linecap="round"/>
+<polygon points="730,434 752,450 730,466" fill="#B9B8FF"/>
+<g id="ario-pkt-1"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
+<g id="ario-pkt-2"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
+<g id="ario-pkt-3"><circle cx="482" cy="450" r="11" fill="#5B5BFF" opacity="0.35"/><circle cx="482" cy="450" r="6" fill="#FFFFFF"/></g>
+</g>
+<g id="ario-tabla">
+<rect x="760" y="280" width="300" height="280" rx="16" fill="#FFFFFF"/>
+<rect x="760" y="280" width="300" height="56" rx="16" fill="#5B5BFF"/>
+<g id="ario-fila-1">
+<rect x="780" y="360" width="260" height="50" rx="10" fill="#EEF0FF"/>
+<rect x="796" y="377" width="120" height="14" rx="7" fill="#706F6F"/>
+<rect x="940" y="377" width="60" height="14" rx="7" fill="#5B5BFF"/>
+</g>
+<g id="ario-fila-2">
+<rect x="780" y="426" width="260" height="50" rx="10" fill="#EEF0FF"/>
+<rect x="796" y="443" width="100" height="14" rx="7" fill="#706F6F"/>
+<rect x="940" y="443" width="60" height="14" rx="7" fill="#5B5BFF"/>
+</g>
+<g id="ario-fila-3">
+<rect x="780" y="492" width="260" height="50" rx="10" fill="#EEF0FF"/>
+<rect x="796" y="509" width="140" height="14" rx="7" fill="#706F6F"/>
+<rect x="940" y="509" width="60" height="14" rx="7" fill="#5B5BFF"/>
+</g>
+</g>
+</svg>

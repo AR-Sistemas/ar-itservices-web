@@ -27,7 +27,8 @@ import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
-import { getContent } from "@/i18n/content";
+import { getContent, type SolutionProduct } from "@/i18n/content";
+import { SolutionVisual } from "@/components/site/SolutionVisual";
 import { getPublicEditorial } from "@/lib/editorial.server";
 import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
@@ -133,6 +134,8 @@ function Home() {
   const [selectedPosition, setSelectedPosition] = useState("");
   // Id del aviso del feed de AR Recruiting (cuando se postula con ?aviso=).
   const [avisoId, setAvisoId] = useState("");
+  // Producto de /soluciones desde el que se llegó al formulario (?producto=ario).
+  const [producto, setProducto] = useState<SolutionProduct["id"] | null>(null);
   // Levantados a estado (en vez de no controlados) para que no se pierdan si
   // el visitante cambia de pestaña de tipo de consulta y vuelve.
   const [empresaValue, setEmpresaValue] = useState("");
@@ -149,10 +152,18 @@ function Home() {
   // Si venimos de "Postularme" en /trabaja-con-nosotros, precargamos el
   // formulario en modo postulante con el puesto ya seleccionado.
   useEffect(() => {
-    const puesto = new URLSearchParams(window.location.search).get("puesto");
+    const params = new URLSearchParams(window.location.search);
+    const puesto = params.get("puesto");
     if (puesto) {
       setContactType("postulante");
       setSelectedPosition(puesto);
+    }
+    const prod = params.get("producto");
+    if (prod === "ario" || prod === "meetingmate" || prod === "sdd") {
+      setContactType("empresa");
+      setProducto(prod);
+      const product = c.solutions.products.find((p) => p.id === prod);
+      if (product) setMensajeValue(c.contact.productMessage(product.name));
     }
   }, []);
 
@@ -329,6 +340,50 @@ function Home() {
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
               <FrameworkHighlight card={c.services.framework} />
+            </AnimatedContent>
+          </div>
+        </section>
+
+        {/* Soluciones — productos propios; el detalle vive en /soluciones */}
+        <section id="soluciones" className="px-5 py-24 sm:py-32">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+                {c.solutions.heading}
+              </h2>
+              <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
+            </AnimatedContent>
+            <div className="mt-10 grid gap-5 md:grid-cols-3">
+              {c.solutions.products.map((p, i) => (
+                <AnimatedContent key={p.id} delay={i * 80} distance={30}>
+                  <SpotlightCard
+                    as="article"
+                    className="h-full rounded-2xl border border-border bg-card p-5"
+                  >
+                    <SolutionVisual id={p.id} alt={c.solutions.logoAlt(p.name)} />
+                    <h3 className="mt-5 font-display text-xl font-extrabold tracking-tight">
+                      {p.name}
+                    </h3>
+                    <p className="mt-1 text-sm font-semibold text-primary">{p.tagline}</p>
+                    <p className="mt-3 text-sm text-muted-foreground">{p.short}</p>
+                    <Link
+                      to="/soluciones"
+                      hash={p.id}
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                    >
+                      {c.solutions.cardCta} →
+                    </Link>
+                  </SpotlightCard>
+                </AnimatedContent>
+              ))}
+            </div>
+            <AnimatedContent className="mt-8">
+              <Link
+                to="/soluciones"
+                className="inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
+              >
+                {c.solutions.teaserCta}
+              </Link>
             </AnimatedContent>
           </div>
         </section>
@@ -561,6 +616,7 @@ function Home() {
                       toast.success(c.contact.success);
                       formEl.reset();
                       setContactType("empresa");
+                      setProducto(null);
                       setSelectedPosition("");
                       setEmpresaValue("");
                       setPaisValue("");
@@ -580,6 +636,29 @@ function Home() {
                     viene de una búsqueda concreta. Vacío = postulación
                     espontánea. */}
                 <input type="hidden" name="aviso_id" value={avisoId} />
+                {producto && contactType !== "postulante" && (
+                  <div className="flex items-center gap-2 sm:col-span-2">
+                    <input
+                      type="hidden"
+                      name="producto"
+                      value={c.solutions.products.find((p) => p.id === producto)?.name ?? ""}
+                    />
+                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-card py-1.5 pr-2 pl-4 text-sm">
+                      <span className="text-muted-foreground">{c.contact.productLabel}:</span>
+                      <span className="font-semibold">
+                        {c.solutions.products.find((p) => p.id === producto)?.name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setProducto(null)}
+                        aria-label={c.contact.productRemove}
+                        className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  </div>
+                )}
                 <input type="hidden" name="formStartedAt" value={formStartedAt} />
                 {/* Honeypot anti-bot: invisible para personas, los bots que
                     autocompletan todo el formulario sí lo llenan (ver
