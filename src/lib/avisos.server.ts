@@ -103,9 +103,21 @@ export type AvisoResult =
   | { ok: false; reason: "not-found" }
   | { ok: false; reason: "unreachable" };
 
+/**
+ * Si el origen es un preview de Vercel con Deployment Protection (p. ej. la
+ * homologación del hub), hay que mandar el secreto de bypass o responde 302 al
+ * login de Vercel. Solo server-side; si no está definido no se manda nada.
+ */
+function originHeaders(): Record<string, string> {
+  const headers: Record<string, string> = { accept: "application/json" };
+  const bypass = process.env["AVISOS_BYPASS_SECRET"];
+  if (bypass) headers["x-vercel-protection-bypass"] = bypass;
+  return headers;
+}
+
 async function fetchJson(path: string): Promise<{ status: number; body: unknown }> {
   const res = await fetch(`${apiBase()}${path}`, {
-    headers: { accept: "application/json" },
+    headers: originHeaders(),
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
   if (res.status === 404) return { status: 404, body: null };
