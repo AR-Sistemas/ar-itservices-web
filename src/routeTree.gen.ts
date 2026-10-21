@@ -14,6 +14,7 @@ import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as NovedadesRouteImport } from './routes/novedades'
 import { Route as SolucionesRouteImport } from './routes/soluciones'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
+import { Route as AvisoAvisoIdRouteImport } from './routes/aviso.$avisoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const TrabajaConNosotrosRoute = TrabajaConNosotrosRouteImport.update({
   path: '/trabaja-con-nosotros',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AvisoAvisoIdRoute = AvisoAvisoIdRouteImport.update({
+  id: '/aviso/$avisoId',
+  path: '/aviso/$avisoId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/novedades': typeof NovedadesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
+  '/aviso/$avisoId': typeof AvisoAvisoIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/novedades': typeof NovedadesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
+  '/aviso/$avisoId': typeof AvisoAvisoIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,25 @@ export interface FileRoutesById {
   '/novedades': typeof NovedadesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
+  '/aviso/$avisoId': typeof AvisoAvisoIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/nosotros' | '/novedades' | '/soluciones' | '/trabaja-con-nosotros'
+    | '/'
+    | '/nosotros'
+    | '/novedades'
+    | '/soluciones'
+    | '/trabaja-con-nosotros'
+    | '/aviso/$avisoId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/nosotros' | '/novedades' | '/soluciones' | '/trabaja-con-nosotros'
+  to:
+    | '/'
+    | '/nosotros'
+    | '/novedades'
+    | '/soluciones'
+    | '/trabaja-con-nosotros'
+    | '/aviso/$avisoId'
   id:
     | '__root__'
     | '/'
@@ -76,6 +96,7 @@ export interface FileRouteTypes {
     | '/novedades'
     | '/soluciones'
     | '/trabaja-con-nosotros'
+    | '/aviso/$avisoId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -84,6 +105,7 @@ export interface RootRouteChildren {
   NovedadesRoute: typeof NovedadesRoute
   SolucionesRoute: typeof SolucionesRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
+  AvisoAvisoIdRoute: typeof AvisoAvisoIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -123,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TrabajaConNosotrosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/aviso/$avisoId': {
+      id: '/aviso/$avisoId'
+      path: '/aviso/$avisoId'
+      fullPath: '/aviso/$avisoId'
+      preLoaderRoute: typeof AvisoAvisoIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -132,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   NovedadesRoute: NovedadesRoute,
   SolucionesRoute: SolucionesRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
+  AvisoAvisoIdRoute: AvisoAvisoIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -101,6 +101,8 @@ export type SiteContent = {
     submitting: string;
     success: string;
     error: string;
+    /** Borrador del mensaje al postular a un aviso. `{puesto}` = nombre real. */
+    applicationDraft: string;
     productLabel: string;
     productRemove: string;
     productMessage: (productName: string) => string;
@@ -161,6 +163,8 @@ export type SiteContent = {
   careers: {
     heading: string;
     backLink: string;
+    /** Label del BackButton en la PD: vuelve al listado, no al home. */
+    backToPositionsLabel: string;
     intro: string;
     positionsHeading: string;
     emptyHeading: string;
@@ -169,8 +173,40 @@ export type SiteContent = {
     positionCtaLabel: string;
     mustHaveLabel: string;
     niceToHaveLabel: string;
+    responsibilitiesLabel: string;
+    aboutRoleLabel: string;
     filterAllLabel: string;
     filterEmptyMessage: string;
+    // Buscador y filtros combinables (área × tecnología × ubicación)
+    searchLabel: string;
+    searchPlaceholder: string;
+    clearSearchLabel: string;
+    clearFiltersLabel: string;
+    areaFilterLabel: string;
+    techFilterLabel: string;
+    locationFilterLabel: string;
+    /**
+     * Contador de resultados. Es una función porque el plural cambia con el
+     * número: "1 búsqueda" / "3 búsquedas" / "Sin resultados". Un string con
+     * `{n}` no alcanza para el caso 0.
+     */
+    resultsCount: (n: number) => string;
+    // Etiquetas del feed público de avisos (consumido de AR Recruiting)
+    detailCtaLabel: string;
+    // Solo el estado de error de la lista lo usa: recargar el feed es lo
+    // que resuelve un origen caído, y en el caso normal recargar la página
+    // ya lo hace.
+    refreshLabel: string;
+    refreshingLabel: string;
+    updatedLabel: string;
+    errorHeading: string;
+    errorBody: string;
+    vacancyOne: string;
+    vacancyMany: string;
+    publishedLabel: string;
+    englishLevelLabel: string;
+    enNoticeHeading: string;
+    enNoticeBody: string;
     positions: {
       title: string;
       category: string;
@@ -433,6 +469,17 @@ const ES: SiteContent = {
     submitting: "Enviando…",
     success: "Gracias. Te vamos a contactar a la brevedad.",
     error: "No pudimos enviar tu mensaje. Probá de nuevo en unos minutos.",
+    /**
+     * Borrador para el mensaje cuando la postulación viene de un aviso del
+     * feed (`?aviso={id}`). `{puesto}` se reemplaza por el nombre real.
+     *
+     * Es un andamiaje, no un texto cerrado: quien postula lo edita y lo envía
+     * como si fuera propio. Va en primera persona y sin pedir datos que el
+     * formulario ya pide (nombre, email, CV), para no repetir el formulario
+     * dentro del mensaje.
+     */
+    applicationDraft:
+      "Hola,\n\nMe interesa la posición de {puesto}. Soy [nombre] y trabajo con [herramientas] que me parecen un buen match.\n\nAdjunto mi CV y, si les sirve, podemos coordinar una conversación.\n\nGracias,\n[Nombre]",
     productLabel: "Producto de interés",
     productRemove: "Quitar producto",
     productMessage: (productName) =>
@@ -735,6 +782,9 @@ const ES: SiteContent = {
   careers: {
     heading: "Sumate al equipo",
     backLink: "Volver al inicio",
+    // El `BackButton` de la PD vuelve al listado, no al home: usar `backLink`
+    // ("Volver al inicio") mentía sobre el destino.
+    backToPositionsLabel: "Volver a las búsquedas",
     intro:
       "25 años armando equipos que se quedan. Buscamos gente con ganas de resolver problemas reales, no perfiles que encajen en una grilla.",
     positionsHeading: "Búsquedas abiertas",
@@ -745,8 +795,32 @@ const ES: SiteContent = {
     positionCtaLabel: "Postularme",
     mustHaveLabel: "¿Qué buscamos?",
     niceToHaveLabel: "Valoramos",
+    responsibilitiesLabel: "Responsabilidades",
+    aboutRoleLabel: "La posición",
+    detailCtaLabel: "Ver más",
     filterAllLabel: "Todas",
-    filterEmptyMessage: "No hay búsquedas abiertas para esta categoría por ahora.",
+    filterEmptyMessage: "No hay búsquedas que coincidan con esos filtros.",
+    searchLabel: "Buscar búsquedas abiertas",
+    searchPlaceholder: "Buscar por puesto, tecnología o ciudad…",
+    clearSearchLabel: "Limpiar la búsqueda",
+    clearFiltersLabel: "Limpiar filtros",
+    areaFilterLabel: "Área",
+    techFilterLabel: "Tecnología",
+    locationFilterLabel: "Ubicación",
+    resultsCount: (n) => (n === 0 ? "Sin resultados" : n === 1 ? "1 búsqueda" : `${n} búsquedas`),
+    refreshLabel: "Reintentar",
+    refreshingLabel: "Actualizando…",
+    updatedLabel: "Actualizado",
+    errorHeading: "No pudimos cargar las búsquedas",
+    errorBody:
+      "Estamos teniendo problemas para conectarnos con el sistema de búsquedas. Probá de nuevo en un momento.",
+    vacancyOne: "1 vacante disponible",
+    vacancyMany: "vacantes disponibles",
+    publishedLabel: "Publicada",
+    englishLevelLabel: "Inglés requerido",
+    enNoticeHeading: "Las búsquedas se publican en español",
+    enNoticeBody:
+      "Los avisos vienen directo de nuestro sistema de reclutamiento, que los publica en español. Mandanos tu CV en español y te respondemos.",
     positions: [
       {
         title: "Desarrollador/a .NET Senior",
@@ -1109,6 +1183,7 @@ const EN: SiteContent = {
     submitting: "Sending…",
     success: "Thanks. We'll get in touch shortly.",
     error: "We couldn't send your message. Please try again in a few minutes.",
+    applicationDraft: `Hi,\n\nI'm interested in the {puesto} position. I'm [name] and I work with [tools] that seem like a good match.\n\nI'm attaching my CV and, if it works for you, we can set up a conversation.\n\nThanks,\n[Name]`,
     productLabel: "Product of interest",
     productRemove: "Remove product",
     productMessage: (productName) =>
@@ -1410,6 +1485,7 @@ const EN: SiteContent = {
   careers: {
     heading: "Join the team",
     backLink: "Back to home",
+    backToPositionsLabel: "Back to positions",
     intro:
       "25 years building teams that stay. We look for people who want to solve real problems, not profiles that fit a checklist.",
     positionsHeading: "Open positions",
@@ -1420,8 +1496,31 @@ const EN: SiteContent = {
     positionCtaLabel: "Apply",
     mustHaveLabel: "What we're looking for",
     niceToHaveLabel: "Nice to have",
+    responsibilitiesLabel: "Responsibilities",
+    aboutRoleLabel: "The role",
+    detailCtaLabel: "See more",
     filterAllLabel: "All",
-    filterEmptyMessage: "No open positions in this category right now.",
+    filterEmptyMessage: "No positions match those filters.",
+    searchLabel: "Search open positions",
+    searchPlaceholder: "Search by role, technology or city…",
+    clearSearchLabel: "Clear the search",
+    clearFiltersLabel: "Clear filters",
+    areaFilterLabel: "Area",
+    techFilterLabel: "Technology",
+    locationFilterLabel: "Location",
+    resultsCount: (n) => (n === 0 ? "No results" : n === 1 ? "1 position" : `${n} positions`),
+    refreshLabel: "Retry",
+    refreshingLabel: "Refreshing…",
+    updatedLabel: "Updated",
+    errorHeading: "We couldn't load the positions",
+    errorBody: "We're having trouble reaching our recruiting system. Please try again in a moment.",
+    vacancyOne: "1 opening available",
+    vacancyMany: "openings available",
+    publishedLabel: "Posted",
+    englishLevelLabel: "English level required",
+    enNoticeHeading: "Open positions are published in Spanish",
+    enNoticeBody:
+      "These listings come straight from our recruiting system, which publishes them in Spanish. Send us your CV in Spanish and we'll get back to you.",
     positions: [
       {
         title: "Senior .NET Developer",

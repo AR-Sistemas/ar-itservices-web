@@ -206,3 +206,28 @@ cd <repository-name>
 npm i
 npm run dev
 ```
+
+### Avisos de AR Recruiting
+
+`/trabaja-con-nosotros` y `/aviso/:id` no tienen las vacantes hardcodeadas: las bajan
+del feed público del proyecto de AR Recruiting (`GET /api/busquedas` y
+`GET /api/busquedas/:id`). Para que funcione en local, el recruit tiene que estar
+levantado y el sitio pegarle a su URL:
+
+```sh
+# server-only, sin prefijo VITE_ (nunca al bundle del cliente).
+# Default: http://localhost:8080
+AVISOS_API_URL=http://localhost:8080
+```
+
+El fetch se hace **desde el servidor** (server functions), no desde el browser: por
+eso el sitio no necesita CORS ni que su origen esté en el `PUBLIC_SITE_ORIGINS` del
+otro proyecto, y las vacantes llegan en el HTML del SSR.
+
+Si el feed no responde, la página de vacantes muestra un estado de error con botón
+de reintento (no un 500). Un aviso que se cubre, se oculta o se cierra desaparece
+solo del listado y su detalle da 404.
+
+El origen no manda webhooks ni caché: la ruta re-pega contra el feed en cada visita,
+así que un recargar muestra los cambios en `vacantes_disponibles`. Si el feed no
+responde, el botón "Reintentar" del estado de error re-pega sin salir de la página.

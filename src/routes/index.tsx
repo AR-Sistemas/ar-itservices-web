@@ -29,6 +29,7 @@ import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
 import { SolutionVisual } from "@/components/site/SolutionVisual";
 import { getPublicEditorial } from "@/lib/editorial.server";
+import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
 import claroLogo from "@/assets/clients/claro.png";
 import naranjaLogo from "@/assets/clients/naranja.png";
@@ -130,6 +131,8 @@ function Home() {
   const sendContact = useServerFn(sendContactEmail);
   const [contactType, setContactType] = useState<ContactType>("empresa");
   const [selectedPosition, setSelectedPosition] = useState("");
+  // Id del aviso del feed de AR Recruiting (cuando se postula con ?aviso=).
+  const [avisoId, setAvisoId] = useState("");
   // Producto de /soluciones desde el que se llegó al formulario (?producto=ario).
   const [producto, setProducto] = useState<SolutionProduct["id"] | null>(null);
   // Levantados a estado (en vez de no controlados) para que no se pierdan si
@@ -163,6 +166,41 @@ function Home() {
     }
   }, []);
 
+  // "?aviso={id}" viene del botón Postularme del feed de AR Recruiting. No
+  // alcanza con pasar el título: el aviso vive en el otro proyecto y su
+  // nombre no siempre coincide con las opciones del select (que hoy son
+  // textuales). Traemos el aviso del servidor para mostrar su nombre real y
+  // mandar el id como campo propio, que es lo que después puede leer RRHH.
+  useEffect(() => {
+    // `requestedId` y no `avisoId`: el state `avisoId` es el id ya validado
+    // contra el origen (lo devuelve `getAviso`), no el string crudo de la URL.
+    // Con el mismo nombre el `setAvisoId(result.aviso.id)` de adentro se
+    // leía como un no-op sobre la variable local.
+    const requestedId = new URLSearchParams(window.location.search).get("aviso");
+    if (!requestedId) return;
+    let cancelled = false;
+    setContactType("postulante");
+    void getAviso({ data: requestedId }).then((result) => {
+      if (cancelled || !result.ok) return;
+      setAvisoId(result.aviso.id);
+      setSelectedPosition(result.aviso.nombre_posicion);
+      // Mensaje prellenado: el candidato ve qué va a enviar antes de tocar
+      // nada. Es un borrador con huecos para completar, no un texto cerrado:
+      // el que sigue escribiendo encima elige replacearlo por completo.
+      // Solo si el campo está vacío, para no pisar algo que el visitante ya
+      // escribió antes de que llegara la respuesta del origen.
+      setMensajeValue((prev) =>
+        prev ? prev : c.contact.applicationDraft.replace("{puesto}", result.aviso.nombre_posicion),
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+    // `c` y `getAviso` son estables; correrlo una vez al montar es lo que
+    // queremos (lee la query string una sola vez).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Otras secciones (armado de equipo, "Qué hacemos") precargan el mensaje con
   // un texto según lo que el visitante eligió, en modo empresa.
   useEffect(() => {
@@ -176,11 +214,21 @@ function Home() {
     return () => window.removeEventListener(CONTACT_PREFILL_EVENT, onPrefill);
   }, []);
 
+  // El select de puestos lo alimentan dos fuentes: las posiciones fijas del
+  // sitio y, si venís de "?aviso={id}", el nombre real del aviso del feed
+  // (que no viene en c.careers.positions porque ese contenido es textual).
+  const positionOptions = avisoId
+    ? [
+        { title: selectedPosition, category: "" },
+        ...c.careers.positions.filter((p) => p.title !== selectedPosition),
+      ]
+    : c.careers.positions;
+
   // El puesto puede venir de un link generado en otro idioma (o de una
   // posición que ya no existe): si no matchea ninguna opción actual del
   // idioma activo, mostramos "otro" en vez de dejar el select en blanco.
   const puestoSelectValue =
-    selectedPosition && !c.careers.positions.some((p) => p.title === selectedPosition)
+    selectedPosition && !positionOptions.some((p) => p.title === selectedPosition)
       ? "otro"
       : selectedPosition;
 
@@ -580,6 +628,10 @@ function Home() {
                 }}
               >
                 <input type="hidden" name="contactType" value={contactType} />
+                {/* Id del aviso del feed de AR Recruiting, si la postulación
+                    viene de una búsqueda concreta. Vacío = postulación
+                    espontánea. */}
+                <input type="hidden" name="aviso_id" value={avisoId} />
                 {producto && contactType !== "postulante" && (
                   <div className="flex items-center gap-2 sm:col-span-2">
                     <input
@@ -679,7 +731,7 @@ function Home() {
                         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                       >
                         <option value="">—</option>
-                        {c.careers.positions.map((p) => (
+                        {positionOptions.map((p) => (
                           <option key={p.title} value={p.title}>
                             {p.title}
                           </option>
