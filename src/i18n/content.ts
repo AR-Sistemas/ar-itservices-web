@@ -17,7 +17,7 @@ export type ServiceGroup = {
 };
 
 export type SolutionProduct = {
-  id: "ario" | "meetingmate" | "sdd";
+  id: "aria" | "ario" | "meetingmate" | "sdd";
   name: string;
   tagline: string;
   short: string;
@@ -25,7 +25,12 @@ export type SolutionProduct = {
   example?: string;
   steps: string[];
   features: { title: string; desc: string }[];
-  audience: string;
+  audience?: string;
+  /** Sobrescribe los títulos de sección de `solutions.labels` (p. ej. ARIA es un framework, no una app). */
+  howLabel?: string;
+  featuresLabel?: string;
+  /** Si está, la CTA de la ficha abre el modal que envía el PDF por mail en vez de ir a #contacto. */
+  requestCta?: string;
 };
 
 export type ServiceLinkCard = {
@@ -54,7 +59,6 @@ export type SiteContent = {
     hint: string;
     groups: ServiceGroup[];
     inquiryMessage: (area: string, services: string[]) => string;
-    framework: ServiceLinkCard;
   };
   cases: {
     heading: string;
@@ -314,13 +318,6 @@ const ES: SiteContent = {
         "",
         "Quedo a la espera de que me contacten para conversarlo.",
       ].join("\n"),
-    framework: {
-      label: "Framework propio",
-      title: "ARIA",
-      desc: "Adopción Responsable de Inteligencia Artificial: nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo, no un catálogo de herramientas para el corto plazo.",
-      cta: "Descubrí el framework",
-      href: "#contacto",
-    },
   },
   cases: {
     heading: "Casos de éxito",
@@ -431,12 +428,7 @@ const ES: SiteContent = {
       "Portugal",
       "Otro",
     ],
-    projectOptions: [
-      "Desarrollo web/mobile",
-      "Data & BI",
-      "Staffing / equipo dedicado",
-      "Otro",
-    ],
+    projectOptions: ["Desarrollo web/mobile", "Data & BI", "Staffing / equipo dedicado", "Otro"],
     submit: "Enviar consulta",
     submitting: "Enviando…",
     success: "Gracias. Te vamos a contactar a la brevedad.",
@@ -469,6 +461,63 @@ const ES: SiteContent = {
     },
     logoAlt: (n) => `Logo de ${n}`,
     products: [
+      {
+        id: "aria",
+        name: "ARIA",
+        tagline: "Adopción Responsable de Inteligencia Artificial.",
+        short:
+          "Nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo, no un catálogo de herramientas para el corto plazo.",
+        problem:
+          "Convertir «usar IA» en «ganar terreno de negocio con IA» requiere que todas las piezas de la organización apunten hacia el mismo lado. Sin un núcleo estratégico claro, los bloques restantes optimizan hacia direcciones distintas, y una falla persistente en cualquiera degrada al conjunto.",
+        howLabel: "Cómo se articulan los 9 bloques",
+        featuresLabel: "Los 9 bloques",
+        steps: [
+          "EA · Estrategia + IA orienta y prioriza: es el núcleo estratégico.",
+          "GL · Governance y Límites y PR · Personas y roles forman el sistema estructural.",
+          "DA · Data e IN · Ingeniería son las fundaciones técnicas sobre las que corre todo el resto.",
+          "KS · Knowledge sharing e IC · Innovación controlada son los mecanismos de aprendizaje y expansión.",
+          "GC · Gestión del cambio y PM · Perfeccionamiento y madurez son los mecanismos de institucionalización.",
+        ],
+        features: [
+          {
+            title: "EA · Estrategia + IA",
+            desc: "Define para qué, para quién y con qué éxito medible. Prioriza el portfolio de iniciativas y establece ownership ejecutivo.",
+          },
+          {
+            title: "GL · Governance y Límites",
+            desc: "Reglas del juego y controles operativos: catálogo autorizado, políticas de datos, guardrails técnicos, monitoreo e incident response.",
+          },
+          {
+            title: "PR · Personas y roles",
+            desc: "Capacidades esperadas por rol, entrenamiento por nivel, roles nuevos (AI PO, MLOps, evaluadores) y modelo de madurez individual.",
+          },
+          {
+            title: "DA · Data",
+            desc: "Arquitectura, calidad y linaje de datos, data como producto interno y patrones para IA (RAG, embeddings, vector stores).",
+          },
+          {
+            title: "IN · Ingeniería",
+            desc: "Arquitectura de referencia, MLOps/LLMOps y prácticas AI-native (Copilot, spec-driven, componentes reusables).",
+          },
+          {
+            title: "KS · Knowledge sharing",
+            desc: "Marketplace interno curado de prompts, agentes y patrones, con versionado y comunidades de práctica.",
+          },
+          {
+            title: "IC · Innovación controlada",
+            desc: "Portfolio acotado de experimentos, sandbox aislado y gates formales de prototipo a piloto y de piloto a producción.",
+          },
+          {
+            title: "GC · Gestión del cambio",
+            desc: "Adopción escalonada por waves, comunicación consistente, champions locales y manejo de resistencias.",
+          },
+          {
+            title: "PM · Perfeccionamiento y madurez",
+            desc: "Revisión periódica del portfolio, retiro disciplinado de lo obsoleto, evolución del framework y escalamiento del nivel de madurez.",
+          },
+        ],
+        requestCta: "Descubrí el framework",
+      },
       {
         id: "ario",
         name: "Ario",
@@ -653,12 +702,33 @@ const ES: SiteContent = {
         `Total: ${total} ${total === 1 ? "persona" : "personas"}`,
       ].join("\n"),
     disciplines: [
-      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Dev .NET Senior", qty: 1 }, { role: "Dev React", qty: 1 }] },
-      { id: "data-bi", label: "Data & Power BI", roles: [{ role: "Data Engineer", qty: 1 }, { role: "Analista Power BI", qty: 1 }] },
+      {
+        id: "dotnet-react",
+        label: ".NET & React",
+        roles: [
+          { role: "Dev .NET Senior", qty: 1 },
+          { role: "Dev React", qty: 1 },
+        ],
+      },
+      {
+        id: "data-bi",
+        label: "Data & Power BI",
+        roles: [
+          { role: "Data Engineer", qty: 1 },
+          { role: "Analista Power BI", qty: 1 },
+        ],
+      },
       { id: "qa", label: "QA & Testing", roles: [{ role: "QA Automation", qty: 1 }] },
       { id: "scrum", label: "Scrum Master", roles: [{ role: "Scrum Master", qty: 1 }] },
       { id: "mobile", label: "Mobile", roles: [{ role: "Dev iOS / Android", qty: 2 }] },
-      { id: "devops", label: "DevOps & n8n", roles: [{ role: "DevOps Engineer", qty: 1 }, { role: "Especialista Automatización", qty: 1 }] },
+      {
+        id: "devops",
+        label: "DevOps & n8n",
+        roles: [
+          { role: "DevOps Engineer", qty: 1 },
+          { role: "Especialista Automatización", qty: 1 },
+        ],
+      },
       { id: "pm", label: "Project Manager", roles: [{ role: "Project Manager", qty: 1 }] },
     ],
   },
@@ -925,13 +995,6 @@ const EN: SiteContent = {
         "",
         "I look forward to hearing from you.",
       ].join("\n"),
-    framework: {
-      label: "Our framework",
-      title: "ARIA",
-      desc: "Responsible AI Adoption: our 9-block framework to design the AI-Native company for the medium and long term, not a catalog of tools for the short term.",
-      cta: "Discover the framework",
-      href: "#contacto",
-    },
   },
   cases: {
     heading: "Success stories",
@@ -959,8 +1022,7 @@ const EN: SiteContent = {
   newsTeaser: { eyebrow: "AI Newsletter", cta: "Read the full issue" },
   people: {
     heading: "Our people",
-    statement:
-      "Behind every project, there are people backed by more than 25 years of experience.",
+    statement: "Behind every project, there are people backed by more than 25 years of experience.",
     ctaLink: "Meet our people",
     backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
@@ -1042,12 +1104,7 @@ const EN: SiteContent = {
       "Portugal",
       "Other",
     ],
-    projectOptions: [
-      "Web/mobile development",
-      "Data & BI",
-      "Staffing / dedicated team",
-      "Other",
-    ],
+    projectOptions: ["Web/mobile development", "Data & BI", "Staffing / dedicated team", "Other"],
     submit: "Send inquiry",
     submitting: "Sending…",
     success: "Thanks. We'll get in touch shortly.",
@@ -1079,6 +1136,63 @@ const EN: SiteContent = {
     },
     logoAlt: (n) => `${n} logo`,
     products: [
+      {
+        id: "aria",
+        name: "ARIA",
+        tagline: "Responsible AI Adoption.",
+        short:
+          "Our 9-block framework to design the AI-Native company for the medium and long term, not a catalog of tools for the short term.",
+        problem:
+          "Turning “using AI” into “gaining business ground with AI” takes every part of the organization pulling the same way. Without a clear strategic core, the other blocks optimize in different directions, and a persistent failure in any one of them degrades the whole.",
+        howLabel: "How the 9 blocks fit together",
+        featuresLabel: "The 9 blocks",
+        steps: [
+          "EA · Strategy + AI guides and prioritizes: it is the strategic core.",
+          "GL · Governance and Limits and PR · People and roles form the structural system.",
+          "DA · Data and IN · Engineering are the technical foundations everything else runs on.",
+          "KS · Knowledge sharing and IC · Controlled innovation are the learning and expansion mechanisms.",
+          "GC · Change management and PM · Improvement and maturity are the institutionalization mechanisms.",
+        ],
+        features: [
+          {
+            title: "EA · Strategy + AI",
+            desc: "Defines what for, for whom and with what measurable success. Prioritizes the initiative portfolio and sets executive ownership.",
+          },
+          {
+            title: "GL · Governance and Limits",
+            desc: "Rules of the game plus operational controls: authorized catalog, data policies, technical guardrails, monitoring and incident response.",
+          },
+          {
+            title: "PR · People and roles",
+            desc: "Expected capabilities by role, training by level, new roles (AI PO, MLOps, evaluators) and an individual maturity model.",
+          },
+          {
+            title: "DA · Data",
+            desc: "Data architecture, quality and lineage, data as an internal product, and patterns for AI (RAG, embeddings, vector stores).",
+          },
+          {
+            title: "IN · Engineering",
+            desc: "Reference architecture, MLOps/LLMOps and AI-native practices (Copilot, spec-driven, reusable components).",
+          },
+          {
+            title: "KS · Knowledge sharing",
+            desc: "A curated internal marketplace of prompts, agents and patterns, with versioning and communities of practice.",
+          },
+          {
+            title: "IC · Controlled innovation",
+            desc: "A bounded portfolio of experiments, an isolated sandbox, and formal gates from prototype to pilot and from pilot to production.",
+          },
+          {
+            title: "GC · Change management",
+            desc: "Staged adoption in waves, consistent communication, local champions and handling of resistance.",
+          },
+          {
+            title: "PM · Improvement and maturity",
+            desc: "Periodic portfolio review, disciplined retirement of the obsolete, evolution of the framework itself and a rising global maturity level.",
+          },
+        ],
+        requestCta: "Discover the framework",
+      },
       {
         id: "ario",
         name: "Ario",
@@ -1263,12 +1377,33 @@ const EN: SiteContent = {
         `Total: ${total} ${total === 1 ? "person" : "people"}`,
       ].join("\n"),
     disciplines: [
-      { id: "dotnet-react", label: ".NET & React", roles: [{ role: "Senior .NET Dev", qty: 1 }, { role: "React Dev", qty: 1 }] },
-      { id: "data-bi", label: "Data & Power BI", roles: [{ role: "Data Engineer", qty: 1 }, { role: "Power BI Analyst", qty: 1 }] },
+      {
+        id: "dotnet-react",
+        label: ".NET & React",
+        roles: [
+          { role: "Senior .NET Dev", qty: 1 },
+          { role: "React Dev", qty: 1 },
+        ],
+      },
+      {
+        id: "data-bi",
+        label: "Data & Power BI",
+        roles: [
+          { role: "Data Engineer", qty: 1 },
+          { role: "Power BI Analyst", qty: 1 },
+        ],
+      },
       { id: "qa", label: "QA & Testing", roles: [{ role: "QA Automation", qty: 1 }] },
       { id: "scrum", label: "Scrum Master", roles: [{ role: "Scrum Master", qty: 1 }] },
       { id: "mobile", label: "Mobile", roles: [{ role: "iOS / Android Dev", qty: 2 }] },
-      { id: "devops", label: "DevOps & n8n", roles: [{ role: "DevOps Engineer", qty: 1 }, { role: "Automation Specialist", qty: 1 }] },
+      {
+        id: "devops",
+        label: "DevOps & n8n",
+        roles: [
+          { role: "DevOps Engineer", qty: 1 },
+          { role: "Automation Specialist", qty: 1 },
+        ],
+      },
       { id: "pm", label: "Project Manager", roles: [{ role: "Project Manager", qty: 1 }] },
     ],
   },

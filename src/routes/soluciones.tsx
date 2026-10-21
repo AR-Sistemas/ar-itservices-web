@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
 import { FloatingNav } from "@/components/site/FloatingNav";
+import { FrameworkRequestModal } from "@/components/site/FrameworkRequestModal";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { LogoMark } from "@/components/site/LogoMark";
@@ -18,7 +20,7 @@ export const Route = createFileRoute("/soluciones")({
       {
         name: "description",
         content:
-          "Ario, MeetingMate y AR SDD: productos propios de AR IT Services para automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
+          "ARIA, Ario, MeetingMate y AR SDD: framework y productos propios de AR IT Services para adoptar IA con criterio, automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
       },
       { property: "og:title", content: "Soluciones | AR IT Services" },
       {
@@ -38,6 +40,7 @@ function SolutionsPage() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const s = c.solutions;
+  const [requestOpen, setRequestOpen] = useState<string | null>(null);
   // Desde esta página, los anchors del nav apuntan a la home.
   const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
@@ -125,7 +128,7 @@ function SolutionsPage() {
 
                   <div className="mt-8">
                     <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.how}
+                      {p.howLabel ?? s.labels.how}
                     </h3>
                     <ol className="mt-3 space-y-3">
                       {p.steps.map((step, i) => (
@@ -141,7 +144,7 @@ function SolutionsPage() {
 
                   <div className="mt-8">
                     <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.features}
+                      {p.featuresLabel ?? s.labels.features}
                     </h3>
                     <ul className="mt-3 grid gap-3 sm:grid-cols-2">
                       {p.features.map((f) => (
@@ -153,25 +156,43 @@ function SolutionsPage() {
                     </ul>
                   </div>
 
-                  <div className="mt-8">
-                    <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.audience}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground">{p.audience}</p>
-                  </div>
+                  {p.audience && (
+                    <div className="mt-8">
+                      <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
+                        {s.labels.audience}
+                      </h3>
+                      <p className="mt-2 text-muted-foreground">{p.audience}</p>
+                    </div>
+                  )}
 
-                  <a
-                    href={`/?producto=${p.id}#contacto`}
-                    className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-                  >
-                    {s.contactCta}
-                  </a>
+                  {p.requestCta ? (
+                    <button
+                      type="button"
+                      onClick={() => setRequestOpen(p.name)}
+                      className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                    >
+                      {p.requestCta}
+                    </button>
+                  ) : (
+                    <a
+                      href={`/?producto=${p.id}#contacto`}
+                      className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                    >
+                      {s.contactCta}
+                    </a>
+                  )}
                 </AnimatedContent>
               </div>
             </section>
           ))}
         </div>
       </main>
+
+      <FrameworkRequestModal
+        open={requestOpen !== null}
+        onClose={() => setRequestOpen(null)}
+        frameworkTitle={requestOpen ?? ""}
+      />
 
       <footer className="px-5 py-8 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-4">

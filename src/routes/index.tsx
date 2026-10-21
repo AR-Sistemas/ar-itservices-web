@@ -16,7 +16,6 @@ import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { ServiceAreaCards } from "@/components/site/ServiceAreaCards";
-import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
@@ -194,10 +193,7 @@ function Home() {
         ctaHref="#contacto"
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline
-              play={visible}
-              className="h-8 w-auto shrink-0 text-foreground sm:h-9"
-            />
+            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
             <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
           </span>
         )}
@@ -293,9 +289,6 @@ function Home() {
                 />
               </div>
             </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <FrameworkHighlight card={c.services.framework} />
-            </AnimatedContent>
           </div>
         </section>
 
@@ -308,7 +301,7 @@ function Home() {
               </h2>
               <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
             </AnimatedContent>
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {c.solutions.products.map((p, i) => (
                 <AnimatedContent key={p.id} delay={i * 80} distance={30}>
                   <SpotlightCard
@@ -347,9 +340,7 @@ function Home() {
         <section className="px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-5xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.clients.heading}
-              </h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.clients.heading}</h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
               <LogoLoop
@@ -390,9 +381,7 @@ function Home() {
           <section id="casos" className="px-5 py-24 sm:py-32">
             <div className="mx-auto max-w-5xl">
               <AnimatedContent>
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  {c.cases.heading}
-                </h2>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.cases.heading}</h2>
               </AnimatedContent>
               <div className="mt-12 space-y-14">
                 {c.cases.items.map((cs, i) => (
@@ -474,8 +463,12 @@ function Home() {
                   />
                 ) : (
                   <div className="rounded-3xl border border-border bg-card p-8 text-center">
-                    <p className="font-mono text-xs tracking-widest text-primary uppercase">{c.newsTeaser.eyebrow}</p>
-                    <p className="mt-4 text-sm text-muted-foreground">El resumen editorial del mes estará disponible próximamente.</p>
+                    <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                      {c.newsTeaser.eyebrow}
+                    </p>
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      El resumen editorial del mes estará disponible próximamente.
+                    </p>
                   </div>
                 )}
               </AnimatedContent>
@@ -626,10 +619,21 @@ function Home() {
                 <Field id="email" label={c.contact.fields.email} type="email" />
 
                 {contactType === "empresa" && (
-                  <Field id="empresa" label={c.contact.fields.company} value={empresaValue} onChange={setEmpresaValue} />
+                  <Field
+                    id="empresa"
+                    label={c.contact.fields.company}
+                    value={empresaValue}
+                    onChange={setEmpresaValue}
+                  />
                 )}
                 {contactType === "postulante" && (
-                  <Field id="telefono" label={c.contact.fields.phone} type="tel" value={telefonoValue} onChange={setTelefonoValue} />
+                  <Field
+                    id="telefono"
+                    label={c.contact.fields.phone}
+                    type="tel"
+                    value={telefonoValue}
+                    onChange={setTelefonoValue}
+                  />
                 )}
 
                 {contactType !== "consulta" && (
