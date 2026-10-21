@@ -3,6 +3,7 @@ import ariaLogo from "@/assets/products/aria.png";
 import arioLogo from "@/assets/products/ario.png";
 import meetingmateLogo from "@/assets/products/meetingmate.png";
 import sddLogo from "@/assets/products/ar-sdd.png";
+import ariaAnim from "@/assets/products/animations/aria.svg?raw";
 import arioAnim from "@/assets/products/animations/ario.svg?raw";
 import meetingmateAnim from "@/assets/products/animations/meetingmate.svg?raw";
 import sddAnim from "@/assets/products/animations/sdd.svg?raw";
@@ -19,6 +20,7 @@ const LOGOS: Record<ProductId, string> = {
 };
 
 const ANIMATIONS: Partial<Record<ProductId, string>> = {
+  aria: ariaAnim,
   ario: arioAnim,
   meetingmate: meetingmateAnim,
   sdd: sddAnim,
@@ -26,6 +28,10 @@ const ANIMATIONS: Partial<Record<ProductId, string>> = {
 
 // Descripción accesible de cada animación (el SVG original solo la trae en español).
 const ANIM_LABELS: Partial<Record<ProductId, { ES: string; EN: string }>> = {
+  aria: {
+    ES: "Framework ARIA: nueve bloques operando como un sistema integrado alrededor de un núcleo estratégico",
+    EN: "ARIA framework: nine blocks working as an integrated system around a strategic core",
+  },
   ario: {
     ES: "Ario: los documentos entran, se leen, se extraen los campos y salen datos ordenados en una tabla",
     EN: "Ario: documents come in, are read, their fields are extracted and orderly data comes out in a table",
@@ -61,7 +67,7 @@ export function SolutionVisual({
 }
 
 /**
- * Panel de la ficha de cada producto (sin animación, p. ej. ARIA: solo el logo grande): logo chico arriba y debajo la
+ * Panel de la ficha de cada producto (si no hay animación, solo el logo grande): logo chico arriba y debajo la
  * animación SVG (loop de 10 s, 4:3, sin texto) que explica a grandes rasgos
  * cómo funciona. Las animaciones son CSS puro dentro del SVG (ver
  * src/assets/products/animations); acá solo se pausan cuando el panel no

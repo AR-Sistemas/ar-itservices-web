@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="arf-root" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Framework ARIA: nueve bloques operando como un sistema integrado alrededor de un núcleo estratégico">
+  <style>
+    /* Base */
+    .arf-conn { fill: none; stroke-width: 8; stroke-linecap: round; stroke-dasharray: 300 300; }
+    .arf-pulso { fill: none; stroke: #ffffff; stroke-width: 6; stroke-linecap: round; stroke-dasharray: 26 274; }
+    .arf-blk { fill: url(#arf-grad-metal); stroke-width: 6; transform-box: fill-box; transform-origin: center; }
+    .arf-sig { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 44px; fill: #14131c; stroke: none; text-anchor: middle; dominant-baseline: central; transform-box: fill-box; transform-origin: center; }
+    .arf-nucleo { transform-box: fill-box; transform-origin: center; animation: arf-core 10s ease-in-out infinite; }
+    .arf-latido { transform-box: fill-box; transform-origin: center; animation: arf-latido 2.5s ease-in-out infinite; }
+    .arf-nucleo-texto { font-family: Arial, Helvetica, sans-serif; font-weight: 700; font-size: 56px; fill: #ffffff; text-anchor: middle; dominant-baseline: central; transform-box: fill-box; transform-origin: center; }
+
+    /* Grupos: estructural (plateado), fundaciones (rojo claro), aprendizaje (gris), institucionalización (gris azulado claro) */
+    .arf-est .arf-conn { stroke: #e6e8ec; animation: arf-draw-s 10s linear infinite; }
+    .arf-est .arf-blk { stroke: #e6e8ec; animation: arf-lit-s 10s linear infinite; }
+    .arf-est .arf-sig { animation: arf-lit-s 10s linear infinite; }
+    .arf-est .arf-pulso { animation: arf-flow 2.5s linear infinite, arf-on-s 10s linear infinite; }
+
+    .arf-fun .arf-conn { stroke: #ff6b72; animation: arf-draw-f 10s linear infinite; }
+    .arf-fun .arf-blk { stroke: #ff6b72; animation: arf-lit-f 10s linear infinite; }
+    .arf-fun .arf-sig { animation: arf-lit-f 10s linear infinite; }
+    .arf-fun .arf-pulso { animation: arf-flow 2.5s linear infinite, arf-on-f 10s linear infinite; }
+
+    .arf-apr .arf-conn { stroke: #b5b8bf; animation: arf-draw-a 10s linear infinite; }
+    .arf-apr .arf-blk { stroke: #b5b8bf; animation: arf-lit-a 10s linear infinite; }
+    .arf-apr .arf-sig { animation: arf-lit-a 10s linear infinite; }
+    .arf-apr .arf-pulso { animation: arf-flow 2.5s linear infinite, arf-on-a 10s linear infinite; }
+
+    .arf-ins .arf-conn { stroke: #8fa3bf; animation: arf-draw-i 10s linear infinite; }
+    .arf-ins .arf-blk { stroke: #8fa3bf; animation: arf-lit-i 10s linear infinite; }
+    .arf-ins .arf-sig { animation: arf-lit-i 10s linear infinite; }
+    .arf-ins .arf-pulso { animation: arf-flow 2.5s linear infinite, arf-on-i 10s linear infinite; }
+
+    /* Movimiento. Loop de 10 s: 0-15 % núcleo; 15-60 % grupos en orden; 60-90 % sistema activo con pulsos; 90-100 % cierre */
+    @keyframes arf-core { 0% { opacity: 0; transform: scale(.6); } 15%, 90% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(1); } }
+    @keyframes arf-latido { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+    @keyframes arf-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -300; } }
+
+    @keyframes arf-draw-s { 0% { stroke-dashoffset: 300; opacity: 0; } 15% { stroke-dashoffset: 300; opacity: 1; } 21%, 90% { stroke-dashoffset: 0; opacity: 1; } 98%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+    @keyframes arf-draw-f { 0% { stroke-dashoffset: 300; opacity: 0; } 27% { stroke-dashoffset: 300; opacity: 1; } 33%, 90% { stroke-dashoffset: 0; opacity: 1; } 98%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+    @keyframes arf-draw-a { 0% { stroke-dashoffset: 300; opacity: 0; } 39% { stroke-dashoffset: 300; opacity: 1; } 45%, 90% { stroke-dashoffset: 0; opacity: 1; } 98%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+    @keyframes arf-draw-i { 0% { stroke-dashoffset: 300; opacity: 0; } 51% { stroke-dashoffset: 300; opacity: 1; } 57%, 90% { stroke-dashoffset: 0; opacity: 1; } 98%, 100% { stroke-dashoffset: 0; opacity: 0; } }
+
+    @keyframes arf-lit-s { 0%, 15% { opacity: 0; transform: scale(.85); } 24%, 90% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(1); } }
+    @keyframes arf-lit-f { 0%, 27% { opacity: 0; transform: scale(.85); } 36%, 90% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(1); } }
+    @keyframes arf-lit-a { 0%, 39% { opacity: 0; transform: scale(.85); } 48%, 90% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(1); } }
+    @keyframes arf-lit-i { 0%, 51% { opacity: 0; transform: scale(.85); } 60%, 90% { opacity: 1; transform: scale(1); } 98%, 100% { opacity: 0; transform: scale(1); } }
+
+    @keyframes arf-on-s { 0%, 24% { opacity: 0; } 30%, 90% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes arf-on-f { 0%, 36% { opacity: 0; } 42%, 90% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes arf-on-a { 0%, 48% { opacity: 0; } 54%, 90% { opacity: 1; } 98%, 100% { opacity: 0; } }
+    @keyframes arf-on-i { 0%, 60% { opacity: 0; } 66%, 90% { opacity: 1; } 98%, 100% { opacity: 0; } }
+
+    /* Sin movimiento: se muestra el cuadro final completo */
+    @media (prefers-reduced-motion: reduce) {
+      .arf-root * { animation: none !important; }
+      .arf-pulso { display: none; }
+    }
+  </style>
+
+  <defs>
+    <linearGradient id="arf-grad-metal" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e6e8ec"/>
+      <stop offset="0.5" stop-color="#9aa0a9"/>
+      <stop offset="1" stop-color="#4a4d57"/>
+    </linearGradient>
+    <linearGradient id="arf-grad-nucleo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff3b43"/>
+      <stop offset="0.5" stop-color="#ff000d"/>
+      <stop offset="1" stop-color="#990f1b"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Capa: conexiones y pulsos por grupo (los bloques tapan los extremos) -->
+  <g id="arf-capa-estructural" class="arf-est">
+    <line id="arf-conexion-gl" class="arf-conn" x1="600" y1="450" x2="600" y2="150"/>
+    <line id="arf-pulso-gl" class="arf-pulso" x1="600" y1="450" x2="600" y2="150"/>
+    <line id="arf-conexion-pr" class="arf-conn" x1="600" y1="450" x2="812" y2="238"/>
+    <line id="arf-pulso-pr" class="arf-pulso" x1="600" y1="450" x2="812" y2="238"/>
+    <rect id="arf-bloque-gl" class="arf-blk" x="525" y="75" width="150" height="150" rx="34"/>
+    <rect id="arf-bloque-pr" class="arf-blk" x="737" y="163" width="150" height="150" rx="34"/>
+    <text id="arf-sigla-gl" class="arf-sig" x="600" y="150">GL</text>
+    <text id="arf-sigla-pr" class="arf-sig" x="812" y="238">PR</text>
+  </g>
+
+  <g id="arf-capa-fundaciones" class="arf-fun">
+    <line id="arf-conexion-da" class="arf-conn" x1="600" y1="450" x2="900" y2="450"/>
+    <line id="arf-pulso-da" class="arf-pulso" x1="600" y1="450" x2="900" y2="450"/>
+    <line id="arf-conexion-in" class="arf-conn" x1="600" y1="450" x2="812" y2="662"/>
+    <line id="arf-pulso-in" class="arf-pulso" x1="600" y1="450" x2="812" y2="662"/>
+    <rect id="arf-bloque-da" class="arf-blk" x="825" y="375" width="150" height="150" rx="34"/>
+    <rect id="arf-bloque-in" class="arf-blk" x="737" y="587" width="150" height="150" rx="34"/>
+    <text id="arf-sigla-da" class="arf-sig" x="900" y="450">DA</text>
+    <text id="arf-sigla-in" class="arf-sig" x="812" y="662">IN</text>
+  </g>
+
+  <g id="arf-capa-aprendizaje" class="arf-apr">
+    <line id="arf-conexion-ks" class="arf-conn" x1="600" y1="450" x2="600" y2="750"/>
+    <line id="arf-pulso-ks" class="arf-pulso" x1="600" y1="450" x2="600" y2="750"/>
+    <line id="arf-conexion-ic" class="arf-conn" x1="600" y1="450" x2="388" y2="662"/>
+    <line id="arf-pulso-ic" class="arf-pulso" x1="600" y1="450" x2="388" y2="662"/>
+    <rect id="arf-bloque-ks" class="arf-blk" x="525" y="675" width="150" height="150" rx="34"/>
+    <rect id="arf-bloque-ic" class="arf-blk" x="313" y="587" width="150" height="150" rx="34"/>
+    <text id="arf-sigla-ks" class="arf-sig" x="600" y="750">KS</text>
+    <text id="arf-sigla-ic" class="arf-sig" x="388" y="662">IC</text>
+  </g>
+
+  <g id="arf-capa-institucionalizacion" class="arf-ins">
+    <line id="arf-conexion-gc" class="arf-conn" x1="600" y1="450" x2="300" y2="450"/>
+    <line id="arf-pulso-gc" class="arf-pulso" x1="600" y1="450" x2="300" y2="450"/>
+    <line id="arf-conexion-pm" class="arf-conn" x1="600" y1="450" x2="388" y2="238"/>
+    <line id="arf-pulso-pm" class="arf-pulso" x1="600" y1="450" x2="388" y2="238"/>
+    <rect id="arf-bloque-gc" class="arf-blk" x="225" y="375" width="150" height="150" rx="34"/>
+    <rect id="arf-bloque-pm" class="arf-blk" x="313" y="163" width="150" height="150" rx="34"/>
+    <text id="arf-sigla-gc" class="arf-sig" x="300" y="450">GC</text>
+    <text id="arf-sigla-pm" class="arf-sig" x="388" y="238">PM</text>
+  </g>
+
+  <!-- Capa: núcleo estratégico EA (encima de todo) -->
+  <g id="arf-capa-nucleo" class="arf-nucleo">
+    <rect id="arf-nucleo-halo" x="485" y="335" width="230" height="230" rx="62" fill="#990f1b" opacity="0.35"/>
+    <rect id="arf-nucleo-cuerpo" class="arf-latido" x="515" y="365" width="170" height="170" rx="40" fill="url(#arf-grad-nucleo)"/>
+    <text id="arf-sigla-ea" class="arf-nucleo-texto" x="600" y="450">EA</text>
+  </g>
+</svg>
