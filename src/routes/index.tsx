@@ -28,6 +28,8 @@ import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
 import { SolutionVisual } from "@/components/site/SolutionVisual";
+import { SolutionsQuickLinks } from "@/components/site/SolutionsQuickLinks";
+import { EventBanner } from "@/components/site/EventBanner";
 import { getPublicEditorial } from "@/lib/editorial.server";
 import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
@@ -235,6 +237,7 @@ function Home() {
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
       <CodeGridSpotlight />
+      <EventBanner />
       <FloatingNav
         items={c.nav}
         ctaLabel={c.cta.talk}
@@ -283,7 +286,7 @@ function Home() {
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
                 {c.hero.subtitle}
               </p>
-              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-3 sm:mt-9">
                 <StarBorder href="#contacto" className="group">
                   {c.hero.ctaPrimary}
                 </StarBorder>
@@ -296,6 +299,7 @@ function Home() {
                   </a>
                 )}
               </div>
+              <SolutionsQuickLinks label={c.hero.solutionsLabel} products={c.solutions.products} />
             </AnimatedContent>
           </div>
         </section>
@@ -318,30 +322,8 @@ function Home() {
           </AnimatedContent>
         </section>
 
-        {/* Servicios */}
-        <section id="servicios" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.services.heading}
-              </h2>
-            </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                {c.services.hint}
-              </p>
-              <div className="mt-8">
-                <ServiceAreaCards
-                  groups={c.services.groups}
-                  inquiryMessage={c.services.inquiryMessage}
-                />
-              </div>
-            </AnimatedContent>
-          </div>
-        </section>
-
         {/* Soluciones — productos propios; el detalle vive en /soluciones */}
-        <section id="soluciones" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
+        <section id="soluciones" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
@@ -380,6 +362,28 @@ function Home() {
               >
                 {c.solutions.teaserCta}
               </Link>
+            </AnimatedContent>
+          </div>
+        </section>
+
+        {/* Servicios */}
+        <section id="servicios" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
+                {c.services.heading}
+              </h2>
+            </AnimatedContent>
+            <AnimatedContent className="mt-12" distance={30}>
+              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                {c.services.hint}
+              </p>
+              <div className="mt-8">
+                <ServiceAreaCards
+                  groups={c.services.groups}
+                  inquiryMessage={c.services.inquiryMessage}
+                />
+              </div>
             </AnimatedContent>
           </div>
         </section>

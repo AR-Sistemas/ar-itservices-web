@@ -1,7 +1,19 @@
 import type { Lang } from "./language";
 import { isIntermedio } from "@/lib/site-mode";
+import { isNewBadgeActive } from "@/lib/event-banner";
 
-export type NavItem = { label: string; href: string };
+export type NavChild = { label: string; href: string; hint: string };
+
+/**
+ * Ítem del menú. `children` arma un panel desplegable (hoy solo "Soluciones",
+ * lo completa getContent con los productos) y `badge` una etiqueta chica al lado.
+ */
+export type NavItem = {
+  label: string;
+  href: string;
+  badge?: string;
+  children?: NavChild[];
+};
 
 export type ServiceItem = {
   title: string;
@@ -44,6 +56,7 @@ export type ServiceLinkCard = {
 export type SiteContent = {
   nav: NavItem[];
   cta: { talk: string };
+  eventBanner: { text: string; cta: string; close: string };
   langLabel: string;
   hero: {
     eyebrow: string;
@@ -51,6 +64,7 @@ export type SiteContent = {
     subtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
+    solutionsLabel: string;
     phrases: string[];
   };
   metrics: { value: number; suffix: string; label: string }[];
@@ -113,6 +127,7 @@ export type SiteContent = {
     backLink: string;
     teaserCta: string;
     cardCta: string;
+    navBadge: string;
     contactCta: string;
     labels: { problem: string; example: string; how: string; features: string; audience: string };
     logoAlt: (name: string) => string;
@@ -228,14 +243,19 @@ export type SiteContent = {
 
 const ES: SiteContent = {
   nav: [
-    { label: "Servicios", href: "#servicios" },
     { label: "Soluciones", href: "/soluciones" },
+    { label: "Servicios", href: "#servicios" },
     { label: "Casos de éxito", href: "#casos" },
     { label: "Novedades", href: "/novedades" },
     { label: "Nosotros", href: "/nosotros" },
     { label: "Trabajá con nosotros", href: "/trabaja-con-nosotros" },
   ],
   cta: { talk: "Hablemos" },
+  eventBanner: {
+    text: "Estamos en Córdoba Tech Week · 12 y 13 de noviembre",
+    cta: "Conocé nuestras soluciones",
+    close: "Cerrar aviso",
+  },
   langLabel: "Idioma",
   hero: {
     eyebrow: "AR IT Services · Dallas · Córdoba · Asunción",
@@ -244,6 +264,7 @@ const ES: SiteContent = {
       "25 años desarrollando software, modelos de datos y equipos dedicados para empresas y gobiernos, desde tres países.",
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver casos de éxito",
+    solutionsLabel: "Nuestras soluciones",
     phrases: [
       "Ayudamos a las organizaciones a evolucionar hacia un modelo **AI-Native**, desde la estrategia hasta la implementación.",
       "Creamos el equipo que tu producto realmente necesita, con **datos e IA** integrados en el proceso.",
@@ -498,6 +519,7 @@ const ES: SiteContent = {
     backLink: "Volver al inicio",
     teaserCta: "Ver todas las soluciones",
     cardCta: "Conocer más",
+    navBadge: "Nuevo",
     contactCta: "Conversemos sobre tu proyecto",
     labels: {
       problem: "El problema",
@@ -943,14 +965,19 @@ const ES: SiteContent = {
 
 const EN: SiteContent = {
   nav: [
-    { label: "Services", href: "#servicios" },
     { label: "Solutions", href: "/soluciones" },
+    { label: "Services", href: "#servicios" },
     { label: "Success stories", href: "#casos" },
     { label: "News", href: "/novedades" },
     { label: "About us", href: "/nosotros" },
     { label: "Work with us", href: "/trabaja-con-nosotros" },
   ],
   cta: { talk: "Let's talk" },
+  eventBanner: {
+    text: "We're at Córdoba Tech Week · November 12–13",
+    cta: "Discover our solutions",
+    close: "Close notice",
+  },
   langLabel: "Language",
   hero: {
     eyebrow: "AR IT Services · Dallas · Córdoba · Asunción",
@@ -959,6 +986,7 @@ const EN: SiteContent = {
       "25 years building software, data models and dedicated teams for companies and governments, from three countries.",
     ctaPrimary: "Let's talk about your project",
     ctaSecondary: "See success stories",
+    solutionsLabel: "Our solutions",
     phrases: [
       "We help organizations become **AI-native companies**, from strategy to implementation and scale.",
       "We build the team your product really needs: **data and artificial intelligence** integrated into the workflow, not just in theory.",
@@ -1201,6 +1229,7 @@ const EN: SiteContent = {
     backLink: "Back to home",
     teaserCta: "See all solutions",
     cardCta: "Learn more",
+    navBadge: "New",
     contactCta: "Let's talk about your project",
     labels: {
       problem: "The problem",
@@ -1647,6 +1676,21 @@ const HIDDEN_IN_INTERMEDIO = ["/novedades", "/trabaja-con-nosotros", "#casos"];
 
 export function getContent(lang: Lang): SiteContent {
   const base = lang === "EN" ? EN : ES;
-  if (!isIntermedio) return base;
-  return { ...base, nav: base.nav.filter((n) => !HIDDEN_IN_INTERMEDIO.includes(n.href)) };
+  // "Soluciones" lleva el panel desplegable con los productos y, mientras dure,
+  // la etiqueta de novedad. Se arma acá para no duplicar los textos del menú.
+  const withSolutions = base.nav.map((n): NavItem =>
+    n.href === "/soluciones"
+      ? {
+          ...n,
+          children: base.solutions.products.map((p) => ({
+            label: p.name,
+            href: `/soluciones#${p.id}`,
+            hint: p.tagline,
+          })),
+          ...(isNewBadgeActive() ? { badge: base.solutions.navBadge } : {}),
+        }
+      : n,
+  );
+  if (!isIntermedio) return { ...base, nav: withSolutions };
+  return { ...base, nav: withSolutions.filter((n) => !HIDDEN_IN_INTERMEDIO.includes(n.href)) };
 }
