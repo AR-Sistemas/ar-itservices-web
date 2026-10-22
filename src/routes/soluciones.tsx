@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
-import { BackButton } from "@/components/site/BackButton";
 import { FrameworkRequestModal } from "@/components/site/FrameworkRequestModal";
 import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
@@ -74,8 +73,7 @@ function SolutionsPage() {
       <main className="px-5 pt-20 pb-8 sm:pt-24">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <BackButton label={s.backLink} />
-            <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
+            <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
               {s.heading}
             </h1>
             <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg">
