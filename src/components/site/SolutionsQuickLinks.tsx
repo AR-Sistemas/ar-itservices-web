@@ -18,7 +18,7 @@ export function SolutionsQuickLinks({
 }) {
   return (
     <nav aria-label={label} className="mt-4 flex flex-col items-center gap-2.5 sm:mt-6 sm:gap-3">
-      <p className="sr-only font-mono text-[11px] tracking-widest text-muted-foreground uppercase sm:not-sr-only">
+      <p className="sr-only font-mono text-[11px] tracking-widest text-primary uppercase sm:not-sr-only">
         {label}
       </p>
       <ul className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
