@@ -2,15 +2,12 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { BackButton } from "@/components/site/BackButton";
-import { FloatingNav } from "@/components/site/FloatingNav";
 import { FrameworkRequestModal } from "@/components/site/FrameworkRequestModal";
-import { LogoDrawInline } from "@/components/site/LogoDrawInline";
-import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { SolutionAnimation } from "@/components/site/SolutionVisual";
-import { SolutionsDock } from "@/components/site/SolutionsDock";
+import { SolutionsNav } from "@/components/site/SolutionsNav";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
@@ -47,16 +44,10 @@ function SolutionsPage() {
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
-      <FloatingNav
-        items={navItems}
-        ctaLabel={c.cta.talk}
-        ctaHref="/#contacto"
-        logo={(visible) => (
-          <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
-            <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
-          </span>
-        )}
+      <SolutionsNav
+        products={s.products}
+        jumpLabel={s.jumpLabel}
+        backLabel={s.backLink}
         rightSlot={
           <div
             className="flex items-center gap-1 text-xs font-semibold"
@@ -80,7 +71,7 @@ function SolutionsPage() {
         }
       />
 
-      <main className="px-5 pt-20 pb-28 sm:pt-24">
+      <main className="px-5 pt-20 pb-8 sm:pt-24">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
             <BackButton label={s.backLink} />
@@ -96,7 +87,7 @@ function SolutionsPage() {
             <section
               key={p.id}
               id={p.id}
-              className="mt-14 scroll-mt-24 border-t border-border pt-14 first-of-type:mt-10"
+              className="mt-14 scroll-mt-40 border-t sm:scroll-mt-28 border-border pt-14 first-of-type:mt-10"
             >
               <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
                 <AnimatedContent className="lg:sticky lg:top-28">
@@ -188,8 +179,6 @@ function SolutionsPage() {
           ))}
         </div>
       </main>
-
-      <SolutionsDock products={s.products} label={s.jumpLabel} />
 
       <FrameworkRequestModal
         open={requestOpen !== null}

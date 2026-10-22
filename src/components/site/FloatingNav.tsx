@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { useSpringPress } from "./useSpringPress";
+import { useIslandReveal } from "./useIslandReveal";
 import type { NavItem } from "@/i18n/content";
 
 export type { NavItem };
@@ -36,36 +37,14 @@ export function FloatingNav({
   revealAt?: number;
   idleMs?: number;
 }) {
-  const [shown, setShown] = useState(false);
-  const [active, setActive] = useState(true);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);
   const cta = useSpringPress<HTMLAnchorElement>();
-
-  useEffect(() => {
-    const onScroll = () => setShown(window.scrollY > revealAt);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [revealAt]);
-
-  // Detección de inactividad: cada interacción reactiva la barra y reinicia el
-  // temporizador; si no pasa nada durante idleMs, se esfuma.
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout>;
-    const ping = () => {
-      setActive(true);
-      clearTimeout(timer);
-      timer = setTimeout(() => setActive(false), idleMs);
-    };
-    const events = ["mousemove", "mousedown", "keydown", "touchstart", "wheel", "scroll"];
-    for (const e of events) window.addEventListener(e, ping, { passive: true });
-    ping();
-    return () => {
-      clearTimeout(timer);
-      for (const e of events) window.removeEventListener(e, ping);
-    };
-  }, [idleMs]);
+  const { shown, visible, dur, delay, enter, tab, island } = useIslandReveal({
+    revealAt,
+    idleMs,
+    hold: menuOpen,
+  });
 
   // El menú mobile no puede quedar abierto si la barra se oculta.
   useEffect(() => {
@@ -75,29 +54,9 @@ export function FloatingNav({
     }
   }, [shown]);
 
-  // Visible mientras estemos scrolleados y haya actividad (o el menú esté abierto).
-  const visible = shown && (active || menuOpen);
-  // Esfumado por inactividad (sigue scrolleado pero sin actividad): usamos una
-  // transición mucho más lenta para que el efecto se aprecie. La aparición y el
-  // rearmado mantienen su velocidad original.
-  const dissolving = shown && !visible;
-  const dur = dissolving ? "duration-[2200ms]" : "duration-500";
-  const delay = (i: number) => (visible ? `${100 + i * 70}ms` : "0ms");
-  const enter = visible ? "translate-y-0 opacity-100" : "translate-y-1.5 opacity-0";
-  const tab = visible ? 0 : -1;
   // Ítem con panel desplegable (hoy hay uno solo) y si está abierto.
   const panelItem = items.find((n) => n.children?.length);
   const panelOpen = visible && panelItem !== undefined && openKey === panelItem.href;
-
-  // Tres estados para el contenedor:
-  //  - arriba del todo (no scrolleado): sube y desaparece.
-  //  - esfumado por inactividad: se queda en lugar y se disuelve (blur + fade).
-  //  - visible: nítido y en su sitio.
-  const island = visible
-    ? "pointer-events-auto translate-y-0 scale-100 opacity-100 blur-0"
-    : shown
-      ? "pointer-events-none scale-[0.98] opacity-0 blur-[6px]"
-      : "pointer-events-none -translate-y-8 opacity-0";
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
