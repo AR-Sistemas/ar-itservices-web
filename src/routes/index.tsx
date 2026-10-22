@@ -319,7 +319,7 @@ function Home() {
         </section>
 
         {/* Servicios */}
-        <section id="servicios" className="px-5 py-24 sm:py-32">
+        <section id="servicios" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
@@ -341,7 +341,7 @@ function Home() {
         </section>
 
         {/* Soluciones — productos propios; el detalle vive en /soluciones */}
-        <section id="soluciones" className="px-5 py-24 sm:py-32">
+        <section id="soluciones" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
