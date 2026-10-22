@@ -1,23 +1,13 @@
 import { useEffect, useRef, useState } from "react";
-import ariaLogo from "@/assets/products/aria.png";
-import arioLogo from "@/assets/products/ario.png";
-import meetingmateLogo from "@/assets/products/meetingmate.png";
-import sddLogo from "@/assets/products/ar-sdd.png";
 import ariaAnim from "@/assets/products/animations/aria.svg?raw";
 import arioAnim from "@/assets/products/animations/ario.svg?raw";
 import meetingmateAnim from "@/assets/products/animations/meetingmate.svg?raw";
 import sddAnim from "@/assets/products/animations/sdd.svg?raw";
+import { PRODUCT_LOGOS as LOGOS } from "./product-logos";
 import { useLang } from "@/i18n/language";
 import type { SolutionProduct } from "@/i18n/content";
 
 type ProductId = SolutionProduct["id"];
-
-const LOGOS: Record<ProductId, string> = {
-  aria: ariaLogo,
-  ario: arioLogo,
-  meetingmate: meetingmateLogo,
-  sdd: sddLogo,
-};
 
 const ANIMATIONS: Partial<Record<ProductId, string>> = {
   aria: ariaAnim,

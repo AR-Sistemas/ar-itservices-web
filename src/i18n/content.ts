@@ -56,7 +56,7 @@ export type ServiceLinkCard = {
 export type SiteContent = {
   nav: NavItem[];
   cta: { talk: string };
-  eventBanner: { text: string; cta: string; close: string };
+  eventBanner: { lead: string; dates: string; cta: string; close: string };
   langLabel: string;
   hero: {
     eyebrow: string;
@@ -252,7 +252,8 @@ const ES: SiteContent = {
   ],
   cta: { talk: "Hablemos" },
   eventBanner: {
-    text: "Estamos en Córdoba Tech Week · 12 y 13 de noviembre",
+    lead: "Estamos presentes",
+    dates: "12 y 13 de noviembre",
     cta: "Conocé nuestras soluciones",
     close: "Cerrar aviso",
   },
@@ -974,7 +975,8 @@ const EN: SiteContent = {
   ],
   cta: { talk: "Let's talk" },
   eventBanner: {
-    text: "We're at Córdoba Tech Week · November 12–13",
+    lead: "We'll be there",
+    dates: "November 12–13",
     cta: "Discover our solutions",
     close: "Close notice",
   },

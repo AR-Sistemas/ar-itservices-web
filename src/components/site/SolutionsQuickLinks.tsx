@@ -1,19 +1,13 @@
 import { Link } from "@tanstack/react-router";
+import { PRODUCT_LOGOS } from "./product-logos";
 import type { SolutionProduct } from "@/i18n/content";
-
-// Punto de color por producto, tomado de cada logo (rojo ARIA, violeta Ario,
-// cian MeetingMate, plata AR SDD).
-const DOT: Record<SolutionProduct["id"], string> = {
-  aria: "#ff000d",
-  ario: "#5b57ff",
-  meetingmate: "#00d4ff",
-  sdd: "#b5b8bf",
-};
 
 /**
  * Acceso rápido a las fichas de /soluciones, pensado para la primera pantalla
  * del home: los productos quedan a un clic sin tener que scrollear hasta la
- * sección de Soluciones (y antes de que aparezca el menú flotante).
+ * sección de Soluciones (y antes de que aparezca el menú flotante). Cada acceso
+ * muestra el logo del producto (el logo ya trae el nombre; el nombre accesible
+ * va en el alt de la imagen).
  */
 export function SolutionsQuickLinks({
   label,
@@ -23,8 +17,8 @@ export function SolutionsQuickLinks({
   products: Pick<SolutionProduct, "id" | "name">[];
 }) {
   return (
-    <nav aria-label={label} className="mt-4 flex flex-col sm:mt-6 items-center gap-3">
-      <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
+    <nav aria-label={label} className="mt-4 flex flex-col items-center gap-2.5 sm:mt-6 sm:gap-3">
+      <p className="sr-only font-mono text-[11px] tracking-widest text-muted-foreground uppercase sm:not-sr-only">
         {label}
       </p>
       <ul className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2">
@@ -33,14 +27,14 @@ export function SolutionsQuickLinks({
             <Link
               to="/soluciones"
               hash={p.id}
-              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-card/50 px-2.5 py-1.5 text-xs font-semibold sm:gap-2 sm:px-4 sm:py-2 sm:text-sm text-foreground transition-colors hover:border-white/30 hover:bg-card"
+              className="flex h-12 items-center justify-center rounded-xl border border-white/15 bg-card/50 px-3 transition-colors hover:border-white/30 hover:bg-card sm:h-16 sm:px-4"
             >
-              <span
-                aria-hidden="true"
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: DOT[p.id] }}
+              <img
+                src={PRODUCT_LOGOS[p.id]}
+                alt={p.name}
+                loading="lazy"
+                className="h-8 w-auto object-contain sm:h-11"
               />
-              {p.name}
             </Link>
           </li>
         ))}
