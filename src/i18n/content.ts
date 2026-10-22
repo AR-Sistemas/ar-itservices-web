@@ -64,7 +64,6 @@ export type SiteContent = {
     subtitle: string;
     ctaPrimary: string;
     ctaSecondary: string;
-    solutionsLabel: string;
     phrases: string[];
   };
   metrics: { value: number; suffix: string; label: string }[];
@@ -128,6 +127,7 @@ export type SiteContent = {
     teaserCta: string;
     cardCta: string;
     navBadge: string;
+    jumpLabel: string;
     contactCta: string;
     labels: { problem: string; example: string; how: string; features: string; audience: string };
     logoAlt: (name: string) => string;
@@ -265,7 +265,6 @@ const ES: SiteContent = {
       "25 años desarrollando software, modelos de datos y equipos dedicados para empresas y gobiernos, desde tres países.",
     ctaPrimary: "Hablemos de tu proyecto",
     ctaSecondary: "Ver casos de éxito",
-    solutionsLabel: "Nuestras soluciones",
     phrases: [
       "Ayudamos a las organizaciones a evolucionar hacia un modelo **AI-Native**, desde la estrategia hasta la implementación.",
       "Creamos el equipo que tu producto realmente necesita, con **datos e IA** integrados en el proceso.",
@@ -521,6 +520,7 @@ const ES: SiteContent = {
     teaserCta: "Ver todas las soluciones",
     cardCta: "Conocer más",
     navBadge: "Nuevo",
+    jumpLabel: "Ir a una solución",
     contactCta: "Conversemos sobre tu proyecto",
     labels: {
       problem: "El problema",
@@ -988,7 +988,6 @@ const EN: SiteContent = {
       "25 years building software, data models and dedicated teams for companies and governments, from three countries.",
     ctaPrimary: "Let's talk about your project",
     ctaSecondary: "See success stories",
-    solutionsLabel: "Our solutions",
     phrases: [
       "We help organizations become **AI-native companies**, from strategy to implementation and scale.",
       "We build the team your product really needs: **data and artificial intelligence** integrated into the workflow, not just in theory.",
@@ -1232,6 +1231,7 @@ const EN: SiteContent = {
     teaserCta: "See all solutions",
     cardCta: "Learn more",
     navBadge: "New",
+    jumpLabel: "Jump to a solution",
     contactCta: "Let's talk about your project",
     labels: {
       problem: "The problem",

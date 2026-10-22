@@ -28,7 +28,6 @@ import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
 import { SolutionVisual } from "@/components/site/SolutionVisual";
-import { SolutionsQuickLinks } from "@/components/site/SolutionsQuickLinks";
 import { EventBanner } from "@/components/site/EventBanner";
 import { getPublicEditorial } from "@/lib/editorial.server";
 import { getAviso } from "@/lib/avisos.server";
@@ -286,7 +285,7 @@ function Home() {
               <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground">
                 {c.hero.subtitle}
               </p>
-              <div className="mt-7 flex flex-wrap items-center justify-center gap-3 sm:mt-9">
+              <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
                 <StarBorder href="#contacto" className="group">
                   {c.hero.ctaPrimary}
                 </StarBorder>
@@ -299,7 +298,6 @@ function Home() {
                   </a>
                 )}
               </div>
-              <SolutionsQuickLinks label={c.hero.solutionsLabel} products={c.solutions.products} />
             </AnimatedContent>
           </div>
         </section>

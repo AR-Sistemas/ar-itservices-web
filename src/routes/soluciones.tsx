@@ -10,6 +10,7 @@ import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { SolutionAnimation } from "@/components/site/SolutionVisual";
+import { SolutionsDock } from "@/components/site/SolutionsDock";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
@@ -79,7 +80,7 @@ function SolutionsPage() {
         }
       />
 
-      <main className="px-5 pt-20 pb-8 sm:pt-24">
+      <main className="px-5 pt-20 pb-28 sm:pt-24">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
             <BackButton label={s.backLink} />
@@ -187,6 +188,8 @@ function SolutionsPage() {
           ))}
         </div>
       </main>
+
+      <SolutionsDock products={s.products} label={s.jumpLabel} />
 
       <FrameworkRequestModal
         open={requestOpen !== null}
