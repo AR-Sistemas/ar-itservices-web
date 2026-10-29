@@ -1,13 +1,12 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
-import { BackButton } from "@/components/site/BackButton";
-import { FloatingNav } from "@/components/site/FloatingNav";
-import { LogoDrawInline } from "@/components/site/LogoDrawInline";
-import { LogoWordmark } from "@/components/site/LogoWordmark";
+import { FrameworkRequestModal } from "@/components/site/FrameworkRequestModal";
 import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { SolutionAnimation } from "@/components/site/SolutionVisual";
+import { SolutionsNav } from "@/components/site/SolutionsNav";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
@@ -18,7 +17,7 @@ export const Route = createFileRoute("/soluciones")({
       {
         name: "description",
         content:
-          "Ario, MeetingMate y AR SDD: productos propios de AR IT Services para automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
+          "ARIA, Ario, MeetingMate y AR SDD: framework y productos propios de AR IT Services para adoptar IA con criterio, automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
       },
       { property: "og:title", content: "Soluciones | AR IT Services" },
       {
@@ -38,21 +37,16 @@ function SolutionsPage() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const s = c.solutions;
+  const [requestOpen, setRequestOpen] = useState<string | null>(null);
   // Desde esta página, los anchors del nav apuntan a la home.
   const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
-      <FloatingNav
-        items={navItems}
-        ctaLabel={c.cta.talk}
-        ctaHref="/#contacto"
-        logo={(visible) => (
-          <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
-            <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
-          </span>
-        )}
+      <SolutionsNav
+        products={s.products}
+        jumpLabel={s.jumpLabel}
+        backLabel={s.backLink}
         rightSlot={
           <div
             className="flex items-center gap-1 text-xs font-semibold"
@@ -79,8 +73,7 @@ function SolutionsPage() {
       <main className="px-5 pt-20 pb-8 sm:pt-24">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <BackButton label={s.backLink} />
-            <h1 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
+            <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-5xl">
               {s.heading}
             </h1>
             <p className="mt-3 max-w-2xl text-base text-muted-foreground sm:text-lg">
@@ -92,7 +85,7 @@ function SolutionsPage() {
             <section
               key={p.id}
               id={p.id}
-              className="mt-14 scroll-mt-24 border-t border-border pt-14 first-of-type:mt-10"
+              className="mt-14 scroll-mt-40 border-t sm:scroll-mt-28 border-border pt-14 first-of-type:mt-10"
             >
               <div className="grid gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start">
                 <AnimatedContent className="lg:sticky lg:top-28">
@@ -125,7 +118,7 @@ function SolutionsPage() {
 
                   <div className="mt-8">
                     <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.how}
+                      {p.howLabel ?? s.labels.how}
                     </h3>
                     <ol className="mt-3 space-y-3">
                       {p.steps.map((step, i) => (
@@ -141,7 +134,7 @@ function SolutionsPage() {
 
                   <div className="mt-8">
                     <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.features}
+                      {p.featuresLabel ?? s.labels.features}
                     </h3>
                     <ul className="mt-3 grid gap-3 sm:grid-cols-2">
                       {p.features.map((f) => (
@@ -153,25 +146,43 @@ function SolutionsPage() {
                     </ul>
                   </div>
 
-                  <div className="mt-8">
-                    <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
-                      {s.labels.audience}
-                    </h3>
-                    <p className="mt-2 text-muted-foreground">{p.audience}</p>
-                  </div>
+                  {p.audience && (
+                    <div className="mt-8">
+                      <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
+                        {s.labels.audience}
+                      </h3>
+                      <p className="mt-2 text-muted-foreground">{p.audience}</p>
+                    </div>
+                  )}
 
-                  <a
-                    href={`/?producto=${p.id}#contacto`}
-                    className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-                  >
-                    {s.contactCta}
-                  </a>
+                  {p.requestCta ? (
+                    <button
+                      type="button"
+                      onClick={() => setRequestOpen(p.name)}
+                      className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                    >
+                      {p.requestCta}
+                    </button>
+                  ) : (
+                    <a
+                      href={`/?producto=${p.id}#contacto`}
+                      className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                    >
+                      {s.contactCta}
+                    </a>
+                  )}
                 </AnimatedContent>
               </div>
             </section>
           ))}
         </div>
       </main>
+
+      <FrameworkRequestModal
+        open={requestOpen !== null}
+        onClose={() => setRequestOpen(null)}
+        frameworkTitle={requestOpen ?? ""}
+      />
 
       <footer className="px-5 py-8 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-4">

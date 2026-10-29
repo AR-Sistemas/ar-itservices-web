@@ -468,3 +468,152 @@ html {
 .sol-anim[data-paused="true"] svg * {
   animation-play-state: paused !important;
 }
+
+/* Cartel de Córdoba Tech Week (EventBanner): iluminación en verde lima del logo
+   oficial (#c4f023). Todo es CSS; se pausa fuera de pantalla y se apaga con
+   "reducir movimiento". */
+.ctw-banner {
+  --ctw-lime: #c4f023;
+  background-image: linear-gradient(
+    90deg,
+    rgb(196 240 35 / 0.12),
+    transparent 30%,
+    transparent 70%,
+    rgb(196 240 35 / 0.12)
+  );
+}
+.ctw-aurora {
+  position: absolute;
+  top: -80%;
+  height: 260%;
+  width: 38%;
+  pointer-events: none;
+  background: radial-gradient(closest-side, var(--ctw-lime), transparent);
+  filter: blur(36px);
+  opacity: 0.45;
+  animation: ctw-drift 9s ease-in-out infinite alternate;
+}
+.ctw-aurora-a {
+  left: 6%;
+}
+.ctw-aurora-b {
+  right: 6%;
+  opacity: 0.32;
+  animation-delay: -4.5s;
+}
+@keyframes ctw-drift {
+  from {
+    transform: translateX(-25%) scale(1);
+  }
+  to {
+    transform: translateX(35%) scale(1.2);
+  }
+}
+.ctw-beam {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  pointer-events: none;
+  background-image: linear-gradient(90deg, transparent, var(--ctw-lime) 50%, transparent);
+  background-size: 34% 100%;
+  background-repeat: no-repeat;
+  background-position: -40% 0;
+  box-shadow: 0 0 10px 0 rgb(196 240 35 / 0.55);
+  animation: ctw-beam 3.6s linear infinite;
+}
+.ctw-beam-top {
+  top: 0;
+  animation-direction: reverse;
+}
+.ctw-beam-bottom {
+  bottom: 0;
+}
+@keyframes ctw-beam {
+  from {
+    background-position: -40% 0;
+  }
+  to {
+    background-position: 140% 0;
+  }
+}
+.ctw-logo {
+  animation: ctw-glow 2.8s ease-in-out infinite;
+}
+@keyframes ctw-glow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px rgb(196 240 35 / 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 12px rgb(196 240 35 / 0.8));
+  }
+}
+/* Brillo que cruza las letras: capa enmascarada con el propio PNG del logo. */
+.ctw-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  -webkit-mask-image: var(--ctw-logo);
+  mask-image: var(--ctw-logo);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  background-image: linear-gradient(
+    105deg,
+    transparent 38%,
+    rgb(255 255 255 / 0.95) 50%,
+    transparent 62%
+  );
+  background-size: 300% 100%;
+  background-position: 150% 0;
+  animation: ctw-shine 3.6s ease-in-out infinite;
+}
+@keyframes ctw-shine {
+  0%,
+  30% {
+    background-position: 150% 0;
+  }
+  75%,
+  100% {
+    background-position: -50% 0;
+  }
+}
+.ctw-cta {
+  background-image: linear-gradient(110deg, var(--ctw-lime) 40%, #ffffff 50%, var(--ctw-lime) 60%);
+  background-size: 220% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: ctw-text 2.8s linear infinite;
+}
+@keyframes ctw-text {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+.ctw-banner[data-paused="true"] * {
+  animation-play-state: paused !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ctw-banner *,
+  .ctw-banner::before {
+    animation: none !important;
+  }
+  .ctw-shine,
+  .ctw-beam {
+    display: none;
+  }
+  .ctw-cta {
+    -webkit-text-fill-color: var(--ctw-lime);
+    color: var(--ctw-lime);
+    background-image: none;
+  }
+}

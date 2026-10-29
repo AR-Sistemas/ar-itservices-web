@@ -1,29 +1,27 @@
 import { useEffect, useRef, useState } from "react";
-import arioLogo from "@/assets/products/ario.png";
-import meetingmateLogo from "@/assets/products/meetingmate.png";
-import sddLogo from "@/assets/products/ar-sdd.png";
+import ariaAnim from "@/assets/products/animations/aria.svg?raw";
 import arioAnim from "@/assets/products/animations/ario.svg?raw";
 import meetingmateAnim from "@/assets/products/animations/meetingmate.svg?raw";
 import sddAnim from "@/assets/products/animations/sdd.svg?raw";
+import { PRODUCT_LOGOS as LOGOS } from "./product-logos";
 import { useLang } from "@/i18n/language";
 import type { SolutionProduct } from "@/i18n/content";
 
 type ProductId = SolutionProduct["id"];
 
-const LOGOS: Record<ProductId, string> = {
-  ario: arioLogo,
-  meetingmate: meetingmateLogo,
-  sdd: sddLogo,
-};
-
-const ANIMATIONS: Record<ProductId, string> = {
+const ANIMATIONS: Partial<Record<ProductId, string>> = {
+  aria: ariaAnim,
   ario: arioAnim,
   meetingmate: meetingmateAnim,
   sdd: sddAnim,
 };
 
 // Descripción accesible de cada animación (el SVG original solo la trae en español).
-const ANIM_LABELS: Record<ProductId, { ES: string; EN: string }> = {
+const ANIM_LABELS: Partial<Record<ProductId, { ES: string; EN: string }>> = {
+  aria: {
+    ES: "Framework ARIA: nueve bloques operando como un sistema integrado alrededor de un núcleo estratégico",
+    EN: "ARIA framework: nine blocks working as an integrated system around a strategic core",
+  },
   ario: {
     ES: "Ario: los documentos entran, se leen, se extraen los campos y salen datos ordenados en una tabla",
     EN: "Ario: documents come in, are read, their fields are extracted and orderly data comes out in a table",
@@ -59,7 +57,7 @@ export function SolutionVisual({
 }
 
 /**
- * Panel de la ficha de cada producto: logo chico arriba y debajo la
+ * Panel de la ficha de cada producto (si no hay animación, solo el logo grande): logo chico arriba y debajo la
  * animación SVG (loop de 10 s, 4:3, sin texto) que explica a grandes rasgos
  * cómo funciona. Las animaciones son CSS puro dentro del SVG (ver
  * src/assets/products/animations); acá solo se pausan cuando el panel no
@@ -99,12 +97,16 @@ export function SolutionAnimation({
     return () => io.disconnect();
   }, []);
 
-  const label = ANIM_LABELS[id][lang === "EN" ? "EN" : "ES"];
-  const svg = ANIMATIONS[id].replace(/aria-label="[^"]*"/, `aria-label="${label}"`);
+  const rawSvg = ANIMATIONS[id];
+  const labels = ANIM_LABELS[id];
+  const svg =
+    rawSvg && labels
+      ? rawSvg.replace(/aria-label="[^"]*"/, `aria-label="${labels[lang === "EN" ? "EN" : "ES"]}"`)
+      : null;
 
   return (
     <div ref={ref} data-paused={!visible} className={`sol-anim ${PANEL} flex-col p-3 ${className}`}>
-      {reduceMotion ? (
+      {reduceMotion || !svg ? (
         <img
           src={LOGOS[id]}
           alt={alt}

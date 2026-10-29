@@ -16,7 +16,6 @@ import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { ServiceAreaCards } from "@/components/site/ServiceAreaCards";
-import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
 import { StarBorderCard } from "@/components/site/StarBorderCard";
 import { IsoBadge } from "@/components/site/IsoBadge";
@@ -29,6 +28,7 @@ import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
 import { SolutionVisual } from "@/components/site/SolutionVisual";
+import { EventBanner } from "@/components/site/EventBanner";
 import { getPublicEditorial } from "@/lib/editorial.server";
 import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
@@ -236,6 +236,7 @@ function Home() {
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
       <CodeGridSpotlight />
+      <EventBanner />
       <FloatingNav
         items={c.nav}
         ctaLabel={c.cta.talk}
@@ -319,33 +320,8 @@ function Home() {
           </AnimatedContent>
         </section>
 
-        {/* Servicios */}
-        <section id="servicios" className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.services.heading}
-              </h2>
-            </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                {c.services.hint}
-              </p>
-              <div className="mt-8">
-                <ServiceAreaCards
-                  groups={c.services.groups}
-                  inquiryMessage={c.services.inquiryMessage}
-                />
-              </div>
-            </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <FrameworkHighlight card={c.services.framework} />
-            </AnimatedContent>
-          </div>
-        </section>
-
         {/* Soluciones — productos propios; el detalle vive en /soluciones */}
-        <section id="soluciones" className="px-5 py-24 sm:py-32">
+        <section id="soluciones" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
@@ -353,7 +329,7 @@ function Home() {
               </h2>
               <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
             </AnimatedContent>
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {c.solutions.products.map((p, i) => (
                 <AnimatedContent key={p.id} delay={i * 80} distance={30}>
                   <SpotlightCard
@@ -384,6 +360,28 @@ function Home() {
               >
                 {c.solutions.teaserCta}
               </Link>
+            </AnimatedContent>
+          </div>
+        </section>
+
+        {/* Servicios */}
+        <section id="servicios" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
+                {c.services.heading}
+              </h2>
+            </AnimatedContent>
+            <AnimatedContent className="mt-12" distance={30}>
+              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                {c.services.hint}
+              </p>
+              <div className="mt-8">
+                <ServiceAreaCards
+                  groups={c.services.groups}
+                  inquiryMessage={c.services.inquiryMessage}
+                />
+              </div>
             </AnimatedContent>
           </div>
         </section>
