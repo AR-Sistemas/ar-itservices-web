@@ -38,6 +38,7 @@ import stellantisLogo from "@/assets/clients/Stellantis-canva.png";
 import agdLogo from "@/assets/clients/AGD-canva.png";
 import aguasCordobesasLogo from "@/assets/clients/AguasCordobesas-canva.png";
 import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
+import bancorLogo from "@/assets/clients/Bancor.png";
 import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
 import firenzeLogo from "@/assets/clients/Firenze.svg";
 import fcaLogo from "@/assets/clients/FCA-canva.png";
@@ -48,7 +49,7 @@ import holcimLogo from "@/assets/clients/Holcim-canva.png";
 import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
 import mcafeeLogo from "@/assets/clients/McAfee-canva.png";
 import minettiLogo from "@/assets/clients/Minetti-canva.png";
-import prittyLogo from "@/assets/clients/Pritty-canva.png";
+import prittyLogo from "@/assets/clients/Pritty.png";
 import tipsLogo from "@/assets/clients/Tips-canva.png";
 import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
@@ -104,6 +105,7 @@ const CLIENTS: { name: string; src: string; scale?: number }[] = [
   { name: "AGD", src: agdLogo },
   { name: "Aguas Cordobesas", src: aguasCordobesasLogo },
   { name: "América Móvil", src: americaMovilLogo },
+  { name: "Bancor", src: bancorLogo },
   { name: "Ecogas", src: ecogasLogo, scale: 1.35 },
   { name: "Firenze", src: firenzeLogo },
   { name: "FCA", src: fcaLogo },
