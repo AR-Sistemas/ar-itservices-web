@@ -153,6 +153,7 @@ function Home() {
   // formulario en modo postulante con el puesto ya seleccionado.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    if (params.get("tipo") === "postulante") setContactType("postulante");
     const puesto = params.get("puesto");
     if (puesto) {
       setContactType("postulante");
