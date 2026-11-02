@@ -492,8 +492,30 @@ function Home() {
           </AnimatedContent>
         </section>
 
+        {/* Servicios */}
+        <section id="servicios" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
+                {c.services.heading}
+              </h2>
+            </AnimatedContent>
+            <AnimatedContent className="mt-12" distance={30}>
+              <p className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
+                {c.services.hint}
+              </p>
+              <div className="mt-8">
+                <ServiceAreaCards
+                  groups={c.services.groups}
+                  inquiryMessage={c.services.inquiryMessage}
+                />
+              </div>
+            </AnimatedContent>
+          </div>
+        </section>
+
         {/* Soluciones — productos propios; el detalle vive en /soluciones */}
-        <section id="soluciones" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
+        <section id="soluciones" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
@@ -514,28 +536,6 @@ function Home() {
                 </AnimatedContent>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Servicios */}
-        <section id="servicios" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.services.heading}
-              </h2>
-            </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
-                {c.services.hint}
-              </p>
-              <div className="mt-8">
-                <ServiceAreaCards
-                  groups={c.services.groups}
-                  inquiryMessage={c.services.inquiryMessage}
-                />
-              </div>
-            </AnimatedContent>
           </div>
         </section>
 
