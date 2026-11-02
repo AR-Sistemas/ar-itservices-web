@@ -3,7 +3,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { sendContactEmail } from "@/lib/contact.server";
 import { toast } from "sonner";
-import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
@@ -126,7 +125,6 @@ function Home() {
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const sendContact = useServerFn(sendContactEmail);
   const [contactType, setContactType] = useState<ContactType>("empresa");
-  const [contactOpen, setContactOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("");
   // Id del aviso del feed de AR Recruiting (cuando se postula con ?aviso=).
   const [avisoId, setAvisoId] = useState("");
@@ -151,12 +149,10 @@ function Home() {
     const params = new URLSearchParams(window.location.search);
     if (params.get("tipo") === "postulante") {
       setContactType("postulante");
-      setContactOpen(true);
     }
     const puesto = params.get("puesto");
     if (puesto) {
       setContactType("postulante");
-      setContactOpen(true);
       setSelectedPosition(puesto);
     }
     const prod = params.get("producto");
@@ -182,7 +178,6 @@ function Home() {
     if (!requestedId) return;
     let cancelled = false;
     setContactType("postulante");
-    setContactOpen(true);
     void getAviso({ data: requestedId }).then((result) => {
       if (cancelled || !result.ok) return;
       setAvisoId(result.aviso.id);
@@ -212,7 +207,6 @@ function Home() {
       if (!message) return;
       setContactType("empresa");
       setMensajeValue(message);
-      setContactOpen(false);
     };
     window.addEventListener(CONTACT_PREFILL_EVENT, onPrefill);
     return () => window.removeEventListener(CONTACT_PREFILL_EVENT, onPrefill);
@@ -249,7 +243,6 @@ function Home() {
             setSendState("sent");
             toast.success(c.contact.success);
             formEl.reset();
-            setContactOpen(false);
             setContactType("empresa");
             setProducto(null);
             setSelectedPosition("");
@@ -690,7 +683,6 @@ function Home() {
                     onClick={() => {
                       setContactType(value);
                       setSendState("idle");
-                      setContactOpen(value !== "empresa");
                     }}
                     className={`rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                       contactType === value
@@ -703,31 +695,7 @@ function Home() {
                 ))}
               </div>
 
-              {!contactOpen && contactForm}
-
-              <Dialog
-                open={contactOpen}
-                onOpenChange={(open) => {
-                  if (sendState !== "sending") {
-                    setContactOpen(open);
-                    if (!open) setContactType("empresa");
-                  }
-                }}
-              >
-                <DialogContent
-                  className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-2xl p-6 sm:p-8"
-                  aria-describedby={undefined}
-                >
-                  <DialogTitle className="pr-8 text-xl">
-                    {contactType === "empresa"
-                      ? c.contact.typeLabels.company
-                      : contactType === "postulante"
-                        ? c.contact.typeLabels.candidate
-                        : c.contact.typeLabels.general}
-                  </DialogTitle>
-                  {contactOpen && contactForm}
-                </DialogContent>
-              </Dialog>
+              {contactForm}
             </AnimatedContent>
           </div>
         </section>
