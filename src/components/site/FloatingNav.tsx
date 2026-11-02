@@ -22,7 +22,7 @@ export type { NavItem };
  */
 export function FloatingNav({
   logo,
-  items,
+  items: allItems,
   ctaLabel = "Hablemos",
   ctaHref = "#contacto",
   rightSlot,
@@ -37,6 +37,9 @@ export function FloatingNav({
   revealAt?: number;
   idleMs?: number;
 }) {
+  const items = allItems.filter(
+    (item) => !["#casos", "/#casos", "/novedades", "/trabaja-con-nosotros"].includes(item.href),
+  );
   const [menuOpen, setMenuOpen] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);
   const cta = useSpringPress<HTMLAnchorElement>();
