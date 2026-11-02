@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { sendContactEmail } from "@/lib/contact.server";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
@@ -131,6 +132,7 @@ function Home() {
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const sendContact = useServerFn(sendContactEmail);
   const [contactType, setContactType] = useState<ContactType>("empresa");
+  const [contactOpen, setContactOpen] = useState(false);
   const [selectedPosition, setSelectedPosition] = useState("");
   // Id del aviso del feed de AR Recruiting (cuando se postula con ?aviso=).
   const [avisoId, setAvisoId] = useState("");
@@ -153,10 +155,14 @@ function Home() {
   // formulario en modo postulante con el puesto ya seleccionado.
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get("tipo") === "postulante") setContactType("postulante");
+    if (params.get("tipo") === "postulante") {
+      setContactType("postulante");
+      setContactOpen(true);
+    }
     const puesto = params.get("puesto");
     if (puesto) {
       setContactType("postulante");
+      setContactOpen(true);
       setSelectedPosition(puesto);
     }
     const prod = params.get("producto");
@@ -182,6 +188,7 @@ function Home() {
     if (!requestedId) return;
     let cancelled = false;
     setContactType("postulante");
+    setContactOpen(true);
     void getAviso({ data: requestedId }).then((result) => {
       if (cancelled || !result.ok) return;
       setAvisoId(result.aviso.id);
@@ -211,6 +218,7 @@ function Home() {
       if (!message) return;
       setContactType("empresa");
       setMensajeValue(message);
+      setContactOpen(false);
     };
     window.addEventListener(CONTACT_PREFILL_EVENT, onPrefill);
     return () => window.removeEventListener(CONTACT_PREFILL_EVENT, onPrefill);
@@ -233,6 +241,191 @@ function Home() {
     selectedPosition && !positionOptions.some((p) => p.title === selectedPosition)
       ? "otro"
       : selectedPosition;
+
+  const contactForm = (
+    <form
+      className="mt-8 grid gap-5 sm:grid-cols-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        const formEl = e.currentTarget;
+        const formData = new FormData(formEl);
+        setSendState("sending");
+        sendContact({ data: formData })
+          .then(() => {
+            setSendState("sent");
+            toast.success(c.contact.success);
+            formEl.reset();
+            setContactOpen(false);
+            setContactType("empresa");
+            setProducto(null);
+            setSelectedPosition("");
+            setEmpresaValue("");
+            setPaisValue("");
+            setTipoValue("");
+            setTelefonoValue("");
+            setMensajeValue("");
+          })
+          .catch((err) => {
+            console.error(err);
+            setSendState("error");
+            toast.error(c.contact.error);
+          });
+      }}
+    >
+      <input type="hidden" name="contactType" value={contactType} />
+      {/* Id del aviso del feed de AR Recruiting, si la postulación
+                    viene de una búsqueda concreta. Vacío = postulación
+                    espontánea. */}
+      <input type="hidden" name="aviso_id" value={avisoId} />
+      {producto && contactType !== "postulante" && (
+        <div className="flex items-center gap-2 sm:col-span-2">
+          <input
+            type="hidden"
+            name="producto"
+            value={c.solutions.products.find((p) => p.id === producto)?.name ?? ""}
+          />
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-card py-1.5 pr-2 pl-4 text-sm">
+            <span className="text-muted-foreground">{c.contact.productLabel}:</span>
+            <span className="font-semibold">
+              {c.solutions.products.find((p) => p.id === producto)?.name}
+            </span>
+            <button
+              type="button"
+              onClick={() => setProducto(null)}
+              aria-label={c.contact.productRemove}
+              className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      )}
+      <input type="hidden" name="formStartedAt" value={formStartedAt} />
+      {/* Honeypot anti-bot: invisible para personas, los bots que
+                    autocompletan todo el formulario sí lo llenan (ver
+                    src/lib/contact.server.ts). */}
+      <input
+        type="text"
+        name="sitio_web"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+      <Field id="nombre" label={c.contact.fields.name} />
+      <Field id="email" label={c.contact.fields.email} type="email" />
+
+      {contactType === "empresa" && (
+        <Field
+          id="empresa"
+          label={c.contact.fields.company}
+          value={empresaValue}
+          onChange={setEmpresaValue}
+        />
+      )}
+      {contactType === "postulante" && (
+        <Field
+          id="telefono"
+          label={c.contact.fields.phone}
+          type="tel"
+          value={telefonoValue}
+          onChange={setTelefonoValue}
+        />
+      )}
+
+      {contactType !== "consulta" && (
+        <SelectField
+          id="pais"
+          label={c.contact.fields.country}
+          options={c.contact.countries}
+          value={paisValue}
+          onChange={setPaisValue}
+        />
+      )}
+
+      {contactType === "empresa" && (
+        <div className="sm:col-span-2">
+          <label htmlFor="tipo" className="text-sm font-medium">
+            {c.contact.fields.projectType}
+          </label>
+          <select
+            id="tipo"
+            name="tipo"
+            value={tipoValue || c.contact.projectOptions[0]}
+            onChange={(e) => setTipoValue(e.target.value)}
+            className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+          >
+            {c.contact.projectOptions.map((opt) => (
+              <option key={opt}>{opt}</option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      {contactType === "postulante" && (
+        <>
+          <div className="sm:col-span-2">
+            <label htmlFor="puesto" className="text-sm font-medium">
+              {c.contact.fields.position}
+            </label>
+            <select
+              id="puesto"
+              name="puesto"
+              value={puestoSelectValue}
+              onChange={(e) => setSelectedPosition(e.target.value)}
+              className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+            >
+              <option value="">—</option>
+              {positionOptions.map((p) => (
+                <option key={p.title} value={p.title}>
+                  {p.title}
+                </option>
+              ))}
+              <option value="otro">{c.contact.fields.positionOther}</option>
+            </select>
+          </div>
+          <div className="sm:col-span-2">
+            <label htmlFor="cv" className="text-sm font-medium">
+              {c.contact.fields.resume}
+            </label>
+            <input
+              id="cv"
+              name="cv"
+              type="file"
+              accept=".pdf,.doc,.docx"
+              className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
+            />
+          </div>
+        </>
+      )}
+
+      <div className="sm:col-span-2">
+        <label htmlFor="mensaje" className="text-sm font-medium">
+          {c.contact.fields.message}
+        </label>
+        <textarea
+          id="mensaje"
+          name="mensaje"
+          value={mensajeValue}
+          onChange={(e) => setMensajeValue(e.target.value)}
+          rows={contactType === "consulta" ? 4 : 5}
+          required={contactType !== "postulante"}
+          className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
+        />
+      </div>
+      <div className="sm:col-span-2">
+        <button
+          ref={submitCta.ref}
+          onMouseDown={submitCta.press}
+          type="submit"
+          disabled={sendState === "sending"}
+          className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {sendState === "sending" ? c.contact.submitting : c.contact.submit}
+        </button>
+      </div>
+    </form>
+  );
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
@@ -574,7 +767,7 @@ function Home() {
               <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.contact.heading}</h2>
               <p className="mt-3 text-muted-foreground">{c.contact.subtitle}</p>
 
-              <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-2xl border border-border bg-card p-1.5">
+              <div className="mt-8 flex w-full flex-col gap-1.5 rounded-2xl border border-border bg-card p-1.5 sm:inline-flex sm:w-auto sm:flex-row sm:flex-wrap">
                 {(
                   [
                     ["empresa", c.contact.typeLabels.company],
@@ -585,8 +778,12 @@ function Home() {
                   <button
                     key={value}
                     type="button"
-                    onClick={() => setContactType(value)}
-                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                    onClick={() => {
+                      setContactType(value);
+                      setSendState("idle");
+                      setContactOpen(value !== "empresa");
+                    }}
+                    className={`rounded-full px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${
                       contactType === value
                         ? "bg-primary text-primary-foreground"
                         : "text-muted-foreground hover:text-foreground"
@@ -597,187 +794,31 @@ function Home() {
                 ))}
               </div>
 
-              <form
-                className="mt-8 grid gap-5 sm:grid-cols-2"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  const formEl = e.currentTarget;
-                  const formData = new FormData(formEl);
-                  setSendState("sending");
-                  sendContact({ data: formData })
-                    .then(() => {
-                      setSendState("sent");
-                      toast.success(c.contact.success);
-                      formEl.reset();
-                      setContactType("empresa");
-                      setProducto(null);
-                      setSelectedPosition("");
-                      setEmpresaValue("");
-                      setPaisValue("");
-                      setTipoValue("");
-                      setTelefonoValue("");
-                      setMensajeValue("");
-                    })
-                    .catch((err) => {
-                      console.error(err);
-                      setSendState("error");
-                      toast.error(c.contact.error);
-                    });
+              {!contactOpen && contactForm}
+
+              <Dialog
+                open={contactOpen}
+                onOpenChange={(open) => {
+                  if (sendState !== "sending") {
+                    setContactOpen(open);
+                    if (!open) setContactType("empresa");
+                  }
                 }}
               >
-                <input type="hidden" name="contactType" value={contactType} />
-                {/* Id del aviso del feed de AR Recruiting, si la postulación
-                    viene de una búsqueda concreta. Vacío = postulación
-                    espontánea. */}
-                <input type="hidden" name="aviso_id" value={avisoId} />
-                {producto && contactType !== "postulante" && (
-                  <div className="flex items-center gap-2 sm:col-span-2">
-                    <input
-                      type="hidden"
-                      name="producto"
-                      value={c.solutions.products.find((p) => p.id === producto)?.name ?? ""}
-                    />
-                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-card py-1.5 pr-2 pl-4 text-sm">
-                      <span className="text-muted-foreground">{c.contact.productLabel}:</span>
-                      <span className="font-semibold">
-                        {c.solutions.products.find((p) => p.id === producto)?.name}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => setProducto(null)}
-                        aria-label={c.contact.productRemove}
-                        className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
-                      >
-                        ×
-                      </button>
-                    </span>
-                  </div>
-                )}
-                <input type="hidden" name="formStartedAt" value={formStartedAt} />
-                {/* Honeypot anti-bot: invisible para personas, los bots que
-                    autocompletan todo el formulario sí lo llenan (ver
-                    src/lib/contact.server.ts). */}
-                <input
-                  type="text"
-                  name="sitio_web"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
-                />
-                <Field id="nombre" label={c.contact.fields.name} />
-                <Field id="email" label={c.contact.fields.email} type="email" />
-
-                {contactType === "empresa" && (
-                  <Field
-                    id="empresa"
-                    label={c.contact.fields.company}
-                    value={empresaValue}
-                    onChange={setEmpresaValue}
-                  />
-                )}
-                {contactType === "postulante" && (
-                  <Field
-                    id="telefono"
-                    label={c.contact.fields.phone}
-                    type="tel"
-                    value={telefonoValue}
-                    onChange={setTelefonoValue}
-                  />
-                )}
-
-                {contactType !== "consulta" && (
-                  <SelectField
-                    id="pais"
-                    label={c.contact.fields.country}
-                    options={c.contact.countries}
-                    value={paisValue}
-                    onChange={setPaisValue}
-                  />
-                )}
-
-                {contactType === "empresa" && (
-                  <div className="sm:col-span-2">
-                    <label htmlFor="tipo" className="text-sm font-medium">
-                      {c.contact.fields.projectType}
-                    </label>
-                    <select
-                      id="tipo"
-                      name="tipo"
-                      value={tipoValue || c.contact.projectOptions[0]}
-                      onChange={(e) => setTipoValue(e.target.value)}
-                      className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-                    >
-                      {c.contact.projectOptions.map((opt) => (
-                        <option key={opt}>{opt}</option>
-                      ))}
-                    </select>
-                  </div>
-                )}
-
-                {contactType === "postulante" && (
-                  <>
-                    <div className="sm:col-span-2">
-                      <label htmlFor="puesto" className="text-sm font-medium">
-                        {c.contact.fields.position}
-                      </label>
-                      <select
-                        id="puesto"
-                        name="puesto"
-                        value={puestoSelectValue}
-                        onChange={(e) => setSelectedPosition(e.target.value)}
-                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-                      >
-                        <option value="">—</option>
-                        {positionOptions.map((p) => (
-                          <option key={p.title} value={p.title}>
-                            {p.title}
-                          </option>
-                        ))}
-                        <option value="otro">{c.contact.fields.positionOther}</option>
-                      </select>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <label htmlFor="cv" className="text-sm font-medium">
-                        {c.contact.fields.resume}
-                      </label>
-                      <input
-                        id="cv"
-                        name="cv"
-                        type="file"
-                        accept=".pdf,.doc,.docx"
-                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
-                      />
-                    </div>
-                  </>
-                )}
-
-                <div className="sm:col-span-2">
-                  <label htmlFor="mensaje" className="text-sm font-medium">
-                    {c.contact.fields.message}
-                  </label>
-                  <textarea
-                    id="mensaje"
-                    name="mensaje"
-                    value={mensajeValue}
-                    onChange={(e) => setMensajeValue(e.target.value)}
-                    rows={contactType === "consulta" ? 4 : 5}
-                    required={contactType !== "postulante"}
-                    className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-                  />
-                </div>
-                <div className="sm:col-span-2">
-                  <button
-                    ref={submitCta.ref}
-                    onMouseDown={submitCta.press}
-                    type="submit"
-                    disabled={sendState === "sending"}
-                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
-                  >
-                    {sendState === "sending" ? c.contact.submitting : c.contact.submit}
-                  </button>
-                </div>
-              </form>
+                <DialogContent
+                  className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-2xl overflow-y-auto rounded-2xl p-6 sm:p-8"
+                  aria-describedby={undefined}
+                >
+                  <DialogTitle className="pr-8 text-xl">
+                    {contactType === "empresa"
+                      ? c.contact.typeLabels.company
+                      : contactType === "postulante"
+                        ? c.contact.typeLabels.candidate
+                        : c.contact.typeLabels.general}
+                  </DialogTitle>
+                  {contactOpen && contactForm}
+                </DialogContent>
+              </Dialog>
             </AnimatedContent>
           </div>
         </section>
