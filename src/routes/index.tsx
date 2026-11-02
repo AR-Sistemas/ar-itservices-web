@@ -5,7 +5,6 @@ import { sendContactEmail } from "@/lib/contact.server";
 import { toast } from "sonner";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
-import { SpotlightCard } from "@/components/site/SpotlightCard";
 
 import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
@@ -25,7 +24,7 @@ import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
-import { SolutionVisual } from "@/components/site/SolutionVisual";
+import { PRODUCT_LOGOS } from "@/components/site/product-logos";
 import { EventBanner } from "@/components/site/EventBanner";
 import { getAviso } from "@/lib/avisos.server";
 import claroLogo from "@/assets/clients/claro.png";
@@ -508,23 +507,9 @@ function Home() {
                   <Link
                     to="/soluciones/$productId"
                     params={{ productId: p.id }}
-                    className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    className="flex h-full min-h-36 items-center justify-center rounded-lg p-5 transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                   >
-                    <SpotlightCard
-                      as="article"
-                      className="h-full rounded-2xl border border-border bg-card p-5"
-                      contentClassName="flex h-full flex-col"
-                    >
-                      <SolutionVisual id={p.id} alt={c.solutions.logoAlt(p.name)} />
-                      <h3 className="mt-5 font-display text-xl font-extrabold tracking-tight">
-                        {p.name}
-                      </h3>
-                      <p className="mt-1 text-sm font-semibold text-primary">{p.tagline}</p>
-                      <p className="mt-3 text-sm text-muted-foreground">{p.short}</p>
-                      <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-primary transition-colors group-hover:text-brand-dark">
-                        {c.solutions.cardCta} →
-                      </span>
-                    </SpotlightCard>
+                    <img src={PRODUCT_LOGOS[p.id]} alt={c.solutions.logoAlt(p.name)} loading="lazy" className="max-h-28 w-full object-contain" />
                   </Link>
                 </AnimatedContent>
               ))}
