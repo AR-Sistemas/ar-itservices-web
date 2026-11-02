@@ -6,6 +6,8 @@ import { useLang } from "@/i18n/language";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { QrContactForm } from "@/components/site/QrContactForm";
+import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
+import { Beams } from "@/components/site/Beams";
 
 export const Route = createFileRoute("/qr")({
   head: () => ({
@@ -34,8 +36,10 @@ function QrPage() {
   ];
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-background px-5 py-10 sm:py-16">
-      <div className="w-full max-w-lg">
+    <main className="relative flex min-h-screen flex-col items-center overflow-x-clip bg-background px-5 py-10 sm:py-16">
+      <CodeGridSpotlight />
+      <Beams />
+      <div className="relative z-10 w-full max-w-lg">
         <div className="flex items-center justify-between gap-4">
           <Link to="/" aria-label="AR IT Services" className="inline-flex items-center gap-3">
             <LogoMark className="h-11 w-auto text-foreground" />
