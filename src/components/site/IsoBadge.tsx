@@ -6,9 +6,17 @@
  *
  * `compact` → versión a mitad de tamaño, horizontal, para el footer.
  *
+ * Al hacer clic abre el modal del certificado (IsoCertificateModal) con los datos
+ * y el PDF original de Bureau Veritas.
+ *
  * NOTA: si el organismo certificador provee su isotipo oficial, reemplazar este
  * badge por ese archivo tal cual (sin recolorear ni deformar).
  */
+import { useState } from "react";
+import { IsoCertificateModal } from "./IsoCertificateModal";
+import { useLang } from "@/i18n/language";
+import { getContent } from "@/i18n/content";
+
 function ShieldCheck({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -36,23 +44,48 @@ export function IsoBadge({
   className?: string;
   label?: string;
 }) {
-  if (compact) {
-    return (
-      <span className={`inline-flex items-center gap-2 ${className}`}>
-        <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-        <span className="leading-tight">
-          <span className="block text-xs font-medium text-foreground">ISO 9001:2015</span>
-          <span className="block text-[0.65rem] text-muted-foreground">{label}</span>
+  const [open, setOpen] = useState(false);
+  const { lang } = useLang();
+  const view = getContent(lang).iso.view;
+
+  const trigger = compact ? (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      aria-haspopup="dialog"
+      title={view}
+      className={`group inline-flex items-center gap-2 rounded-md text-left transition-opacity hover:opacity-80 ${className}`}
+    >
+      <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
+      <span className="leading-tight">
+        <span className="block text-xs font-medium text-foreground">ISO 9001:2015</span>
+        <span className="block text-[0.65rem] text-muted-foreground group-hover:text-primary">
+          {label}
         </span>
       </span>
-    );
-  }
+    </button>
+  ) : (
+    <button
+      type="button"
+      onClick={() => setOpen(true)}
+      aria-haspopup="dialog"
+      className={`group flex flex-col items-start justify-center rounded-lg text-left ${className}`}
+    >
+      <ShieldCheck className="h-10 w-10 text-primary" />
+      <span className="mt-3 block font-display text-lg font-medium text-foreground">
+        ISO 9001:2015
+      </span>
+      <span className="mt-1 block text-sm text-muted-foreground">{label}</span>
+      <span className="mt-1 block text-xs font-semibold text-primary transition-colors group-hover:text-brand-dark">
+        {view} →
+      </span>
+    </button>
+  );
 
   return (
-    <div className={`flex flex-col justify-center ${className}`}>
-      <ShieldCheck className="h-10 w-10 text-primary" />
-      <p className="mt-3 font-display text-lg font-medium text-foreground">ISO 9001:2015</p>
-      <p className="mt-1 text-sm text-muted-foreground">{label}</p>
-    </div>
+    <>
+      {trigger}
+      <IsoCertificateModal open={open} onClose={() => setOpen(false)} />
+    </>
   );
 }

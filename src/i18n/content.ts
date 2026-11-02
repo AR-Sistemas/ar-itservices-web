@@ -153,7 +153,19 @@ export type SiteContent = {
     legal: string;
     offices: { city: string; country: string; address: string }[];
   };
-  iso: { certified: string };
+  iso: {
+    certified: string;
+    view: string;
+    modal: {
+      eyebrow: string;
+      title: string;
+      closeLabel: string;
+      rows: { label: string; value: string }[];
+      open: string;
+      verify: string;
+      note: string;
+    };
+  };
   team: {
     eyebrow: string;
     heading: string;
@@ -748,7 +760,34 @@ const ES: SiteContent = {
       { city: "Asunción", country: "Paraguay", address: "Asunción" },
     ],
   },
-  iso: { certified: "Certificados" },
+  iso: {
+    certified: "Certificados",
+    view: "Ver certificado",
+    modal: {
+      eyebrow: "Certificación de calidad",
+      title: "ISO 9001:2015",
+      closeLabel: "Cerrar",
+      rows: [
+        { label: "Empresa", value: "AR Consultores S.R.L." },
+        {
+          label: "Certificadora",
+          value:
+            "Bureau Veritas Certification, acreditada por el OAA (Organismo Argentino de Acreditación)",
+        },
+        {
+          label: "Alcance",
+          value:
+            "Desarrollo de productos de software a medida. Servicio de provisión de recursos humanos (outsourcing) para desarrollo de software.",
+        },
+        { label: "Certificado N°", value: "AR-O240463" },
+        { label: "Emisión", value: "2 de enero de 2024" },
+        { label: "Vigencia", value: "Hasta el 10 de enero de 2027" },
+      ],
+      open: "Ver certificado original (PDF)",
+      verify: "Para verificar su validez, Bureau Veritas atiende al",
+      note: "El certificado cubre el alcance indicado arriba.",
+    },
+  },
   team: {
     eyebrow: "// selecciona las disciplinas",
     heading: "Armá el equipo que tu proyecto necesita",
@@ -1459,7 +1498,34 @@ const EN: SiteContent = {
       { city: "Asunción", country: "Paraguay", address: "Asunción" },
     ],
   },
-  iso: { certified: "Certified" },
+  iso: {
+    certified: "Certified",
+    view: "View certificate",
+    modal: {
+      eyebrow: "Quality certification",
+      title: "ISO 9001:2015",
+      closeLabel: "Close",
+      rows: [
+        { label: "Company", value: "AR Consultores S.R.L." },
+        {
+          label: "Certification body",
+          value:
+            "Bureau Veritas Certification, accredited by the OAA (Argentine Accreditation Body)",
+        },
+        {
+          label: "Scope",
+          value:
+            "Custom software product development. Human resources provision service (outsourcing) for software development.",
+        },
+        { label: "Certificate no.", value: "AR-O240463" },
+        { label: "Issued", value: "January 2, 2024" },
+        { label: "Valid until", value: "January 10, 2027" },
+      ],
+      open: "View original certificate (PDF)",
+      verify: "To verify its validity, Bureau Veritas can be reached at",
+      note: "The original certificate is in Spanish. This summary is a translation.",
+    },
+  },
   team: {
     eyebrow: "// select the disciplines",
     heading: "Build the team your project needs",
