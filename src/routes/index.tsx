@@ -332,35 +332,30 @@ function Home() {
             <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {c.solutions.products.map((p, i) => (
                 <AnimatedContent key={p.id} delay={i * 80} distance={30}>
-                  <SpotlightCard
-                    as="article"
-                    className="h-full rounded-2xl border border-border bg-card p-5"
+                  <Link
+                    to="/soluciones/$productId"
+                    params={{ productId: p.id }}
+                    className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                   >
-                    <SolutionVisual id={p.id} alt={c.solutions.logoAlt(p.name)} />
-                    <h3 className="mt-5 font-display text-xl font-extrabold tracking-tight">
-                      {p.name}
-                    </h3>
-                    <p className="mt-1 text-sm font-semibold text-primary">{p.tagline}</p>
-                    <p className="mt-3 text-sm text-muted-foreground">{p.short}</p>
-                    <Link
-                      to="/soluciones"
-                      hash={p.id}
-                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                    <SpotlightCard
+                      as="article"
+                      className="h-full rounded-2xl border border-border bg-card p-5"
+                      contentClassName="flex h-full flex-col"
                     >
-                      {c.solutions.cardCta} →
-                    </Link>
-                  </SpotlightCard>
+                      <SolutionVisual id={p.id} alt={c.solutions.logoAlt(p.name)} />
+                      <h3 className="mt-5 font-display text-xl font-extrabold tracking-tight">
+                        {p.name}
+                      </h3>
+                      <p className="mt-1 text-sm font-semibold text-primary">{p.tagline}</p>
+                      <p className="mt-3 text-sm text-muted-foreground">{p.short}</p>
+                      <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-primary transition-colors group-hover:text-brand-dark">
+                        {c.solutions.cardCta} →
+                      </span>
+                    </SpotlightCard>
+                  </Link>
                 </AnimatedContent>
               ))}
             </div>
-            <AnimatedContent className="mt-8">
-              <Link
-                to="/soluciones"
-                className="inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
-              >
-                {c.solutions.teaserCta}
-              </Link>
-            </AnimatedContent>
           </div>
         </section>
 
