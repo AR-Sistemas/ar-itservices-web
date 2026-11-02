@@ -523,7 +523,7 @@ function Home() {
               </h2>
               <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
             </AnimatedContent>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-10 grid grid-cols-2 gap-5 lg:grid-cols-4">
               {c.solutions.products.map((p, i) => (
                 <AnimatedContent key={p.id} delay={i * 80} distance={30}>
                   <Link
