@@ -682,13 +682,15 @@ function Home() {
                     onChange={setEmpresaValue}
                   />
                 )}
-                {contactType === "postulante" && (
+                {contactType !== "consulta" && (
                   <Field
                     id="telefono"
                     label={c.contact.fields.phone}
                     type="tel"
                     value={telefonoValue}
                     onChange={setTelefonoValue}
+                    required={contactType === "postulante"}
+                    optionalLabel={c.contact.fields.optional}
                   />
                 )}
 
@@ -703,7 +705,7 @@ function Home() {
                 )}
 
                 {contactType === "empresa" && (
-                  <div className="sm:col-span-2">
+                  <div>
                     <label htmlFor="tipo" className="text-sm font-medium">
                       {c.contact.fields.projectType}
                     </label>
@@ -837,23 +839,31 @@ function Field({
   type = "text",
   value,
   onChange,
+  required = true,
+  optionalLabel,
 }: {
   id: string;
   label: string;
   type?: string;
   value?: string;
   onChange?: (value: string) => void;
+  required?: boolean;
+  /** Texto "(opcional)" que se muestra al lado de la etiqueta si el campo no es obligatorio. */
+  optionalLabel?: string;
 }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium">
         {label}
+        {!required && optionalLabel && (
+          <span className="font-normal text-muted-foreground"> {optionalLabel}</span>
+        )}
       </label>
       <input
         id={id}
         name={id}
         type={type}
-        required
+        required={required}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"

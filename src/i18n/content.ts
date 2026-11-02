@@ -100,6 +100,7 @@ export type SiteContent = {
       name: string;
       email: string;
       phone: string;
+      optional: string;
       company: string;
       country: string;
       projectType: string;
@@ -459,6 +460,7 @@ const ES: SiteContent = {
       name: "Nombre",
       email: "Email",
       phone: "Teléfono",
+      optional: "(opcional)",
       company: "Empresa",
       country: "País",
       projectType: "Tipo de proyecto",
@@ -1208,6 +1210,7 @@ const EN: SiteContent = {
       name: "Name",
       email: "Email",
       phone: "Phone",
+      optional: "(optional)",
       company: "Company",
       country: "Country",
       projectType: "Project type",
