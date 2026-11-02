@@ -277,7 +277,7 @@ function Home() {
           <Beams />
           <div className="relative mx-auto max-w-4xl text-center">
             <LogoDraw className="mx-auto h-16 w-auto text-primary" />
-            <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
+            <p className="mt-6 font-mono text-xs font-bold tracking-widest text-primary uppercase">
               {c.hero.eyebrow}
             </p>
             {/* Frases pedidas por gerencia: rotan y se traducen con el idioma del sitio */}
@@ -369,7 +369,7 @@ function Home() {
               </h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+              <p className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
                 {c.services.hint}
               </p>
               <div className="mt-8">
@@ -525,7 +525,7 @@ function Home() {
         {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
         <section className="px-5 py-24 sm:py-32">
           <AnimatedContent className="mx-auto max-w-3xl text-center">
-            <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
+            <h2 className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
               {c.people.heading}
             </h2>
             <p className="mt-6 text-4xl leading-snug font-bold tracking-tight text-balance sm:text-5xl">

@@ -750,12 +750,12 @@ const ES: SiteContent = {
   },
   iso: { certified: "Certificados" },
   team: {
-    eyebrow: "// selecciona las disciplinas",
+    eyebrow: "// SELECCIONA LAS DISCIPLINAS",
     heading: "Armá el equipo que tu proyecto necesita",
     paragraph:
       "Tocá las disciplinas y mirá cómo se arma el equipo. Es exactamente lo que hacemos con nuestros clientes: perfiles concretos, cantidades concretas.",
     disciplinesAria: "Disciplinas",
-    proposed: "// equipo propuesto",
+    proposed: "// EQUIPO PROPUESTO",
     person: "persona",
     people: "personas",
     empty: "Seleccioná al menos una disciplina para ver tu equipo.",
