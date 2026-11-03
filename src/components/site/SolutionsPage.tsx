@@ -8,6 +8,8 @@ import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { SolutionAnimation } from "@/components/site/SolutionVisual";
 import { SolutionsNav } from "@/components/site/SolutionsNav";
+import { SddDetail } from "@/components/site/SddDetail";
+import { ArioDetail } from "@/components/site/ArioDetail";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
@@ -61,7 +63,11 @@ export function SolutionsPage({ productId }: { productId: SolutionProduct["id"] 
 
           {s.products
             .filter((p) => p.id === productId)
-            .map((p) => (
+            .map((p) => p.id === "sdd" ? (
+              <SddDetail key={p.id} product={p} content={s} />
+            ) : p.id === "ario" ? (
+              <ArioDetail key={p.id} product={p} content={s} lang={lang} />
+            ) : (
               <section
                 key={p.id}
                 id={p.id}
@@ -102,13 +108,26 @@ export function SolutionsPage({ productId }: { productId: SolutionProduct["id"] 
                       <h3 className="font-mono text-xs tracking-widest text-primary uppercase">
                         {p.howLabel ?? s.labels.how}
                       </h3>
-                      <ol className="mt-3 space-y-3">
+                      <ol
+                        className={
+                          p.id === "meetingmate"
+                            ? "mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2"
+                            : "mt-3 space-y-3"
+                        }
+                      >
                         {p.steps.map((step, i) => (
-                          <li key={step} className="flex gap-3">
+                          <li
+                            key={step}
+                            className={
+                              p.id === "meetingmate"
+                                ? "flex items-start gap-3 rounded-xl border border-border bg-card p-3"
+                                : "flex gap-3"
+                            }
+                          >
                             <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-primary/40 text-xs font-bold text-primary">
                               {i + 1}
                             </span>
-                            <span className="text-muted-foreground">{step}</span>
+                            <span className={p.id === "meetingmate" ? "text-sm leading-snug text-muted-foreground" : "text-muted-foreground"}>{step}</span>
                           </li>
                         ))}
                       </ol>
