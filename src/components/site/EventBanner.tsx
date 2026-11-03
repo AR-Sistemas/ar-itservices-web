@@ -78,7 +78,7 @@ export function EventBanner() {
             <span className="hidden sm:inline">{c.lead} · </span>
             {c.dates}
           </span>
-          <Link to="/soluciones" className="ctw-cta font-bold">
+          <Link to="/" hash="soluciones" className="ctw-cta font-bold">
             {c.cta} →
           </Link>
         </p>

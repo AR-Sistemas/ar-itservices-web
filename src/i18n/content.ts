@@ -1743,9 +1743,10 @@ export function getContent(lang: Lang): SiteContent {
     n.href === "/soluciones"
       ? {
           ...n,
+          href: "/#soluciones",
           children: base.solutions.products.map((p) => ({
             label: p.name,
-            href: `/soluciones#${p.id}`,
+            href: `/soluciones/${p.id}`,
             hint: p.tagline,
           })),
           ...(isNewBadgeActive() ? { badge: base.solutions.navBadge } : {}),

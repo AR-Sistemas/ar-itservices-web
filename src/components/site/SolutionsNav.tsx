@@ -1,4 +1,4 @@
-import { useEffect, useState, type MouseEvent, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { PRODUCT_LOGOS } from "./product-logos";
 import { useIslandReveal } from "./useIslandReveal";
@@ -12,65 +12,24 @@ type Item = Pick<SolutionProduct, "id" | "name">;
  * solución y el selector de idioma (`rightSlot`).
  *  - Misma "isla" que FloatingNav (useIslandReveal + Star Border): aparece al
  *    scrollear, entra escalonada, se esfuma por inactividad y vuelve al interactuar.
- *  - Resalta la ficha que se está leyendo (scroll-spy con IntersectionObserver).
- *  - El salto entre fichas es un desplazamiento suave, no un corte; con "reducir
- *    movimiento" salta directo.
- *  - Si se entra con un hash (/soluciones#ario, desde el home o el menú), también
- *    se desplaza suavemente hasta esa ficha.
+ *  - Los logos conducen a las páginas individuales de cada solución.
  */
 export function SolutionsNav({
   products,
   jumpLabel,
   backLabel,
   rightSlot,
+  current,
+  fromQr = false,
 }: {
   products: Item[];
   jumpLabel: string;
   backLabel: string;
   rightSlot?: ReactNode;
+  current?: string | undefined;
+  fromQr?: boolean;
 }) {
-  const [current, setCurrent] = useState<string | null>(null);
   const { visible, dur, delay, enter, tab, island } = useIslandReveal();
-
-  const smooth = () =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
-
-  useEffect(() => {
-    const sections = products
-      .map((p) => document.getElementById(p.id))
-      .filter((el): el is HTMLElement => el !== null);
-    // La ficha "activa" es la que cruza la franja del medio de la pantalla.
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) if (e.isIntersecting) setCurrent(e.target.id);
-      },
-      { rootMargin: "-40% 0px -55% 0px" },
-    );
-    for (const el of sections) io.observe(el);
-    return () => io.disconnect();
-  }, [products]);
-
-  // Llegada con hash: esperamos a que se asiente el layout (hay animaciones de
-  // entrada) y recién ahí hacemos el desplazamiento suave.
-  useEffect(() => {
-    const id = window.location.hash.slice(1);
-    if (!products.some((p) => p.id === id)) return;
-    const t = window.setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: smooth(), block: "start" });
-    }, 350);
-    return () => window.clearTimeout(t);
-    // Solo al montar: lee el hash una vez.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const jump = (e: MouseEvent<HTMLAnchorElement>, id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    e.preventDefault();
-    el.scrollIntoView({ behavior: smooth(), block: "start" });
-    window.history.replaceState(null, "", `#${id}`);
-    setCurrent(id);
-  };
 
   return (
     <div className="pointer-events-none fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 sm:pt-4">
@@ -108,8 +67,7 @@ export function SolutionsNav({
                 return (
                   <a
                     key={p.id}
-                    href={`#${p.id}`}
-                    onClick={(e) => jump(e, p.id)}
+                    href={`/soluciones/${p.id}${fromQr ? "?origen=qr" : ""}`}
                     tabIndex={tab}
                     aria-current={isActive ? "true" : undefined}
                     className={`flex h-10 items-center justify-center rounded-xl px-2.5 transition-all ${dur} ease-out sm:h-11 sm:px-3.5 ${enter} ${
