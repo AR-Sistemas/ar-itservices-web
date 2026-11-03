@@ -156,13 +156,11 @@ export type SiteContent = {
   };
   iso: {
     certified: string;
-    view: string;
     modal: {
       eyebrow: string;
       title: string;
       closeLabel: string;
       rows: { label: string; value: string }[];
-      open: string;
       verify: string;
       note: string;
     };
@@ -764,7 +762,6 @@ const ES: SiteContent = {
   },
   iso: {
     certified: "Certificados",
-    view: "Ver certificado",
     modal: {
       eyebrow: "Certificación de calidad",
       title: "ISO 9001:2015",
@@ -782,10 +779,7 @@ const ES: SiteContent = {
             "Desarrollo de productos de software a medida. Servicio de provisión de recursos humanos (outsourcing) para desarrollo de software.",
         },
         { label: "Certificado N°", value: "AR-O240463" },
-        { label: "Emisión", value: "2 de enero de 2024" },
-        { label: "Vigencia", value: "Hasta el 10 de enero de 2027" },
       ],
-      open: "Ver certificado original (PDF)",
       verify: "Para verificar su validez, Bureau Veritas atiende al",
       note: "El certificado cubre el alcance indicado arriba.",
     },
@@ -1503,7 +1497,6 @@ const EN: SiteContent = {
   },
   iso: {
     certified: "Certified",
-    view: "View certificate",
     modal: {
       eyebrow: "Quality certification",
       title: "ISO 9001:2015",
@@ -1521,12 +1514,9 @@ const EN: SiteContent = {
             "Custom software product development. Human resources provision service (outsourcing) for software development.",
         },
         { label: "Certificate no.", value: "AR-O240463" },
-        { label: "Issued", value: "January 2, 2024" },
-        { label: "Valid until", value: "January 10, 2027" },
       ],
-      open: "View original certificate (PDF)",
       verify: "To verify its validity, Bureau Veritas can be reached at",
-      note: "The original certificate is in Spanish. This summary is a translation.",
+      note: "The certificate covers the scope stated above.",
     },
   },
   team: {

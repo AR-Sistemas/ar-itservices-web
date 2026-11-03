@@ -8,9 +8,9 @@ import { ISO_CERTIFICATE } from "@/lib/iso-certificate";
 
 /**
  * Modal del certificado ISO 9001:2015: resume los datos del certificado (empresa,
- * certificadora, alcance, número, emisión y vigencia) y abre el PDF original
- * emitido por Bureau Veritas en una pestaña nueva. Los textos viven en
- * content.ts (`iso.modal`) y siguen el idioma del sitio.
+ * certificadora, alcance y número). A propósito no muestra fechas de emisión ni
+ * vigencia ni enlaza al PDF, para no tener que tocar la web en cada recertificación.
+ * Los textos viven en content.ts (`iso.modal`) y siguen el idioma del sitio.
  */
 export function IsoCertificateModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const { lang } = useLang();
@@ -65,15 +65,7 @@ export function IsoCertificateModal({ open, onClose }: { open: boolean; onClose:
           ))}
         </dl>
 
-        <a
-          href={ISO_CERTIFICATE.pdfUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="mt-6 flex w-full items-center justify-center rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-        >
-          {c.open}
-        </a>
-        <p className="mt-4 text-center text-xs text-muted-foreground">
+        <p className="mt-6 text-center text-xs text-muted-foreground">
           {c.verify}{" "}
           <a
             href={`tel:${ISO_CERTIFICATE.verifyPhone.replace(/\s/g, "")}`}

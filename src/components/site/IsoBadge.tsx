@@ -6,8 +6,8 @@
  *
  * `compact` → versión a mitad de tamaño, horizontal, para el footer.
  *
- * Al hacer clic abre el modal del certificado (IsoCertificateModal) con los datos
- * y el PDF original de Bureau Veritas.
+ * Al hacer clic en el ícono abre el modal del certificado (IsoCertificateModal)
+ * con los datos de la certificación.
  *
  * NOTA: si el organismo certificador provee su isotipo oficial, reemplazar este
  * badge por ese archivo tal cual (sin recolorear ni deformar).
@@ -46,45 +46,40 @@ export function IsoBadge({
 }) {
   const [open, setOpen] = useState(false);
   const { lang } = useLang();
-  const view = getContent(lang).iso.view;
+  const title = getContent(lang).iso.modal.title;
 
-  const trigger = compact ? (
+  // El ícono es el único elemento clickeable: abre el modal con los datos.
+  const icon = (size: string) => (
     <button
       type="button"
       onClick={() => setOpen(true)}
       aria-haspopup="dialog"
-      title={view}
-      className={`group inline-flex items-center gap-2 rounded-md text-left transition-opacity hover:opacity-80 ${className}`}
+      aria-label={title}
+      className={`${size} shrink-0 cursor-pointer rounded-md text-primary transition-all hover:scale-110 hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
     >
-      <ShieldCheck className="h-5 w-5 shrink-0 text-primary" />
-      <span className="leading-tight">
-        <span className="block text-xs font-medium text-foreground">ISO 9001:2015</span>
-        <span className="block text-[0.65rem] text-muted-foreground group-hover:text-primary">
-          {label}
-        </span>
-      </span>
-    </button>
-  ) : (
-    <button
-      type="button"
-      onClick={() => setOpen(true)}
-      aria-haspopup="dialog"
-      className={`group flex flex-col items-start justify-center rounded-lg text-left ${className}`}
-    >
-      <ShieldCheck className="h-10 w-10 text-primary" />
-      <span className="mt-3 block font-display text-lg font-medium text-foreground">
-        ISO 9001:2015
-      </span>
-      <span className="mt-1 block text-sm text-muted-foreground">{label}</span>
-      <span className="mt-1 block text-xs font-semibold text-primary transition-colors group-hover:text-brand-dark">
-        {view} →
-      </span>
+      <ShieldCheck className="h-full w-full" />
     </button>
   );
 
   return (
     <>
-      {trigger}
+      {compact ? (
+        <div className={`inline-flex items-center gap-2 ${className}`}>
+          {icon("h-5 w-5")}
+          <span className="leading-tight">
+            <span className="block text-xs font-medium text-foreground">ISO 9001:2015</span>
+            <span className="block text-[0.65rem] text-muted-foreground">{label}</span>
+          </span>
+        </div>
+      ) : (
+        <div className={`flex flex-col items-start justify-center ${className}`}>
+          {icon("h-10 w-10")}
+          <span className="mt-3 block font-display text-lg font-medium text-foreground">
+            ISO 9001:2015
+          </span>
+          <span className="mt-1 block text-sm text-muted-foreground">{label}</span>
+        </div>
+      )}
       <IsoCertificateModal open={open} onClose={() => setOpen(false)} />
     </>
   );
