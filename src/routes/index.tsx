@@ -317,7 +317,7 @@ function Home() {
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
               ))}
-              <IsoBadge label={c.iso.certified} />
+              <IsoBadge metric label={c.iso.certified} />
             </div>
           </AnimatedContent>
         </section>

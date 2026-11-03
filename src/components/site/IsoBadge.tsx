@@ -37,10 +37,13 @@ function ShieldCheck({ className = "" }: { className?: string }) {
 
 export function IsoBadge({
   compact = false,
+  metric = false,
   className = "",
   label = "Certificados",
 }: {
   compact?: boolean;
+  /** Para la franja de métricas: ícono + "ISO 9001:2015" en la línea de los números y la etiqueta debajo. */
+  metric?: boolean;
   className?: string;
   label?: string;
 }) {
@@ -48,14 +51,16 @@ export function IsoBadge({
   const { lang } = useLang();
   const title = getContent(lang).iso.modal.title;
 
-  // El ícono es el único elemento clickeable: abre el modal con los datos.
+  // El ícono (y el texto, en la franja de métricas) abren el modal con los datos.
+  const trigger =
+    "cursor-pointer transition-colors hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
   const icon = (size: string) => (
     <button
       type="button"
       onClick={() => setOpen(true)}
       aria-haspopup="dialog"
       aria-label={title}
-      className={`${size} shrink-0 cursor-pointer rounded-md text-primary transition-all hover:scale-110 hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary`}
+      className={`${size} shrink-0 rounded-md text-primary hover:scale-110 ${trigger}`}
     >
       <ShieldCheck className="h-full w-full" />
     </button>
@@ -63,7 +68,22 @@ export function IsoBadge({
 
   return (
     <>
-      {compact ? (
+      {metric ? (
+        <div className={className}>
+          <div className="flex h-9 items-center gap-2.5 sm:h-12 lg:h-10 xl:h-12">
+            {icon("h-8 w-8 sm:h-9 sm:w-9")}
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-haspopup="dialog"
+              className={`rounded-md font-display text-lg font-bold whitespace-nowrap text-foreground sm:text-xl lg:text-base xl:text-lg ${trigger}`}
+            >
+              ISO 9001:2015
+            </button>
+          </div>
+          <p className="mt-2 text-sm text-muted-foreground">{label}</p>
+        </div>
+      ) : compact ? (
         <div className={`inline-flex items-center gap-2 ${className}`}>
           {icon("h-5 w-5")}
           <span className="leading-tight">
