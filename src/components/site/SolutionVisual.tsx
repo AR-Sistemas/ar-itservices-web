@@ -31,8 +31,8 @@ const ANIM_LABELS: Partial<Record<ProductId, { ES: string; EN: string }>> = {
     EN: "MeetingMate: a meeting is transcribed and produces a summary and the agreed tasks",
   },
   sdd: {
-    ES: "AR SDD: un pedido pasa por especificación, desarrollo y verificaciones hasta quedar aprobado",
-    EN: "AR SDD: a request goes through specification, development and checks until it is approved",
+    ES: "CriterIA: un pedido pasa por especificación, desarrollo y verificaciones hasta quedar aprobado",
+    EN: "CriterIA: a request goes through specification, development and checks until it is approved",
   },
 };
 

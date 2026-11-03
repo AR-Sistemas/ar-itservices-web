@@ -100,6 +100,7 @@ export type SiteContent = {
       name: string;
       email: string;
       phone: string;
+      optional: string;
       company: string;
       country: string;
       projectType: string;
@@ -153,7 +154,17 @@ export type SiteContent = {
     legal: string;
     offices: { city: string; country: string; address: string }[];
   };
-  iso: { certified: string };
+  iso: {
+    certified: string;
+    modal: {
+      eyebrow: string;
+      title: string;
+      closeLabel: string;
+      rows: { label: string; value: string }[];
+      verify: string;
+      note: string;
+    };
+  };
   team: {
     eyebrow: string;
     heading: string;
@@ -275,7 +286,7 @@ const ES: SiteContent = {
     { value: 25, suffix: "+", label: "años de trayectoria" },
     { value: 2000, suffix: "+", label: "proyectos entregados" },
     { value: 3, suffix: "", label: "países con oficina propia" },
-    { value: 2, suffix: "M+", label: "horas-hombre" },
+    { value: 2, suffix: "M+", label: "horas de ingeniería" },
   ],
   services: {
     heading: "Qué hacemos",
@@ -393,7 +404,7 @@ const ES: SiteContent = {
         challenge:
           "Sostener una demanda continua de desarrollo y soporte en múltiples países de LATAM con equipos que puedan escalar.",
         result:
-          "Más de 2.000 proyectos entregados y 2M+ horas-hombre acumuladas trabajando junto a sus equipos en toda la región.",
+          "Más de 2.000 proyectos entregados y 2M+ horas de ingeniería acumuladas trabajando junto a sus equipos en toda la región.",
       },
     ],
   },
@@ -447,6 +458,7 @@ const ES: SiteContent = {
       name: "Nombre",
       email: "Email",
       phone: "Teléfono",
+      optional: "(opcional)",
       company: "Empresa",
       country: "País",
       projectType: "Tipo de proyecto",
@@ -679,7 +691,7 @@ const ES: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
+        name: "CriterIA",
         tagline: "Del pedido a un cambio verificable.",
         short:
           "Un método de desarrollo con IA y un kit técnico para transformar pedidos de software en cambios definidos, revisados y verificables.",
@@ -748,7 +760,30 @@ const ES: SiteContent = {
       { city: "Asunción", country: "Paraguay", address: "Asunción" },
     ],
   },
-  iso: { certified: "Certificados" },
+  iso: {
+    certified: "Certificados",
+    modal: {
+      eyebrow: "Certificación de calidad",
+      title: "ISO 9001:2015",
+      closeLabel: "Cerrar",
+      rows: [
+        { label: "Empresa", value: "AR Consultores S.R.L." },
+        {
+          label: "Certificadora",
+          value:
+            "Bureau Veritas Certification, acreditada por el OAA (Organismo Argentino de Acreditación)",
+        },
+        {
+          label: "Alcance",
+          value:
+            "Desarrollo de productos de software a medida. Servicio de provisión de recursos humanos (outsourcing) para desarrollo de software.",
+        },
+        { label: "Certificado N°", value: "AR-O240463" },
+      ],
+      verify: "Para verificar su validez, Bureau Veritas atiende al",
+      note: "El certificado cubre el alcance indicado arriba.",
+    },
+  },
   team: {
     eyebrow: "// selecciona las disciplinas",
     heading: "Armá el equipo que tu proyecto necesita",
@@ -998,7 +1033,7 @@ const EN: SiteContent = {
     { value: 25, suffix: "+", label: "years in business" },
     { value: 2000, suffix: "+", label: "projects delivered" },
     { value: 3, suffix: "", label: "countries with our own office" },
-    { value: 2, suffix: "M+", label: "man-hours" },
+    { value: 2, suffix: "M+", label: "engineering hours" },
   ],
   services: {
     heading: "What we do",
@@ -1116,7 +1151,7 @@ const EN: SiteContent = {
         challenge:
           "Sustain continuous development and support demand across multiple LATAM countries with teams that can scale.",
         result:
-          "Over 2,000 projects delivered and 2M+ accumulated man-hours working alongside their teams across the region.",
+          "Over 2,000 projects delivered and 2M+ accumulated engineering hours working alongside their teams across the region.",
       },
     ],
   },
@@ -1169,6 +1204,7 @@ const EN: SiteContent = {
       name: "Name",
       email: "Email",
       phone: "Phone",
+      optional: "(optional)",
       company: "Company",
       country: "Country",
       projectType: "Project type",
@@ -1390,7 +1426,7 @@ const EN: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
+        name: "CriterIA",
         tagline: "From a request to a verifiable change.",
         short:
           "An AI-assisted development method and a technical kit to turn software requests into defined, reviewed and verifiable changes.",
@@ -1459,7 +1495,30 @@ const EN: SiteContent = {
       { city: "Asunción", country: "Paraguay", address: "Asunción" },
     ],
   },
-  iso: { certified: "Certified" },
+  iso: {
+    certified: "Certified",
+    modal: {
+      eyebrow: "Quality certification",
+      title: "ISO 9001:2015",
+      closeLabel: "Close",
+      rows: [
+        { label: "Company", value: "AR Consultores S.R.L." },
+        {
+          label: "Certification body",
+          value:
+            "Bureau Veritas Certification, accredited by the OAA (Argentine Accreditation Body)",
+        },
+        {
+          label: "Scope",
+          value:
+            "Custom software product development. Human resources provision service (outsourcing) for software development.",
+        },
+        { label: "Certificate no.", value: "AR-O240463" },
+      ],
+      verify: "To verify its validity, Bureau Veritas can be reached at",
+      note: "The certificate covers the scope stated above.",
+    },
+  },
   team: {
     eyebrow: "// select the disciplines",
     heading: "Build the team your project needs",

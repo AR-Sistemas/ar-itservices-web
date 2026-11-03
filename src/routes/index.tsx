@@ -38,6 +38,7 @@ import stellantisLogo from "@/assets/clients/Stellantis-canva.png";
 import agdLogo from "@/assets/clients/AGD-canva.png";
 import aguasCordobesasLogo from "@/assets/clients/AguasCordobesas-canva.png";
 import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
+import bancorLogo from "@/assets/clients/Bancor.png";
 import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
 import firenzeLogo from "@/assets/clients/Firenze.svg";
 import fcaLogo from "@/assets/clients/FCA-canva.png";
@@ -48,7 +49,7 @@ import holcimLogo from "@/assets/clients/Holcim-canva.png";
 import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
 import mcafeeLogo from "@/assets/clients/McAfee-canva.png";
 import minettiLogo from "@/assets/clients/Minetti-canva.png";
-import prittyLogo from "@/assets/clients/Pritty-canva.png";
+import prittyLogo from "@/assets/clients/Pritty.png";
 import tipsLogo from "@/assets/clients/Tips-canva.png";
 import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
@@ -104,6 +105,7 @@ const CLIENTS: { name: string; src: string; scale?: number }[] = [
   { name: "AGD", src: agdLogo },
   { name: "Aguas Cordobesas", src: aguasCordobesasLogo },
   { name: "América Móvil", src: americaMovilLogo },
+  { name: "Bancor", src: bancorLogo },
   { name: "Ecogas", src: ecogasLogo, scale: 1.35 },
   { name: "Firenze", src: firenzeLogo },
   { name: "FCA", src: fcaLogo },
@@ -316,13 +318,15 @@ function Home() {
           onChange={setEmpresaValue}
         />
       )}
-      {contactType === "postulante" && (
+      {contactType !== "consulta" && (
         <Field
           id="telefono"
           label={c.contact.fields.phone}
           type="tel"
           value={telefonoValue}
           onChange={setTelefonoValue}
+          required={contactType === "postulante"}
+          optionalLabel={c.contact.fields.optional}
         />
       )}
 
@@ -337,7 +341,7 @@ function Home() {
       )}
 
       {contactType === "empresa" && (
-        <div className="sm:col-span-2">
+        <div>
           <label htmlFor="tipo" className="text-sm font-medium">
             {c.contact.fields.projectType}
           </label>
@@ -502,7 +506,7 @@ function Home() {
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
               ))}
-              <IsoBadge label={c.iso.certified} />
+              <IsoBadge metric label={c.iso.certified} />
             </div>
           </AnimatedContent>
         </section>
@@ -840,23 +844,31 @@ function Field({
   type = "text",
   value,
   onChange,
+  required = true,
+  optionalLabel,
 }: {
   id: string;
   label: string;
   type?: string;
   value?: string;
   onChange?: (value: string) => void;
+  required?: boolean;
+  /** Texto "(opcional)" que se muestra al lado de la etiqueta si el campo no es obligatorio. */
+  optionalLabel?: string;
 }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium">
         {label}
+        {!required && optionalLabel && (
+          <span className="font-normal text-muted-foreground"> {optionalLabel}</span>
+        )}
       </label>
       <input
         id={id}
         name={id}
         type={type}
-        required
+        required={required}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
