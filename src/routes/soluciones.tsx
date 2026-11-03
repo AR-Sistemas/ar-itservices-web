@@ -17,7 +17,7 @@ export const Route = createFileRoute("/soluciones")({
       {
         name: "description",
         content:
-          "ARIA, Ario, MeetingMate y AR SDD: framework y productos propios de AR IT Services para adoptar IA con criterio, automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
+          "ARIA, Ario, MeetingMate y CriterIA: framework y productos propios de AR IT Services para adoptar IA con criterio, automatizar documentos, potenciar reuniones y desarrollar con IA de forma controlada.",
       },
       { property: "og:title", content: "Soluciones | AR IT Services" },
       {

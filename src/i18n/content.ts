@@ -691,7 +691,7 @@ const ES: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
+        name: "CriterIA",
         tagline: "Del pedido a un cambio verificable.",
         short:
           "Un método de desarrollo con IA y un kit técnico para transformar pedidos de software en cambios definidos, revisados y verificables.",
@@ -1426,7 +1426,7 @@ const EN: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
+        name: "CriterIA",
         tagline: "From a request to a verifiable change.",
         short:
           "An AI-assisted development method and a technical kit to turn software requests into defined, reviewed and verifiable changes.",
