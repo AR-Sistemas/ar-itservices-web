@@ -5,6 +5,11 @@ import { sendContactEmail } from "@/lib/contact.server";
 import { toast } from "sonner";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
+import { SpotlightCard } from "@/components/site/SpotlightCard";
+import { StarBorderCard } from "@/components/site/StarBorderCard";
+import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
+import { getPublicEditorial } from "@/lib/editorial.server";
+import { isIntermedio } from "@/lib/site-mode";
 
 import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
@@ -24,7 +29,7 @@ import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
-import { PRODUCT_LOGOS } from "@/components/site/product-logos";
+import { SolutionVisual } from "@/components/site/SolutionVisual";
 import { EventBanner } from "@/components/site/EventBanner";
 import { getAviso } from "@/lib/avisos.server";
 import claroLogo from "@/assets/clients/claro.png";
@@ -49,6 +54,7 @@ import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
 
 export const Route = createFileRoute("/")({
+  loader: () => getPublicEditorial(),
   head: () => ({
     meta: [
       { title: "AR IT Services | Software, datos e IA con equipos dedicados" },
@@ -119,6 +125,7 @@ const CLIENTS: { name: string; src: string; scale?: number }[] = [
 type ContactType = "empresa" | "postulante" | "consulta";
 
 function Home() {
+  const editorial = Route.useLoaderData();
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const [sendState, setSendState] = useState<"idle" | "sending" | "sent" | "error">("idle");
@@ -456,7 +463,7 @@ function Home() {
           <Beams />
           <div className="relative mx-auto max-w-4xl text-center">
             <LogoDraw className="mx-auto h-16 w-auto text-primary" />
-            <p className="mt-6 font-mono text-xs font-bold tracking-widest text-primary uppercase">
+            <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
               {c.hero.eyebrow}
             </p>
             {/* Frases pedidas por gerencia: rotan y se traducen con el idioma del sitio */}
@@ -469,6 +476,14 @@ function Home() {
                 <StarBorder href="#contacto" className="group">
                   {c.hero.ctaPrimary}
                 </StarBorder>
+                {!isIntermedio && (
+                  <a
+                    href="#casos"
+                    className="rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
+                  >
+                    {c.hero.ctaSecondary}
+                  </a>
+                )}
               </div>
             </AnimatedContent>
           </div>
@@ -492,30 +507,8 @@ function Home() {
           </AnimatedContent>
         </section>
 
-        {/* Servicios */}
-        <section id="servicios" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
-          <div className="mx-auto max-w-6xl">
-            <AnimatedContent>
-              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.services.heading}
-              </h2>
-            </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
-                {c.services.hint}
-              </p>
-              <div className="mt-8">
-                <ServiceAreaCards
-                  groups={c.services.groups}
-                  inquiryMessage={c.services.inquiryMessage}
-                />
-              </div>
-            </AnimatedContent>
-          </div>
-        </section>
-
         {/* Soluciones — productos propios; el detalle vive en /soluciones */}
-        <section id="soluciones" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
+        <section id="soluciones" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
@@ -529,13 +522,49 @@ function Home() {
                   <Link
                     to="/soluciones/$productId"
                     params={{ productId: p.id }}
-                    className="flex h-full min-h-36 items-center justify-center rounded-lg p-5 transition-opacity hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    className="block h-full rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                   >
-                    <img src={PRODUCT_LOGOS[p.id]} alt={c.solutions.logoAlt(p.name)} loading="lazy" className="max-h-28 w-full object-contain" />
+                    <SpotlightCard
+                      as="article"
+                      className="h-full rounded-2xl border border-border bg-card p-5"
+                      contentClassName="flex h-full flex-col"
+                    >
+                      <SolutionVisual id={p.id} alt={c.solutions.logoAlt(p.name)} />
+                      <h3 className="mt-5 font-display text-xl font-extrabold tracking-tight">
+                        {p.name}
+                      </h3>
+                      <p className="mt-1 text-sm font-semibold text-primary">{p.tagline}</p>
+                      <p className="mt-3 text-sm text-muted-foreground">{p.short}</p>
+                      <span className="mt-auto inline-flex items-center gap-1 pt-4 text-sm font-semibold text-primary transition-colors group-hover:text-brand-dark">
+                        {c.solutions.cardCta} →
+                      </span>
+                    </SpotlightCard>
                   </Link>
                 </AnimatedContent>
               ))}
             </div>
+          </div>
+        </section>
+
+        {/* Servicios */}
+        <section id="servicios" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
+                {c.services.heading}
+              </h2>
+            </AnimatedContent>
+            <AnimatedContent className="mt-12" distance={30}>
+              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                {c.services.hint}
+              </p>
+              <div className="mt-8">
+                <ServiceAreaCards
+                  groups={c.services.groups}
+                  inquiryMessage={c.services.inquiryMessage}
+                />
+              </div>
+            </AnimatedContent>
           </div>
         </section>
 
@@ -579,6 +608,47 @@ function Home() {
           </div>
         </section>
 
+        {/* Casos */}
+        {!isIntermedio && (
+          <section id="casos" className="px-5 py-24 sm:py-32">
+            <div className="mx-auto max-w-5xl">
+              <AnimatedContent>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.cases.heading}</h2>
+              </AnimatedContent>
+              <div className="mt-12 space-y-14">
+                {c.cases.items.map((cs, i) => (
+                  <AnimatedContent key={cs.client} delay={i * 80}>
+                    <StarBorderCard>
+                      <SpotlightCard
+                        as="article"
+                        className="rounded-2xl border border-border bg-card p-8"
+                      >
+                        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                          <h3 className="text-xl font-bold">{cs.client}</h3>
+                          <div className="space-y-5">
+                            <div>
+                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                                {c.cases.challengeLabel}
+                              </p>
+                              <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
+                            </div>
+                            <div>
+                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                                {c.cases.resultLabel}
+                              </p>
+                              <p className="mt-2 text-foreground">{cs.result}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </SpotlightCard>
+                    </StarBorderCard>
+                  </AnimatedContent>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Stack */}
         <section className="border-y border-border px-5 py-20">
           <div className="mx-auto max-w-5xl">
@@ -610,10 +680,38 @@ function Home() {
           </div>
         </section>
 
+        {/* Portada del boletín de novedades */}
+        {!isIntermedio && (
+          <section className="px-5 py-24 sm:py-32">
+            <div className="mx-auto max-w-4xl">
+              <AnimatedContent>
+                {editorial.current ? (
+                  <NewsMagazineCover
+                    kicker="Boletín mensual"
+                    title={editorial.current.title}
+                    subtitle={editorial.current.period}
+                    eyebrow={c.newsTeaser.eyebrow}
+                    cta="Leer resumen editorial"
+                  />
+                ) : (
+                  <div className="rounded-3xl border border-border bg-card p-8 text-center">
+                    <p className="font-mono text-xs tracking-widest text-primary uppercase">
+                      {c.newsTeaser.eyebrow}
+                    </p>
+                    <p className="mt-4 text-sm text-muted-foreground">
+                      El resumen editorial del mes estará disponible próximamente.
+                    </p>
+                  </div>
+                )}
+              </AnimatedContent>
+            </div>
+          </section>
+        )}
+
         {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
         <section className="px-5 py-24 sm:py-32">
           <AnimatedContent className="mx-auto max-w-3xl text-center">
-            <h2 className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
+            <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
               {c.people.heading}
             </h2>
             <p className="mt-6 text-4xl leading-snug font-bold tracking-tight text-balance sm:text-5xl">
@@ -626,6 +724,14 @@ function Home() {
               >
                 {c.people.ctaLink}
               </Link>
+              {!isIntermedio && (
+                <Link
+                  to="/trabaja-con-nosotros"
+                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                >
+                  {c.people.careersLink} →
+                </Link>
+              )}
             </div>
           </AnimatedContent>
         </section>
@@ -705,15 +811,13 @@ function Home() {
           <div>
             <h3 className="text-sm font-semibold text-foreground">{c.footer.sectionsHeading}</h3>
             <ul className="mt-4 space-y-3 text-sm">
-              {c.nav
-                .filter((n) => !["#casos", "/novedades", "/trabaja-con-nosotros"].includes(n.href))
-                .map((n) => (
-                  <li key={n.href}>
-                    <a href={n.href} className="transition-colors hover:text-foreground">
-                      {n.label}
-                    </a>
-                  </li>
-                ))}
+              {c.nav.map((n) => (
+                <li key={n.href}>
+                  <a href={n.href} className="transition-colors hover:text-foreground">
+                    {n.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
           <div>

@@ -28,7 +28,7 @@ export function TeamBuilder() {
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div>
-        <p className="font-mono text-xs font-bold tracking-widest text-primary">{t.eyebrow}</p>
+        <p className="font-mono text-xs tracking-widest text-primary">{t.eyebrow}</p>
         <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">{t.heading}</h2>
         <p className="mt-4 max-w-md text-muted-foreground">{t.paragraph}</p>
 
