@@ -1,8 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { SolutionsPage } from "@/components/site/SolutionsPage";
 import { getContent } from "@/i18n/content";
+import { z } from "zod";
 
 export const Route = createFileRoute("/soluciones_/$productId")({
+  validateSearch: z.object({ origen: z.literal("qr").optional().catch(undefined) }),
   loader: ({ params }) => {
     const product = getContent("ES").solutions.products.find((p) => p.id === params.productId);
     if (!product) throw notFound();
@@ -29,5 +31,6 @@ export const Route = createFileRoute("/soluciones_/$productId")({
 
 function ProductPage() {
   const product = Route.useLoaderData();
-  return <SolutionsPage productId={product.id} />;
+  const { origen } = Route.useSearch();
+  return <SolutionsPage productId={product.id} fromQr={origen === "qr"} />;
 }

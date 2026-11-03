@@ -13,7 +13,7 @@ import { ArioDetail } from "@/components/site/ArioDetail";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
-export function SolutionsPage({ productId }: { productId: SolutionProduct["id"] }) {
+export function SolutionsPage({ productId, fromQr = false }: { productId: SolutionProduct["id"]; fromQr?: boolean }) {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const s = c.solutions;
@@ -26,6 +26,7 @@ export function SolutionsPage({ productId }: { productId: SolutionProduct["id"] 
       <SolutionsNav
         products={s.products}
         current={productId}
+        fromQr={fromQr}
         jumpLabel={s.jumpLabel}
         backLabel={s.backLink}
         rightSlot={
@@ -54,11 +55,11 @@ export function SolutionsPage({ productId }: { productId: SolutionProduct["id"] 
       <main className="px-5 pt-20 pb-8 sm:pt-24">
         <div className="mx-auto max-w-6xl">
           <div className="mb-8">
-            <BackButton
-              to="/"
-              hash="soluciones"
-              label={lang === "ES" ? "Volver a soluciones" : "Back to solutions"}
-            />
+            {fromQr ? (
+              <BackButton to="/qr" label={lang === "ES" ? "Volver al menu" : "Back to menu"} />
+            ) : (
+              <BackButton to="/" hash="soluciones" label={lang === "ES" ? "Volver a soluciones" : "Back to solutions"} />
+            )}
           </div>
 
           {s.products
