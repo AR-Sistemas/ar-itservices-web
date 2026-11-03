@@ -4,14 +4,16 @@ import type { Lang } from "@/i18n/language";
 import { AnimatedContent } from "./AnimatedContent";
 import { SolutionAnimation } from "./SolutionVisual";
 
-export function ArioDetail({
+export function ProductDetail({
   product,
   content,
   lang,
+  onRequest,
 }: {
   product: SolutionProduct;
   content: SiteContent["solutions"];
   lang: Lang;
+  onRequest: (name: string) => void;
 }) {
   return (
     <article id={product.id} className="mt-10 border-t border-border pt-10 sm:pt-14">
@@ -24,17 +26,19 @@ export function ArioDetail({
           {product.short}
         </p>
         <a
-          href="#ario-como-funciona"
+          href={`#${product.id}-como-funciona`}
           className="mt-7 inline-flex rounded-full border border-primary/50 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-primary"
         >
-          {lang === "ES" ? "Conocé cómo funciona" : "See how it works"}{" "}
+          {product.howLabel ?? (lang === "ES" ? "Conocé cómo funciona" : "See how it works")}{" "}
           <span aria-hidden="true" className="ml-2">
             ↓
           </span>
         </a>
       </AnimatedContent>
 
-      <AnimatedContent className="mt-14 grid gap-6 border-y border-border py-8 sm:mt-20 lg:grid-cols-2 lg:gap-12">
+      <AnimatedContent
+        className={`mt-14 grid gap-6 border-y border-border py-8 sm:mt-20 ${product.example ? "lg:grid-cols-2 lg:gap-12" : "max-w-3xl"}`}
+      >
         <div>
           <h2 className="font-mono text-xs font-bold tracking-widest text-primary uppercase">
             {content.labels.problem}
@@ -47,22 +51,24 @@ export function ArioDetail({
               {content.labels.example}
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-foreground">{product.example}</p>
-            <div className="mt-5 flex items-center gap-3 text-xs font-semibold text-muted-foreground sm:text-sm">
-              <span className="inline-flex items-center gap-2">
-                <FileText aria-hidden="true" className="h-5 w-5 text-primary" />
-                {lang === "ES" ? "Documentos" : "Documents"}
-              </span>
-              <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
-              <span className="inline-flex items-center gap-2">
-                <Table2 aria-hidden="true" className="h-5 w-5 text-primary" />
-                {lang === "ES" ? "Datos ordenados" : "Organized data"}
-              </span>
-            </div>
+            {product.id === "ario" && (
+              <div className="mt-5 flex items-center gap-3 text-xs font-semibold text-muted-foreground sm:text-sm">
+                <span className="inline-flex items-center gap-2">
+                  <FileText aria-hidden="true" className="h-5 w-5 text-primary" />
+                  {lang === "ES" ? "Documentos" : "Documents"}
+                </span>
+                <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
+                <span className="inline-flex items-center gap-2">
+                  <Table2 aria-hidden="true" className="h-5 w-5 text-primary" />
+                  {lang === "ES" ? "Datos ordenados" : "Organized data"}
+                </span>
+              </div>
+            )}
           </div>
         )}
       </AnimatedContent>
 
-      <section id="ario-como-funciona" className="scroll-mt-32 pt-14 sm:pt-20">
+      <section id={`${product.id}-como-funciona`} className="scroll-mt-32 pt-14 sm:pt-20">
         <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
           {product.howLabel ?? content.labels.how}
         </h2>
@@ -115,12 +121,22 @@ export function ArioDetail({
             <p className="mt-3 max-w-3xl leading-relaxed text-foreground">{product.audience}</p>
           </>
         )}
-        <a
-          href={`/?producto=${product.id}#contacto`}
-          className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
-        >
-          {content.contactCta}
-        </a>
+        {product.requestCta ? (
+          <button
+            type="button"
+            onClick={() => onRequest(product.name)}
+            className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          >
+            {product.requestCta}
+          </button>
+        ) : (
+          <a
+            href={`/?producto=${product.id}#contacto`}
+            className="mt-8 inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          >
+            {content.contactCta}
+          </a>
+        )}
       </AnimatedContent>
     </article>
   );
