@@ -288,7 +288,7 @@ const ES: SiteContent = {
     { value: 25, suffix: "+", label: "años de trayectoria" },
     { value: 2000, suffix: "+", label: "proyectos entregados" },
     { value: 3, suffix: "", label: "países con oficina propia" },
-    { value: 2, suffix: "M+", label: "horas-hombre" },
+    { value: 2, suffix: "M+", label: "horas de ingeniería" },
   ],
   services: {
     heading: "Qué hacemos",
@@ -406,7 +406,7 @@ const ES: SiteContent = {
         challenge:
           "Sostener una demanda continua de desarrollo y soporte en múltiples países de LATAM con equipos que puedan escalar.",
         result:
-          "Más de 2.000 proyectos entregados y 2M+ horas-hombre acumuladas trabajando junto a sus equipos en toda la región.",
+          "Más de 2.000 proyectos entregados y 2M+ horas de ingeniería acumuladas trabajando junto a sus equipos en toda la región.",
       },
     ],
   },
@@ -1039,7 +1039,7 @@ const EN: SiteContent = {
     { value: 25, suffix: "+", label: "years in business" },
     { value: 2000, suffix: "+", label: "projects delivered" },
     { value: 3, suffix: "", label: "countries with our own office" },
-    { value: 2, suffix: "M+", label: "man-hours" },
+    { value: 2, suffix: "M+", label: "engineering hours" },
   ],
   services: {
     heading: "What we do",
@@ -1157,7 +1157,7 @@ const EN: SiteContent = {
         challenge:
           "Sustain continuous development and support demand across multiple LATAM countries with teams that can scale.",
         result:
-          "Over 2,000 projects delivered and 2M+ accumulated man-hours working alongside their teams across the region.",
+          "Over 2,000 projects delivered and 2M+ accumulated engineering hours working alongside their teams across the region.",
       },
     ],
   },
