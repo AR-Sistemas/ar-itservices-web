@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { QrContactForm } from "@/components/site/QrContactForm";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
 import { Beams } from "@/components/site/Beams";
+import { getContent } from "@/i18n/content";
+import { PRODUCT_LOGOS } from "@/components/site/product-logos";
 
 export const Route = createFileRoute("/qr")({
   head: () => ({
@@ -21,18 +23,19 @@ function QrPage() {
   const en = lang === "EN";
   const [formType, setFormType] = useState<"empresa" | "postulante" | null>(null);
   const [sending, setSending] = useState(false);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
   const options = [
     {
       label: en ? "Contact us" : "Contactanos",
       formType: "empresa" as const,
       icon: MessageCircle,
     },
-    { label: en ? "Solutions" : "Soluciones", href: "/#soluciones", icon: Layers3 },
     {
       label: en ? "Work with us" : "Trabajá con nosotros",
       formType: "postulante" as const,
       icon: BriefcaseBusiness,
     },
+    { label: en ? "Solutions" : "Soluciones", formType: "soluciones" as const, icon: Layers3 },
   ];
 
   return (
@@ -67,7 +70,7 @@ function QrPage() {
           {en ? "How can we help you?" : "¿Cómo podemos ayudarte?"}
         </h1>
         <div className="mt-8 grid gap-4">
-          {options.map(({ label, href, formType: type, icon: Icon }) => {
+          {options.map(({ label, formType: type, icon: Icon }) => {
             const content = (
               <>
                 <Icon aria-hidden="true" className="h-6 w-6 shrink-0 text-primary" />
@@ -80,19 +83,15 @@ function QrPage() {
             );
             const className =
               "group flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card px-5 py-5 text-left text-lg font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary";
-            return type ? (
+            return (
               <button
                 key={label}
                 type="button"
                 className={className}
-                onClick={() => setFormType(type)}
+                onClick={() => (type === "soluciones" ? setSolutionsOpen(true) : setFormType(type))}
               >
                 {content}
               </button>
-            ) : (
-              <a key={label} href={href} className={className}>
-                {content}
-              </a>
             );
           })}
         </div>
@@ -123,6 +122,43 @@ function QrPage() {
               onSendingChange={setSending}
             />
           )}
+        </DialogContent>
+      </Dialog>
+      <Dialog open={solutionsOpen} onOpenChange={setSolutionsOpen}>
+        <DialogContent
+          className="max-h-[90dvh] w-[calc(100%-2rem)] max-w-lg overflow-y-auto rounded-2xl p-6 sm:p-8"
+          aria-describedby={undefined}
+        >
+          <DialogTitle className="pr-8 text-xl">
+            {en ? "Explore our solutions" : "Conocé nuestras soluciones"}
+          </DialogTitle>
+          <div className="mt-2 divide-y divide-border">
+            {getContent(lang).solutions.products.map((product) => (
+              <Link
+                key={product.id}
+                to="/soluciones/$productId"
+                params={{ productId: product.id }}
+                search={{ origen: "qr" }}
+                className="group flex min-h-20 items-center gap-4 rounded-lg px-1 py-4 transition-colors hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+              >
+                <img
+                  src={PRODUCT_LOGOS[product.id]}
+                  alt=""
+                  className="h-12 w-16 shrink-0 object-contain"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold text-foreground">{product.name}</span>
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    {product.tagline}
+                  </span>
+                </span>
+                <ArrowUpRight
+                  aria-hidden="true"
+                  className="h-5 w-5 shrink-0 text-muted-foreground group-hover:text-primary"
+                />
+              </Link>
+            ))}
+          </div>
         </DialogContent>
       </Dialog>
     </main>

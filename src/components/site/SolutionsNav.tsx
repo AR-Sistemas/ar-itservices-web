@@ -20,12 +20,14 @@ export function SolutionsNav({
   backLabel,
   rightSlot,
   current,
+  fromQr = false,
 }: {
   products: Item[];
   jumpLabel: string;
   backLabel: string;
   rightSlot?: ReactNode;
   current?: string | undefined;
+  fromQr?: boolean;
 }) {
   const { visible, dur, delay, enter, tab, island } = useIslandReveal();
 
@@ -65,7 +67,7 @@ export function SolutionsNav({
                 return (
                   <a
                     key={p.id}
-                    href={`/soluciones/${p.id}`}
+                    href={`/soluciones/${p.id}${fromQr ? "?origen=qr" : ""}`}
                     tabIndex={tab}
                     aria-current={isActive ? "true" : undefined}
                     className={`flex h-10 items-center justify-center rounded-xl px-2.5 transition-all ${dur} ease-out sm:h-11 sm:px-3.5 ${enter} ${
