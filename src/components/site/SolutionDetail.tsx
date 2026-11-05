@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { AriaFramework, useAriaPlayback, useAriaStep } from "@/components/site/AriaFramework";
 import { SolutionAnimation } from "@/components/site/SolutionVisual";
@@ -171,45 +171,57 @@ function AriaArticulation({
 }) {
   const [hold, setHold] = useState<number | null>(null);
   const { ref, active, reduceMotion } = useAriaPlayback();
-  const auto = useAriaStep(active, hold);
+  // Cada paso dura según lo que hay que leer; y se reproduce una sola vez por visita
+  // (sin loop), así la página nunca tiene que volver sola hacia arriba.
+  const durationFor = useCallback((n: number) => 1700 + (steps[n - 1]?.length ?? 0) * 14, [steps]);
+  const auto = useAriaStep(active, hold, { loop: false, durationFor });
   const step = reduceMotion ? 10 : auto;
   const items = useRef<(HTMLLIElement | null)[]>([]);
-  const bar = useRef<HTMLDivElement>(null);
   const manualPauseUntil = useRef(0);
+  const autoScrollUntil = useRef(0);
 
-  // Marca de la última interacción manual: el scroll automático no pelea con quien está leyendo.
+  // Última interacción manual: el scroll automático no pelea con quien está leyendo. Un gesto
+  // propio (rueda, toque, teclado o clic) lo pausa 10 s; si la persona sigue, se vuelve a pausar.
   useEffect(() => {
     const mark = () => {
-      manualPauseUntil.current = Date.now() + 6000;
+      // Los eventos que dispara el propio scroll automático no cuentan como interacción.
+      if (Date.now() < autoScrollUntil.current) return;
+      manualPauseUntil.current = Date.now() + 10000;
     };
     const events = ["wheel", "touchstart", "touchmove", "keydown", "pointerdown"] as const;
     events.forEach((e) => window.addEventListener(e, mark, { passive: true }));
     return () => events.forEach((e) => window.removeEventListener(e, mark));
   }, []);
 
-  // Sigue al paso activo: solo mueve la página si ese paso quedó fuera de la zona visible.
-  // `scrollTo` usa una posición absoluta, así no acumula desplazamientos ni pierde el
-  // siguiente ítem cuando cambia rápido el paso activo.
+  // Sigue la lectura con un criterio simple: ver siempre el paso activo y el que viene.
+  //  - Si el activo y el siguiente ya están a la vista, no se mueve nada.
+  //  - Si el siguiente quedaría fuera de la ventana, se corre lo justo para dejar el activo
+  //    arriba (a ~18 % de la altura) y que se vean varios pasos por delante: un salto cada
+  //    tantos pasos en vez de un tironcito por cada uno.
+  //  - Nunca sube sola: si el activo quedó por encima de la ventana (la persona se adelantó),
+  //    no la trae de vuelta; con el paso 1 y la lista ya vista tampoco.
+  //  - Se quita si hay un gesto manual reciente, mientras se pasa el mouse por un paso, con la
+  //    pestaña oculta o si hay "reducir movimiento" (en todos esos casos \`active\` es falso).
   useEffect(() => {
     if (!active || hold !== null || step < 1 || step > features.length) return;
     const id = window.setTimeout(() => {
-      if (Date.now() < manualPauseUntil.current) return;
+      const now = Date.now();
+      if (now < manualPauseUntil.current || now < autoScrollUntil.current) return;
       const el = items.current[step - 1];
       if (!el) return;
+      const vh = window.innerHeight;
       const rect = el.getBoundingClientRect();
-      // Zona visible: debajo de la barra fija con la animación (celular) o de la navegación (escritorio).
-      const barBottom = bar.current?.getBoundingClientRect().bottom ?? 0;
-      const top = Math.max(barBottom, 80) + 12;
-      const bottom = window.innerHeight - 16;
-      if (rect.top >= top && rect.bottom <= bottom) return;
-      const desiredTop = Math.max(0, window.scrollY + rect.top - top);
-      window.scrollTo({
-        top: desiredTop,
-        behavior: reduceMotion ? "auto" : "smooth",
-      });
+      const next = items.current[step]?.getBoundingClientRect();
+      const needBottom = (next ?? rect).bottom;
+      const top = 104; // debajo de la navegación flotante
+      if (rect.top < top) return; // ya está por encima: no se sube sola
+      if (needBottom <= vh - 24) return; // el activo y el siguiente ya se ven
+      const target = Math.max(0, window.scrollY + rect.top - vh * 0.18);
+      autoScrollUntil.current = now + 900;
+      window.scrollTo({ top: target, behavior: "smooth" });
     }, 180);
     return () => window.clearTimeout(id);
-  }, [step, active, hold, reduceMotion, features.length]);
+  }, [step, active, hold, features.length]);
 
   return (
     <div
@@ -275,9 +287,7 @@ function AriaArticulation({
       </AnimatedContent>
       {/* La animación solo se ve en pantallas grandes; en celular el efecto lo lleva la lista. */}
       <AnimatedContent delay={120} className="hidden lg:sticky lg:top-28 lg:order-2 lg:block">
-        <div ref={bar}>
-          <AriaFramework step={step} className="max-w-md" />
-        </div>
+        <AriaFramework step={step} className="max-w-md" />
       </AnimatedContent>
     </div>
   );

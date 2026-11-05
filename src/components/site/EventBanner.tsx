@@ -73,7 +73,9 @@ export function EventBanner() {
       <span aria-hidden="true" className="ctw-beam ctw-beam-top" />
       <span aria-hidden="true" className="ctw-beam ctw-beam-bottom" />
 
-      <div className="relative mx-auto flex max-w-5xl items-center justify-center gap-3 text-left text-xs sm:gap-6 sm:text-sm">
+      {/* Celular: logo + fecha y stand a su lado y, abajo, el enlace en su propia línea.
+          Desde sm entra todo en una fila corta; desde lg, en una sola fila. */}
+      <div className="relative mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs sm:gap-x-6 sm:text-sm lg:flex-nowrap">
         <span
           className="ctw-logo relative inline-block shrink-0"
           style={{ "--ctw-logo": `url(${cordobaTechWeekLogo})` } as CSSProperties}
@@ -81,35 +83,33 @@ export function EventBanner() {
           <img
             src={cordobaTechWeekLogo}
             alt="Córdoba Tech Week"
-            className="relative block h-8 w-auto min-[380px]:h-10 sm:h-14"
+            className="relative block h-9 w-auto sm:h-14"
           />
           <span aria-hidden="true" className="ctw-shine" />
         </span>
-        <p className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4">
-          <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-semibold tracking-wide text-foreground sm:gap-3">
-            <span className="hidden sm:inline">{c.lead}</span>
-            <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
-              ·
-            </span>
-            <span>{c.dates}</span>
-            <span aria-hidden="true" className="text-[#c4f023]">
-              ·
-            </span>
-            <span className="ctw-stand-badge relative isolate inline-flex shrink-0">
-              <img
-                src={cordobaTechWeekStand}
-                alt={c.stand}
-                className="relative h-5 w-auto min-[380px]:h-6 sm:h-7"
-              />
-            </span>
-          </span>
+        <p className="flex min-w-0 flex-col items-start gap-1.5 font-semibold tracking-wide text-foreground sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3">
+          <span className="hidden sm:inline">{c.lead}</span>
           <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
             ·
           </span>
-          <Link to="/" hash="soluciones" className="ctw-cta font-bold">
-            {c.cta} →
-          </Link>
+          <span>{c.dates}</span>
+          <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
+            ·
+          </span>
+          <span className="ctw-stand-badge relative isolate inline-flex shrink-0">
+            <img src={cordobaTechWeekStand} alt={c.stand} className="relative h-6 w-auto sm:h-7" />
+          </span>
         </p>
+        <span aria-hidden="true" className="hidden text-[#c4f023] lg:inline">
+          ·
+        </span>
+        <Link
+          to="/"
+          hash="soluciones"
+          className="ctw-cta basis-full text-center font-bold lg:basis-auto"
+        >
+          {c.cta} →
+        </Link>
       </div>
 
       <button
