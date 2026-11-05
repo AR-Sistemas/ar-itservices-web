@@ -54,15 +54,24 @@ export function LogoLoop({
         }),
     );
 
-    measure();
-    Promise.all(waits).then(() => {
+    let active = true;
+    const show = () => {
+      if (!active) return;
       measure();
       setReady(true);
-    });
+    };
+    measure();
+    // Una imagen lenta no debe mantener el carrusel invisible indefinidamente.
+    const timeout = window.setTimeout(show, 2000);
+    Promise.all(waits).then(show);
 
     const ro = new ResizeObserver(measure);
     ro.observe(el);
-    return () => ro.disconnect();
+    return () => {
+      active = false;
+      window.clearTimeout(timeout);
+      ro.disconnect();
+    };
   }, [speed, logos.length]);
 
   const items = [...logos, ...logos];
@@ -85,7 +94,7 @@ export function LogoLoop({
         }}
       >
         {items.map((node, i) => (
-          <div key={i} className="shrink-0">
+          <div key={i} className="shrink-0" aria-hidden={i >= logos.length ? true : undefined}>
             {node}
           </div>
         ))}
