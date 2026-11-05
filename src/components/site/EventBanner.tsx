@@ -81,12 +81,12 @@ export function EventBanner() {
           <img
             src={cordobaTechWeekLogo}
             alt="Córdoba Tech Week"
-            className="relative block h-10 w-auto sm:h-14"
+            className="relative block h-8 w-auto min-[380px]:h-10 sm:h-14"
           />
           <span aria-hidden="true" className="ctw-shine" />
         </span>
-        <p className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4">
-          <span className="inline-flex items-center gap-2.5 font-semibold tracking-wide text-foreground sm:gap-3">
+        <p className="flex min-w-0 flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4">
+          <span className="flex flex-wrap items-center gap-x-2.5 gap-y-1 font-semibold tracking-wide text-foreground sm:gap-3">
             <span className="hidden sm:inline">{c.lead}</span>
             <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
               ·
@@ -99,7 +99,7 @@ export function EventBanner() {
               <img
                 src={cordobaTechWeekStand}
                 alt={c.stand}
-                className="relative h-6 w-auto sm:h-7"
+                className="relative h-5 w-auto min-[380px]:h-6 sm:h-7"
               />
             </span>
           </span>
