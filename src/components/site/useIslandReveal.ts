@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 
 /**
- * Comportamiento de la barra "isla" flotante, compartido por FloatingNav y la
- * barra de /soluciones (SolutionsNav):
+ * Comportamiento de la barra "isla" flotante (FloatingNav):
  *  - Oculta arriba del todo; aparece al scrollear más de `revealAt` px.
  *  - Tras `idleMs` sin actividad (mouse, scroll, tecla, touch) se esfuma
  *    (blur + fade lento) y reaparece con cualquier interacción.

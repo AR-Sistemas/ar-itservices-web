@@ -12,9 +12,11 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as NovedadesRouteImport } from './routes/novedades'
+import { Route as QrRouteImport } from './routes/qr'
 import { Route as SolucionesRouteImport } from './routes/soluciones'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
 import { Route as AvisoAvisoIdRouteImport } from './routes/aviso.$avisoId'
+import { Route as SolucionSolutionIdRouteImport } from './routes/solucion.$solutionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,6 +31,11 @@ const NosotrosRoute = NosotrosRouteImport.update({
 const NovedadesRoute = NovedadesRouteImport.update({
   id: '/novedades',
   path: '/novedades',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QrRoute = QrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SolucionesRoute = SolucionesRouteImport.update({
@@ -46,31 +53,42 @@ const AvisoAvisoIdRoute = AvisoAvisoIdRouteImport.update({
   path: '/aviso/$avisoId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SolucionSolutionIdRoute = SolucionSolutionIdRouteImport.update({
+  id: '/solucion/$solutionId',
+  path: '/solucion/$solutionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
+  '/qr': typeof QrRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
+  '/qr': typeof QrRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
+  '/qr': typeof QrRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -78,34 +96,42 @@ export interface FileRouteTypes {
     | '/'
     | '/nosotros'
     | '/novedades'
+    | '/qr'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
+    | '/solucion/$solutionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/nosotros'
     | '/novedades'
+    | '/qr'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
+    | '/solucion/$solutionId'
   id:
     | '__root__'
     | '/'
     | '/nosotros'
     | '/novedades'
+    | '/qr'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
+    | '/solucion/$solutionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   NosotrosRoute: typeof NosotrosRoute
   NovedadesRoute: typeof NovedadesRoute
+  QrRoute: typeof QrRoute
   SolucionesRoute: typeof SolucionesRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
   AvisoAvisoIdRoute: typeof AvisoAvisoIdRoute
+  SolucionSolutionIdRoute: typeof SolucionSolutionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -131,6 +157,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NovedadesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/qr': {
+      id: '/qr'
+      path: '/qr'
+      fullPath: '/qr'
+      preLoaderRoute: typeof QrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/soluciones': {
       id: '/soluciones'
       path: '/soluciones'
@@ -152,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AvisoAvisoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solucion/$solutionId': {
+      id: '/solucion/$solutionId'
+      path: '/solucion/$solutionId'
+      fullPath: '/solucion/$solutionId'
+      preLoaderRoute: typeof SolucionSolutionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -159,9 +199,11 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   NosotrosRoute: NosotrosRoute,
   NovedadesRoute: NovedadesRoute,
+  QrRoute: QrRoute,
   SolucionesRoute: SolucionesRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
   AvisoAvisoIdRoute: AvisoAvisoIdRoute,
+  SolucionSolutionIdRoute: SolucionSolutionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,6 +1,7 @@
 import type { Lang } from "./language";
 import { isIntermedio } from "@/lib/site-mode";
 import { isNewBadgeActive } from "@/lib/event-banner";
+import { getPublicSolutionSlug } from "@/lib/solution-slugs";
 
 export type NavChild = { label: string; href: string; hint: string };
 
@@ -56,7 +57,7 @@ export type ServiceLinkCard = {
 export type SiteContent = {
   nav: NavItem[];
   cta: { talk: string };
-  eventBanner: { lead: string; dates: string; cta: string; close: string };
+  eventBanner: { lead: string; dates: string; stand: string; cta: string; close: string };
   langLabel: string;
   hero: {
     eyebrow: string;
@@ -86,15 +87,21 @@ export type SiteContent = {
     heading: string;
     statement: string;
     ctaLink: string;
-    backLink: string;
     items: { name: string; role: string; quote: string }[];
     portraitAlt: (name: string) => string;
     careersLink: string;
+    years: string;
+    yearsLabel: string;
+    joinHeading: string;
   };
-  finalCta: { heading: string; button: string };
   contact: {
     heading: string;
     subtitle: string;
+    /** Título y bajada según el tipo de formulario: "empresa" usa heading/subtitle. */
+    candidateHeading: string;
+    candidateSubtitle: string;
+    generalHeading: string;
+    generalSubtitle: string;
     typeLabels: { company: string; candidate: string; general: string };
     fields: {
       name: string;
@@ -104,7 +111,6 @@ export type SiteContent = {
       country: string;
       projectType: string;
       position: string;
-      positionOther: string;
       resume: string;
       message: string;
     };
@@ -123,7 +129,6 @@ export type SiteContent = {
   solutions: {
     heading: string;
     subtitle: string;
-    backLink: string;
     teaserCta: string;
     cardCta: string;
     navBadge: string;
@@ -134,7 +139,6 @@ export type SiteContent = {
     products: SolutionProduct[];
   };
   frameworkModal: {
-    eyebrow: string;
     requestTitle: (frameworkTitle: string) => string;
     subtitle: string;
     fields: { name: string; email: string; company: string; companyOptional: string };
@@ -164,6 +168,8 @@ export type SiteContent = {
     people: string;
     empty: string;
     cta: string;
+    /** Mensaje cuando se consulta sin haber elegido ningún perfil. */
+    emptyProposalMessage: string;
     proposalMessage: (
       disciplines: string[],
       team: { role: string; qty: number }[],
@@ -177,15 +183,13 @@ export type SiteContent = {
   };
   careers: {
     heading: string;
-    backLink: string;
-    /** Label del BackButton en la PD: vuelve al listado, no al home. */
-    backToPositionsLabel: string;
     intro: string;
     positionsHeading: string;
     emptyHeading: string;
     emptyBody: string;
     applyCta: string;
     positionCtaLabel: string;
+    applySubmitLabel: string;
     mustHaveLabel: string;
     niceToHaveLabel: string;
     responsibilitiesLabel: string;
@@ -212,8 +216,6 @@ export type SiteContent = {
     // que resuelve un origen caído, y en el caso normal recargar la página
     // ya lo hace.
     refreshLabel: string;
-    refreshingLabel: string;
-    updatedLabel: string;
     errorHeading: string;
     errorBody: string;
     vacancyOne: string;
@@ -222,20 +224,8 @@ export type SiteContent = {
     englishLevelLabel: string;
     enNoticeHeading: string;
     enNoticeBody: string;
-    positions: {
-      title: string;
-      category: string;
-      location: string;
-      modality: string;
-      seniority: string;
-      stack: string[];
-      intro: string;
-      mustHave: string[];
-      niceToHave: string[];
-    }[];
   };
   news: {
-    backLink: string;
     enNoticeHeading: string;
     enNoticeBody: string;
   };
@@ -254,6 +244,7 @@ const ES: SiteContent = {
   eventBanner: {
     lead: "Estamos presentes",
     dates: "12 y 13 de noviembre",
+    stand: "[stand_19]",
     cta: "Conocé nuestras soluciones",
     close: "Cerrar aviso",
   },
@@ -275,7 +266,7 @@ const ES: SiteContent = {
     { value: 25, suffix: "+", label: "años de trayectoria" },
     { value: 2000, suffix: "+", label: "proyectos entregados" },
     { value: 3, suffix: "", label: "países con oficina propia" },
-    { value: 2, suffix: "M+", label: "horas-hombre" },
+    { value: 2, suffix: "M+", label: "horas de ingeniería" },
   ],
   services: {
     heading: "Qué hacemos",
@@ -393,7 +384,7 @@ const ES: SiteContent = {
         challenge:
           "Sostener una demanda continua de desarrollo y soporte en múltiples países de LATAM con equipos que puedan escalar.",
         result:
-          "Más de 2.000 proyectos entregados y 2M+ horas-hombre acumuladas trabajando junto a sus equipos en toda la región.",
+          "Más de 2.000 proyectos entregados y 2M+ horas de ingeniería acumuladas trabajando junto a sus equipos en toda la región.",
       },
     ],
   },
@@ -405,9 +396,11 @@ const ES: SiteContent = {
     statement:
       "Detrás de cada proyecto hay personas, respaldadas por más de 25 años de experiencia.",
     ctaLink: "Conocé a nuestra gente",
-    backLink: "Volver al inicio",
     portraitAlt: (n) => `Retrato de ${n}`,
     careersLink: "Ver vacantes abiertas",
+    years: "25+",
+    yearsLabel: "años de trayectoria",
+    joinHeading: "¿Querés ser parte del equipo?",
     items: [
       {
         name: "Felix Melinsky",
@@ -431,13 +424,14 @@ const ES: SiteContent = {
       },
     ],
   },
-  finalCta: {
-    heading: "¿Armamos el equipo que tu proyecto necesita?",
-    button: "Escribinos",
-  },
   contact: {
     heading: "Contanos tu proyecto",
     subtitle: "Respondemos con una propuesta de equipo, no con un folleto.",
+    candidateHeading: "Sumate al equipo",
+    candidateSubtitle:
+      "Dejanos tus datos y tu CV: te escribimos cuando haya una búsqueda que encaje con tu perfil.",
+    generalHeading: "¿En qué podemos ayudarte?",
+    generalSubtitle: "Escribinos y te respondemos a la brevedad.",
     typeLabels: {
       company: "Soy una empresa",
       candidate: "Busco trabajar con ustedes",
@@ -451,7 +445,6 @@ const ES: SiteContent = {
       country: "País",
       projectType: "Tipo de proyecto",
       position: "Puesto de interés",
-      positionOther: "Otro / no está en la lista",
       resume: "Currículum (PDF o Word)",
       message: "Mensaje",
     },
@@ -516,7 +509,6 @@ const ES: SiteContent = {
     heading: "Tecnología que se convierte en soluciones concretas",
     subtitle:
       "Productos propios de AR IT Services para resolver problemas reales de equipos y empresas.",
-    backLink: "Volver al inicio",
     teaserCta: "Ver todas las soluciones",
     cardCta: "Conocer más",
     navBadge: "Nuevo",
@@ -542,11 +534,15 @@ const ES: SiteContent = {
         howLabel: "Cómo se articulan los 9 bloques",
         featuresLabel: "Los 9 bloques",
         steps: [
-          "EA · Estrategia + IA orienta y prioriza: es el núcleo estratégico.",
-          "GL · Governance y Límites y PR · Personas y roles forman el sistema estructural.",
-          "DA · Data e IN · Ingeniería son las fundaciones técnicas sobre las que corre todo el resto.",
-          "KS · Knowledge sharing e IC · Innovación controlada son los mecanismos de aprendizaje y expansión.",
-          "GC · Gestión del cambio y PM · Perfeccionamiento y madurez son los mecanismos de institucionalización.",
+          "EA · Estrategia + IA es el núcleo: define para qué, para quién y con qué éxito, y prioriza las iniciativas.",
+          "GL · Governance y Límites pone las reglas del juego y los controles sobre cómo se usa la IA.",
+          "PR · Personas y roles define las capacidades, el entrenamiento y los roles nuevos que hacen falta.",
+          "DA · Data aporta datos de calidad y con linaje: la base sobre la que corre la IA.",
+          "IN · Ingeniería construye sobre esa base, con arquitectura de referencia y prácticas AI-native.",
+          "KS · Knowledge sharing hace que lo aprendido (prompts, agentes, patrones) se comparta y se reutilice.",
+          "IC · Innovación controlada prueba ideas nuevas en experimentos acotados antes de llevarlas a producción.",
+          "GC · Gestión del cambio acompaña la adopción de las personas, por etapas y con comunicación constante.",
+          "PM · Perfeccionamiento y madurez revisa, retira lo obsoleto y hace evolucionar el sistema completo.",
         ],
         features: [
           {
@@ -590,18 +586,18 @@ const ES: SiteContent = {
       },
       {
         id: "ario",
-        name: "Ario",
+        name: "ARIO",
         tagline: "Tus documentos, convertidos en datos.",
         short:
-          "Ario lee tus documentos y convierte facturas, DNI y PDFs en datos listos para usar, en segundos.",
+          "ARIO lee tus documentos y convierte facturas, DNI y PDFs en datos listos para usar, en segundos.",
         problem:
           "Muchas empresas siguen pasando a mano los datos de facturas, comprobantes y documentos de identidad. Es lento, repetitivo y genera errores.",
         example:
-          "Una administración recibe 200 facturas de proveedores a fin de mes y alguien tiene que copiar CUIT, fecha, número e importes una por una en una planilla. Con Ario las sube todas juntas y recibe los datos ordenados.",
+          "Una administración recibe 200 facturas de proveedores a fin de mes y alguien tiene que copiar CUIT, fecha, número e importes una por una en una planilla. Con ARIO las sube todas juntas y recibe los datos ordenados.",
         steps: [
           "Subís uno o varios documentos (PDF o foto).",
           "Elegís qué tipo de documento es: general, DNI, Factura ARCA o uno con tus propios campos.",
-          "Ario lee el documento y saca los datos automáticamente.",
+          "ARIO lee el documento y saca los datos automáticamente.",
           "Revisás y corregís lo que haga falta.",
           "Exportás los datos listos para usar.",
         ],
@@ -679,48 +675,47 @@ const ES: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
-        tagline: "Del pedido a un cambio verificable.",
+        name: "CriterIA",
+        tagline: "Una forma compartida de desarrollar con agentes de IA.",
         short:
-          "Un método de desarrollo con IA y un kit técnico para transformar pedidos de software en cambios definidos, revisados y verificables.",
+          "Un acompañamiento de AR para integrar agentes de IA a la forma de desarrollar de un equipo: acuerdos, contexto compartido y revisión, adaptados a cada proyecto.",
         problem:
-          "El uso de agentes de IA puede acelerar modificaciones de código, pero sin un marco compartido resulta difícil saber qué se pidió, quién lo aprobó, qué fue validado y si una evidencia sigue vigente.",
+          "Un mismo equipo puede usar agentes con instrucciones, fuentes y hábitos distintos. Cada resultado parece útil por separado, pero al integrarlo hay que corregirlo porque no consideró una decisión vigente o el trabajo de otra persona, y el conocimiento queda atrapado en conversaciones aisladas.",
         steps: [
-          "Contexto: se seleccionan y validan las fuentes pertinentes del proyecto para que los agentes trabajen con el contexto correcto.",
-          "Especificación: el pedido se convierte en un spec, un contrato revisable y aprobable de un cambio.",
-          "Roles: implementador, verificador, reviewer y consolidador trabajan coordinados, cada uno con su responsabilidad.",
-          "Controles: antes de avanzar, los gates comprueban los requisitos y las aprobaciones quedan vinculadas a cada versión.",
-          "Aceptación: QA conserva la validación de calidad y la decisión final queda en manos del equipo.",
+          "Descubrir: se releva con el equipo un caso real, quiénes participan, qué herramientas usan, dónde deciden y cómo validan.",
+          "Acordar: se define qué se delega, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
+          "Diseñar lo necesario: se eligen instrucciones, herramientas y verificaciones; la arquitectura solo si el caso la requiere.",
+          "Probar: la práctica se aplica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
+          "Evaluar y continuar: se compara calidad, retrabajo y esfuerzo total con la práctica anterior, y se registran los aprendizajes para seguir.",
         ],
         features: [
           {
-            title: "Ingeniería de contexto",
-            desc: "Selección y validación de las fuentes pertinentes del proyecto.",
+            title: "Acuerdos de trabajo",
+            desc: "Qué delegar, qué revisar, quién decide y cómo escalar, acordado entre AR y el equipo.",
           },
           {
-            title: "Especificaciones revisables",
-            desc: "Cada cambio parte de un contrato claro que el equipo puede revisar y aprobar.",
+            title: "Contexto compartido",
+            desc: "Referencias y decisiones vigentes del proyecto, con responsables y acceso controlado.",
           },
           {
-            title: "Roles diferenciados",
-            desc: "Implementación, verificación, revisión y consolidación, con un coordinador central.",
+            title: "Revisión humana proporcional",
+            desc: "El equipo conserva el criterio y la responsabilidad; los controles se ajustan a la tarea y al riesgo.",
           },
           {
-            title: "Control humano",
-            desc: "Los gates y las aprobaciones por versión mantienen la autoridad en el equipo.",
+            title: "Profundidad a medida",
+            desc: "Se adapta a las personas, el proyecto y las herramientas existentes, con la menor complejidad suficiente.",
           },
           {
-            title: "Adopción por proyecto",
-            desc: "Se incorpora de forma selectiva sobre un proyecto existente, empezando por un cambio acotado.",
+            title: "Conocimiento que continúa",
+            desc: "Decisiones y evidencia registradas para que otra persona retome el trabajo sin reconstruir todo.",
           },
         ],
         audience:
-          "Equipos de desarrollo internos y consultoras que ya usan asistentes de IA y necesitan más control sobre los cambios: CTO, líderes técnicos, desarrolladores y QA.",
+          "Equipos de desarrollo internos y de clientes que ya usan IA de manera individual y quieren una práctica compartida: dirección, responsables de proyecto, ingeniería, QA, arquitectura, datos y seguridad.",
       },
     ],
   },
   frameworkModal: {
-    eyebrow: "Framework propio",
     requestTitle: (frameworkTitle) => `Solicitá ${frameworkTitle}`,
     subtitle: "Dejanos tus datos y te mandamos el material completo por mail.",
     fields: {
@@ -760,6 +755,8 @@ const ES: SiteContent = {
     people: "personas",
     empty: "Seleccioná al menos una disciplina para ver tu equipo.",
     cta: "Agendar una llamada con tu equipo propuesto",
+    emptyProposalMessage:
+      "Hola, me gustaría conversar sobre armar un equipo para mi proyecto. Todavía no tengo definidos los perfiles: me ayudarían a pensarlos.",
     proposalMessage: (disciplines, team, total) =>
       [
         "Hola, me gustaría agendar una llamada para conversar sobre el siguiente equipo:",
@@ -804,10 +801,6 @@ const ES: SiteContent = {
   },
   careers: {
     heading: "Sumate al equipo",
-    backLink: "Volver al inicio",
-    // El `BackButton` de la PD vuelve al listado, no al home: usar `backLink`
-    // ("Volver al inicio") mentía sobre el destino.
-    backToPositionsLabel: "Volver a las búsquedas",
     intro:
       "25 años armando equipos que se quedan. Buscamos gente con ganas de resolver problemas reales, no perfiles que encajen en una grilla.",
     positionsHeading: "Búsquedas abiertas",
@@ -816,6 +809,7 @@ const ES: SiteContent = {
       "Pero eso cambia seguido. Dejanos tu perfil y te tenemos en cuenta apenas abramos una posición que matchee.",
     applyCta: "Dejanos tu CV",
     positionCtaLabel: "Postularme",
+    applySubmitLabel: "Enviar postulación",
     mustHaveLabel: "¿Qué buscamos?",
     niceToHaveLabel: "Valoramos",
     responsibilitiesLabel: "Responsabilidades",
@@ -832,8 +826,6 @@ const ES: SiteContent = {
     locationFilterLabel: "Ubicación",
     resultsCount: (n) => (n === 0 ? "Sin resultados" : n === 1 ? "1 búsqueda" : `${n} búsquedas`),
     refreshLabel: "Reintentar",
-    refreshingLabel: "Actualizando…",
-    updatedLabel: "Actualizado",
     errorHeading: "No pudimos cargar las búsquedas",
     errorBody:
       "Estamos teniendo problemas para conectarnos con el sistema de búsquedas. Probá de nuevo en un momento.",
@@ -844,120 +836,8 @@ const ES: SiteContent = {
     enNoticeHeading: "Las búsquedas se publican en español",
     enNoticeBody:
       "Los avisos vienen directo de nuestro sistema de reclutamiento, que los publica en español. Mandanos tu CV en español y te respondemos.",
-    positions: [
-      {
-        title: "Desarrollador/a .NET Senior",
-        category: "Full Stack",
-        location: "Córdoba, Argentina",
-        modality: "Híbrida (remoto + oficina cuando se requiera)",
-        seniority: "Senior",
-        stack: [".NET", "C#", "React", "SQL Server"],
-        intro:
-          "Buscamos incorporar un/a Desarrollador/a .NET Senior para sumarse a un equipo que trabaja en productos que salen a producción y se mantienen en el tiempo, no solo prototipos.",
-        mustHave: [
-          "+5 años de experiencia en desarrollo .NET y C#.",
-          "Experiencia con React en el frontend.",
-          "Manejo de SQL Server y diseño de bases de datos relacionales.",
-          "Familiaridad con metodologías ágiles (Scrum/Kanban).",
-          "Perfil autónomo, con capacidad de tomar decisiones técnicas.",
-        ],
-        niceToHave: [
-          "Experiencia con Azure o AWS.",
-          "Uso de herramientas de AI Coding (Copilot, Claude Code) en el día a día.",
-          "Experiencia liderando equipos chicos o mentoreando devs junior.",
-        ],
-      },
-      {
-        title: "Data Engineer",
-        category: "Data",
-        location: "Remoto (Argentina)",
-        modality: "100% remoto",
-        seniority: "Semi Senior / Senior",
-        stack: ["Python", "SQL", "Power BI", "Apache Airflow"],
-        intro:
-          "Buscamos un/a Data Engineer para diseñar y mantener pipelines de datos que alimentan modelos predictivos y tableros que las áreas de negocio de nuestros clientes usan todos los días.",
-        mustHave: [
-          "+3 años de experiencia trabajando con pipelines de datos en Python.",
-          "Experiencia con SQL avanzado y modelado de datos.",
-          "Manejo de Power BI o una herramienta de BI equivalente.",
-          "Conocimientos de orquestación de procesos (Airflow o similar).",
-          "Perfil analítico, con atención al detalle en la calidad del dato.",
-        ],
-        niceToHave: [
-          "Experiencia con machine learning aplicado.",
-          "Manejo de servicios cloud de datos (BigQuery, Redshift, Synapse).",
-          "Inglés técnico para lectura de documentación.",
-        ],
-      },
-      {
-        title: "QA Automation Engineer",
-        category: "QA",
-        location: "Córdoba, Argentina",
-        modality: "Híbrida (remoto + oficina cuando se requiera)",
-        seniority: "Semi Senior",
-        stack: ["Java", "Playwright", "Cypress", "CI/CD"],
-        intro:
-          "Buscamos un/a QA Automation Engineer para diseñar estrategias de testing y automatizar la validación de productos antes de que lleguen a producción.",
-        mustHave: [
-          "+3 años de experiencia en QA Automation.",
-          "Experiencia sólida en testing funcional.",
-          "Desarrollo de automatizaciones con Java y/o Python.",
-          "Manejo de Jira y herramientas de gestión de bugs.",
-          "Perfil proactivo, orientado a la mejora continua.",
-        ],
-        niceToHave: [
-          "Experiencia con Playwright, Cypress o Selenium.",
-          "Integración de tests en pipelines de CI/CD.",
-          "Conocimientos de testing de APIs (Postman).",
-        ],
-      },
-      {
-        title: "Mobile Developer (iOS / Android)",
-        category: "Mobile",
-        location: "Remoto (Argentina / LatAm)",
-        modality: "100% remoto",
-        seniority: "Semi Senior",
-        stack: ["React Native", "TypeScript", "iOS", "Android"],
-        intro:
-          "Buscamos un/a Mobile Developer para trabajar en apps que ya están en producción, con usuarios reales, no solo en fase de prototipo.",
-        mustHave: [
-          "+3 años de experiencia en desarrollo mobile con React Native.",
-          "Conocimientos sólidos de TypeScript.",
-          "Experiencia publicando apps en App Store y Google Play.",
-          "Manejo de control de versiones (Git) y flujos de PR/code review.",
-        ],
-        niceToHave: [
-          "Experiencia con desarrollo nativo (Swift o Kotlin).",
-          "Conocimientos de CI/CD para mobile (Fastlane, EAS).",
-          "Experiencia con testing automatizado en mobile.",
-        ],
-      },
-      {
-        title: "DevOps Engineer",
-        category: "DevOps",
-        location: "Córdoba, Argentina",
-        modality: "Híbrida (remoto + oficina cuando se requiera)",
-        seniority: "Senior",
-        stack: ["AWS", "Docker", "Kubernetes", "n8n"],
-        intro:
-          "Buscamos un/a DevOps Engineer para mantener y mejorar la infraestructura y los pipelines de despliegue de nuestros equipos y clientes.",
-        mustHave: [
-          "+4 años de experiencia en roles de DevOps o SRE.",
-          "Experiencia con AWS (o equivalente en otra nube).",
-          "Manejo de Docker y orquestación con Kubernetes.",
-          "Experiencia diseñando pipelines de CI/CD.",
-          "Perfil resolutivo, cómodo con guardias/soporte productivo.",
-        ],
-        niceToHave: [
-          "Experiencia con Terraform o infraestructura como código.",
-          "Conocimientos de n8n u otras herramientas de automatización de workflows.",
-          "Certificaciones cloud (AWS/Azure).",
-        ],
-      },
-    ],
   },
   news: {
-    backLink: "Volver al inicio",
     enNoticeHeading: "Este boletín se publica en español",
     enNoticeBody:
       "Nuestro boletín mensual de IA está escrito para el mercado hispanohablante. Cambiá a ES arriba para leer la última edición.",
@@ -977,6 +857,7 @@ const EN: SiteContent = {
   eventBanner: {
     lead: "We'll be there",
     dates: "November 12–13",
+    stand: "[stand_19]",
     cta: "Discover our solutions",
     close: "Close notice",
   },
@@ -998,7 +879,7 @@ const EN: SiteContent = {
     { value: 25, suffix: "+", label: "years in business" },
     { value: 2000, suffix: "+", label: "projects delivered" },
     { value: 3, suffix: "", label: "countries with our own office" },
-    { value: 2, suffix: "M+", label: "man-hours" },
+    { value: 2, suffix: "M+", label: "engineering hours" },
   ],
   services: {
     heading: "What we do",
@@ -1116,7 +997,7 @@ const EN: SiteContent = {
         challenge:
           "Sustain continuous development and support demand across multiple LATAM countries with teams that can scale.",
         result:
-          "Over 2,000 projects delivered and 2M+ accumulated man-hours working alongside their teams across the region.",
+          "Over 2,000 projects delivered and 2M+ accumulated engineering hours working alongside their teams across the region.",
       },
     ],
   },
@@ -1127,9 +1008,11 @@ const EN: SiteContent = {
     heading: "Our people",
     statement: "Behind every project, there are people backed by more than 25 years of experience.",
     ctaLink: "Meet our people",
-    backLink: "Back to home",
     portraitAlt: (n) => `Portrait of ${n}`,
     careersLink: "See open positions",
+    years: "25+",
+    yearsLabel: "years of experience",
+    joinHeading: "Want to be part of the team?",
     items: [
       {
         name: "Felix Melinsky",
@@ -1153,13 +1036,14 @@ const EN: SiteContent = {
       },
     ],
   },
-  finalCta: {
-    heading: "Shall we build the team your project needs?",
-    button: "Write to us",
-  },
   contact: {
     heading: "Tell us about your project",
     subtitle: "We reply with a team proposal, not a brochure.",
+    candidateHeading: "Join the team",
+    candidateSubtitle:
+      "Leave us your details and your CV: we'll get in touch when a search matches your profile.",
+    generalHeading: "How can we help?",
+    generalSubtitle: "Write to us and we'll get back to you shortly.",
     typeLabels: {
       company: "I'm a company",
       candidate: "I'm looking to join the team",
@@ -1173,7 +1057,6 @@ const EN: SiteContent = {
       country: "Country",
       projectType: "Project type",
       position: "Position of interest",
-      positionOther: "Other / not listed",
       resume: "Resume (PDF or Word)",
       message: "Message",
     },
@@ -1227,7 +1110,6 @@ const EN: SiteContent = {
   solutions: {
     heading: "Technology that turns into concrete solutions",
     subtitle: "AR IT Services' own products, built to solve real problems for teams and companies.",
-    backLink: "Back to home",
     teaserCta: "See all solutions",
     cardCta: "Learn more",
     navBadge: "New",
@@ -1253,11 +1135,15 @@ const EN: SiteContent = {
         howLabel: "How the 9 blocks fit together",
         featuresLabel: "The 9 blocks",
         steps: [
-          "EA · Strategy + AI guides and prioritizes: it is the strategic core.",
-          "GL · Governance and Limits and PR · People and roles form the structural system.",
-          "DA · Data and IN · Engineering are the technical foundations everything else runs on.",
-          "KS · Knowledge sharing and IC · Controlled innovation are the learning and expansion mechanisms.",
-          "GC · Change management and PM · Improvement and maturity are the institutionalization mechanisms.",
+          "EA · Strategy + AI is the core: it defines what for, for whom and with what success, and prioritizes initiatives.",
+          "GL · Governance and Limits sets the rules of the game and the controls on how AI is used.",
+          "PR · People and roles defines the capabilities, training and new roles that are needed.",
+          "DA · Data provides quality data with lineage: the base AI runs on.",
+          "IN · Engineering builds on that base, with a reference architecture and AI-native practices.",
+          "KS · Knowledge sharing makes what is learned (prompts, agents, patterns) shared and reusable.",
+          "IC · Controlled innovation tests new ideas in bounded experiments before taking them to production.",
+          "GC · Change management supports people through adoption, in stages and with steady communication.",
+          "PM · Improvement and maturity reviews, retires what is obsolete and evolves the whole system.",
         ],
         features: [
           {
@@ -1301,18 +1187,18 @@ const EN: SiteContent = {
       },
       {
         id: "ario",
-        name: "Ario",
+        name: "ARIO",
         tagline: "Your documents, turned into data.",
         short:
-          "Ario reads your documents and turns invoices, ID cards and PDFs into ready-to-use data, in seconds.",
+          "ARIO reads your documents and turns invoices, ID cards and PDFs into ready-to-use data, in seconds.",
         problem:
           "Many companies still copy data by hand from invoices, receipts and ID documents. It is slow, repetitive and error-prone.",
         example:
-          "An accounting office receives 200 supplier invoices at the end of the month, and someone has to copy tax ID, date, number and amounts one by one into a spreadsheet. With Ario they upload them all together and get the data back, organized.",
+          "An accounting office receives 200 supplier invoices at the end of the month, and someone has to copy tax ID, date, number and amounts one by one into a spreadsheet. With ARIO they upload them all together and get the data back, organized.",
         steps: [
           "You upload one or several documents (PDF or photo).",
           "You choose the document type: general, ID card, ARCA invoice or one with your own fields.",
-          "Ario reads the document and extracts the data automatically.",
+          "ARIO reads the document and extracts the data automatically.",
           "You review and correct whatever is needed.",
           "You export the data, ready to use.",
         ],
@@ -1390,48 +1276,47 @@ const EN: SiteContent = {
       },
       {
         id: "sdd",
-        name: "AR SDD",
-        tagline: "From a request to a verifiable change.",
+        name: "CriterIA",
+        tagline: "A shared way to develop with AI agents.",
         short:
-          "An AI-assisted development method and a technical kit to turn software requests into defined, reviewed and verifiable changes.",
+          "An AR engagement to bring AI agents into a team's way of developing software: agreements, shared context and review, adapted to each project.",
         problem:
-          "Using AI agents can speed up code changes, but without a shared framework it is hard to know what was requested, who approved it, what was validated and whether a piece of evidence is still valid.",
+          "The same team can use agents with different instructions, sources and habits. Each output looks useful on its own, but needs fixing when integrated because it ignored a current decision or someone else's work, and knowledge gets stuck in isolated conversations.",
         steps: [
-          "Context: the relevant project sources are selected and validated so agents work with the right context.",
-          "Specification: the request becomes a spec, a reviewable and approvable contract for a change.",
-          "Roles: implementer, verifier, reviewer and consolidator work in coordination, each with their own responsibility.",
-          "Controls: before moving forward, gates check the requirements and approvals are tied to each version.",
-          "Acceptance: QA keeps the quality validation and the final decision stays with the team.",
+          "Discover: together with the team we map a real case, who takes part, which tools they use, where they decide and how they validate.",
+          "Agree: we define what is delegated, what context is shared, who reviews and who accepts the work.",
+          "Design what is needed: instructions, tools and checks are chosen; architecture only if the case requires it.",
+          "Test: the practice is applied to focused, reversible tasks, with tests and the team's observations.",
+          "Evaluate and continue: quality, rework and total effort are compared with the previous practice, and learnings are recorded to keep going.",
         ],
         features: [
           {
-            title: "Context engineering",
-            desc: "Selection and validation of the relevant project sources.",
+            title: "Working agreements",
+            desc: "What to delegate, what to review, who decides and how to escalate, agreed between AR and the team.",
           },
           {
-            title: "Reviewable specifications",
-            desc: "Every change starts from a clear contract the team can review and approve.",
+            title: "Shared context",
+            desc: "Current project references and decisions, with owners and controlled access.",
           },
           {
-            title: "Distinct roles",
-            desc: "Implementation, verification, review and consolidation, with a central coordinator.",
+            title: "Proportional human review",
+            desc: "The team keeps judgment and responsibility; controls scale with the task and the risk.",
           },
           {
-            title: "Human control",
-            desc: "Gates and per-version approvals keep authority with the team.",
+            title: "Right-sized depth",
+            desc: "Adapted to the people, the project and the existing tools, with the least complexity that works.",
           },
           {
-            title: "Adopted per project",
-            desc: "Introduced selectively on an existing project, starting with a focused change.",
+            title: "Knowledge that carries on",
+            desc: "Decisions and evidence recorded so someone else can pick the work up without rebuilding everything.",
           },
         ],
         audience:
-          "In-house development teams and consultancies already using AI assistants that need more control over changes: CTOs, tech leads, developers and QA.",
+          "Internal and client development teams that already use AI individually and want a shared practice: leadership, project leads, engineering, QA, architecture, data and security.",
       },
     ],
   },
   frameworkModal: {
-    eyebrow: "Proprietary framework",
     requestTitle: (frameworkTitle) => `Request ${frameworkTitle}`,
     subtitle: "Leave us your details and we'll send you the full material by email.",
     fields: {
@@ -1471,6 +1356,8 @@ const EN: SiteContent = {
     people: "people",
     empty: "Select at least one discipline to see your team.",
     cta: "Book a call with your proposed team",
+    emptyProposalMessage:
+      "Hi, I'd like to talk about building a team for my project. I haven't defined the profiles yet, so I'd appreciate your help working them out.",
     proposalMessage: (disciplines, team, total) =>
       [
         "Hi, I'd like to schedule a call to talk about the following team:",
@@ -1515,8 +1402,6 @@ const EN: SiteContent = {
   },
   careers: {
     heading: "Join the team",
-    backLink: "Back to home",
-    backToPositionsLabel: "Back to positions",
     intro:
       "25 years building teams that stay. We look for people who want to solve real problems, not profiles that fit a checklist.",
     positionsHeading: "Open positions",
@@ -1525,6 +1410,7 @@ const EN: SiteContent = {
       "That changes often. Send us your profile and we'll reach out when something matches.",
     applyCta: "Send us your CV",
     positionCtaLabel: "Apply",
+    applySubmitLabel: "Send application",
     mustHaveLabel: "What we're looking for",
     niceToHaveLabel: "Nice to have",
     responsibilitiesLabel: "Responsibilities",
@@ -1541,8 +1427,6 @@ const EN: SiteContent = {
     locationFilterLabel: "Location",
     resultsCount: (n) => (n === 0 ? "No results" : n === 1 ? "1 position" : `${n} positions`),
     refreshLabel: "Retry",
-    refreshingLabel: "Refreshing…",
-    updatedLabel: "Updated",
     errorHeading: "We couldn't load the positions",
     errorBody: "We're having trouble reaching our recruiting system. Please try again in a moment.",
     vacancyOne: "1 opening available",
@@ -1552,120 +1436,8 @@ const EN: SiteContent = {
     enNoticeHeading: "Open positions are published in Spanish",
     enNoticeBody:
       "These listings come straight from our recruiting system, which publishes them in Spanish. Send us your CV in Spanish and we'll get back to you.",
-    positions: [
-      {
-        title: "Senior .NET Developer",
-        category: "Full Stack",
-        location: "Córdoba, Argentina",
-        modality: "Hybrid (remote + office when required)",
-        seniority: "Senior",
-        stack: [".NET", "C#", "React", "SQL Server"],
-        intro:
-          "We're hiring a Senior .NET Developer to join a team that works on products that ship to production and stay maintained, not just prototypes.",
-        mustHave: [
-          "5+ years of experience with .NET and C# development.",
-          "Experience with React on the frontend.",
-          "Solid SQL Server skills and relational data modeling.",
-          "Familiarity with agile methodologies (Scrum/Kanban).",
-          "Autonomous profile, comfortable making technical decisions.",
-        ],
-        niceToHave: [
-          "Experience with Azure or AWS.",
-          "Daily use of AI coding tools (Copilot, Claude Code).",
-          "Experience leading small teams or mentoring junior devs.",
-        ],
-      },
-      {
-        title: "Data Engineer",
-        category: "Data",
-        location: "Remote (Argentina)",
-        modality: "100% remote",
-        seniority: "Mid / Senior",
-        stack: ["Python", "SQL", "Power BI", "Apache Airflow"],
-        intro:
-          "We're hiring a Data Engineer to design and maintain the data pipelines behind predictive models and dashboards our clients' teams use every day.",
-        mustHave: [
-          "3+ years of experience building data pipelines in Python.",
-          "Advanced SQL and data modeling experience.",
-          "Hands-on with Power BI or an equivalent BI tool.",
-          "Experience orchestrating workflows (Airflow or similar).",
-          "Analytical profile with a sharp eye for data quality.",
-        ],
-        niceToHave: [
-          "Experience with applied machine learning.",
-          "Cloud data services (BigQuery, Redshift, Synapse).",
-          "Working English for reading documentation.",
-        ],
-      },
-      {
-        title: "QA Automation Engineer",
-        category: "QA",
-        location: "Córdoba, Argentina",
-        modality: "Hybrid (remote + office when required)",
-        seniority: "Mid-level",
-        stack: ["Java", "Playwright", "Cypress", "CI/CD"],
-        intro:
-          "We're hiring a QA Automation Engineer to design testing strategies and automate validation before products reach production.",
-        mustHave: [
-          "3+ years of experience in QA Automation.",
-          "Solid functional testing experience.",
-          "Building automations with Java and/or Python.",
-          "Comfortable with Jira and bug-tracking tools.",
-          "Proactive profile, focused on continuous improvement.",
-        ],
-        niceToHave: [
-          "Experience with Playwright, Cypress or Selenium.",
-          "Integrating tests into CI/CD pipelines.",
-          "API testing knowledge (Postman).",
-        ],
-      },
-      {
-        title: "Mobile Developer (iOS / Android)",
-        category: "Mobile",
-        location: "Remote (Argentina / LatAm)",
-        modality: "100% remote",
-        seniority: "Mid-level",
-        stack: ["React Native", "TypeScript", "iOS", "Android"],
-        intro:
-          "We're hiring a Mobile Developer to work on apps that are already live, with real users, not just in the prototype stage.",
-        mustHave: [
-          "3+ years of experience building mobile apps with React Native.",
-          "Solid TypeScript skills.",
-          "Experience shipping apps to the App Store and Google Play.",
-          "Comfortable with Git and PR/code review workflows.",
-        ],
-        niceToHave: [
-          "Experience with native development (Swift or Kotlin).",
-          "Mobile CI/CD knowledge (Fastlane, EAS).",
-          "Experience with automated mobile testing.",
-        ],
-      },
-      {
-        title: "DevOps Engineer",
-        category: "DevOps",
-        location: "Córdoba, Argentina",
-        modality: "Hybrid (remote + office when required)",
-        seniority: "Senior",
-        stack: ["AWS", "Docker", "Kubernetes", "n8n"],
-        intro:
-          "We're hiring a DevOps Engineer to maintain and improve the infrastructure and deployment pipelines for our teams and clients.",
-        mustHave: [
-          "4+ years of experience in DevOps or SRE roles.",
-          "Experience with AWS (or an equivalent cloud provider).",
-          "Hands-on with Docker and Kubernetes orchestration.",
-          "Experience designing CI/CD pipelines.",
-          "Resolutive profile, comfortable with production on-call support.",
-        ],
-        niceToHave: [
-          "Experience with Terraform or infrastructure as code.",
-          "Knowledge of n8n or other workflow automation tools.",
-          "Cloud certifications (AWS/Azure).",
-        ],
-      },
-    ],
   },
   news: {
-    backLink: "Back to home",
     enNoticeHeading: "This newsletter is published in Spanish",
     enNoticeBody:
       "Our monthly AI newsletter is written for the Spanish-speaking market. Switch to ES above to read the latest issue.",
@@ -1674,7 +1446,7 @@ const EN: SiteContent = {
 
 // Rutas que la versión "intermedia" no expone en el menú ni en el footer
 // (los archivos de ruta y su contenido siguen intactos en el repo).
-const HIDDEN_IN_INTERMEDIO = ["/novedades", "/trabaja-con-nosotros", "#casos"];
+const HIDDEN_IN_INTERMEDIO = ["/novedades", "#casos"];
 
 export function getContent(lang: Lang): SiteContent {
   const base = lang === "EN" ? EN : ES;
@@ -1684,9 +1456,10 @@ export function getContent(lang: Lang): SiteContent {
     n.href === "/soluciones"
       ? {
           ...n,
+          href: "/#soluciones",
           children: base.solutions.products.map((p) => ({
             label: p.name,
-            href: `/soluciones#${p.id}`,
+            href: `/solucion/${getPublicSolutionSlug(p.id)}`,
             hint: p.tagline,
           })),
           ...(isNewBadgeActive() ? { badge: base.solutions.navBadge } : {}),

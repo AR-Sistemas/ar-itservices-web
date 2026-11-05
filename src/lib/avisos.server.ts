@@ -112,6 +112,10 @@ function originHeaders(): Record<string, string> {
   const headers: Record<string, string> = { accept: "application/json" };
   const bypass = process.env["AVISOS_BYPASS_SECRET"];
   if (bypass) headers["x-vercel-protection-bypass"] = bypass;
+  // Clave compartida con AR Recruiting (PUBLIC_SITE_API_KEY allá): el endpoint responde 401
+  // sin ella. Sale solo desde el servidor del sitio, nunca llega al navegador.
+  const key = process.env["AVISOS_API_KEY"];
+  if (key) headers["x-site-key"] = key;
   return headers;
 }
 
@@ -121,6 +125,11 @@ async function fetchJson(path: string): Promise<{ status: number; body: unknown 
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
   });
   if (res.status === 404) return { status: 404, body: null };
+  if (res.status === 401) {
+    console.error(
+      "[avisos] el feed rechazó la clave (401): revisar AVISOS_API_KEY / PUBLIC_SITE_API_KEY",
+    );
+  }
   if (!res.ok) return { status: res.status, body: null };
   return { status: res.status, body: await res.json() };
 }
@@ -178,29 +187,103 @@ export const getAviso = createServerFn({ method: "GET" })
 /* Utilidades compartidas por las rutas                                */
 /* ------------------------------------------------------------------ */
 
+/** Palabras de enlace que no se capitalizan ("Datos e IA", "Desarrollo de Software"). */
+const ENLACES = new Set([
+  "de",
+  "del",
+  "la",
+  "las",
+  "el",
+  "los",
+  "y",
+  "e",
+  "o",
+  "u",
+  "en",
+  "con",
+  "para",
+  "por",
+  "a",
+  "of",
+  "and",
+  "the",
+  "in",
+  "for",
+  "to",
+]);
+
+/** Tildes que el feed suele omitir en valores de uso común. */
+const TILDES: Record<string, string> = {
+  hibrido: "Híbrido",
+  cordoba: "Córdoba",
+  asuncion: "Asunción",
+  tucuman: "Tucumán",
+  ingles: "Inglés",
+};
+
 /**
  * "FULL STACK" / "Hibrido" / "SSR" vienen con el casing cargado en el feed, así
  * que los normalizamos para no mezclar "Hibrido" y "Híbrido" en la misma página.
  *
  * Las siglas se respetan: un titleCase ingenuo convertía "SSR" en "Ssr" y "QA"
- * en "Qa", que es justamente el dato que el recruiter cargó (los seniority del
- * endpoint vienen como "SSR", "SR", "JR"...).
+ * en "Qa". Las palabras de enlace ("DE", "Y", "E") van en minúscula salvo al
+ * inicio, y la letra suelta tras una barra ("Ingeniero/a") queda en minúscula.
  */
 export function titleCase(value: string): string {
-  return value.replace(/(^|[\s.,\-/])([^\s.,\-/]+)/g, (_match, sep: string, word: string) => {
-    // Apartamos los delimitadores del token para no perderlos al capitalizar:
-    // "(Argentina)" no debe quedar "(argentina)".
-    const parts = /^([^A-Za-zÁÉÍÓÚÑÜ]*)(.*?)([^A-Za-zÁÉÍÓÚÑÜ]*)$/.exec(word);
-    if (!parts) return sep + word;
-    const [, pre, core, post] = parts;
-    if (!core) return sep + word;
-    // Sigla = todo mayúsculas y de 3 letras o menos (SSR, SR, JR, QA). El
-    // límite de 3 es a propósito: con 4, "FULL STACK" se preservaba como
-    // sigla y quedaba "FULL Stack" en vez de "Full Stack".
-    const esSigla = core.length <= 3 && core === core.toUpperCase();
-    const normalizado = esSigla ? core : core.charAt(0).toUpperCase() + core.slice(1).toLowerCase();
-    return sep + pre + normalizado + post;
-  });
+  return value.replace(
+    /(^|[\s.,\-/])([^\s.,\-/]+)/g,
+    (_match, sep: string, word: string, offset: number) => {
+      // Apartamos los delimitadores del token para no perderlos al capitalizar:
+      // "(Argentina)" no debe quedar "(argentina)".
+      const parts = /^([^A-Za-zÁÉÍÓÚÑÜ]*)(.*?)([^A-Za-zÁÉÍÓÚÑÜ]*)$/.exec(word);
+      if (!parts) return sep + word;
+      const [, pre, core, post] = parts;
+      if (!core) return sep + word;
+      const lower = core.toLowerCase();
+      if (TILDES[lower]) return sep + pre + TILDES[lower] + post;
+      if (sep === "/" && core.length === 1) return sep + pre + lower + post;
+      if (offset > 0 && ENLACES.has(lower)) return sep + pre + lower + post;
+      // Sigla = todo mayúsculas y de 3 letras o menos (SSR, SR, JR, QA). El
+      // límite de 3 es a propósito: con 4, "FULL STACK" se preservaba como
+      // sigla y quedaba "FULL Stack" en vez de "Full Stack".
+      const esSigla = core.length <= 3 && core === core.toUpperCase();
+      const normalizado = esSigla ? core : core.charAt(0).toUpperCase() + lower.slice(1);
+      return sep + pre + normalizado + post;
+    },
+  );
+}
+
+const SENIORITY: Record<string, { ES: string; EN: string }> = {
+  TRAINEE: { ES: "Trainee", EN: "Trainee" },
+  JR: { ES: "Junior", EN: "Junior" },
+  SSR: { ES: "Semi Senior", EN: "Mid-level" },
+  SR: { ES: "Senior", EN: "Senior" },
+  TL: { ES: "Tech Lead", EN: "Tech Lead" },
+};
+
+/** "SSR" → "Semi Senior": el feed manda siglas que el visitante no tiene por qué conocer. */
+const NIVEL_INGLES: Record<string, { ES: string; EN: string }> = {
+  A1: { ES: "A1 · Principiante", EN: "A1 · Beginner" },
+  A2: { ES: "A2 · Básico", EN: "A2 · Basic" },
+  B1: { ES: "B1 · Intermedio", EN: "B1 · Intermediate" },
+  B2: { ES: "B2 · Intermedio alto", EN: "B2 · Upper intermediate" },
+  C1: { ES: "C1 · Avanzado", EN: "C1 · Advanced" },
+  C2: { ES: "C2 · Proficiente", EN: "C2 · Proficient" },
+};
+
+/**
+ * El feed manda el código del marco europeo (A1..C2) y "no_requerido" cuando no se exige
+ * (hoy el endpoint ya lo convierte en null; se tolera igual por si llega crudo).
+ */
+export function formatNivelIngles(value: string | null, lang: "ES" | "EN"): string | null {
+  if (!value || value === "no_requerido") return null;
+  const hit = NIVEL_INGLES[value.trim().toUpperCase()];
+  return hit ? hit[lang] : titleCase(value);
+}
+
+export function formatSeniority(value: string, lang: "ES" | "EN"): string {
+  const hit = SENIORITY[value.trim().toUpperCase()];
+  return hit ? hit[lang] : titleCase(value);
 }
 
 const MESES = [

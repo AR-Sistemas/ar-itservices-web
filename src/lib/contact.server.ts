@@ -95,7 +95,8 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const honeypot = get("sitio_web");
     const startedAt = Number(get("formStartedAt"));
     const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
-    const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
+    const isLikelyBot =
+      honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
     const shortFields = [
       "nombre",
@@ -146,14 +147,12 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       return { ok: true as const };
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = process.env["RESEND_API_KEY"];
     if (!apiKey) {
-      throw new Error(
-        "Falta configurar RESEND_API_KEY en las variables de entorno del servidor.",
-      );
+      throw new Error("Falta configurar RESEND_API_KEY en las variables de entorno del servidor.");
     }
 
-    const to = RECIPIENTS[data.contactType] ?? RECIPIENTS.consulta;
+    const to = RECIPIENTS[data.contactType] ?? "arconsultores@arconsultores.com.ar";
     const attachments = [];
     if (data.cv) {
       const buffer = Buffer.from(await data.cv.arrayBuffer());
@@ -164,10 +163,10 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to,
-      replyTo: data.email || undefined,
+      ...(data.email ? { replyTo: data.email } : {}),
       subject: `Nuevo contacto (${data.contactType}) | ${data.nombre || "sin nombre"}`,
       text: buildBody(data),
-      attachments: attachments.length ? attachments : undefined,
+      ...(attachments.length ? { attachments } : {}),
     });
 
     if (error) {

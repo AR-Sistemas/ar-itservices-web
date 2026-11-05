@@ -20,21 +20,45 @@ import { useEffect, useRef } from "react";
 // densas y continuas, como un dump de código minificado — no son fragmentos
 // sueltos, es una pared de texto.
 const TOKENS = [
-  "display:flex;", "padding:0 24px;", "border-radius:12px;", "position:absolute;",
-  "transform:rotate(-45deg);", "transition:all .3s ease;", "background:#0f0f14;",
-  "@keyframes fade-in{", "from{opacity:0}", "to{opacity:1}}", "animation:spin 2s linear infinite;",
-  "const handleClick=()=>{", "setState(true)}", "grid-template-columns:repeat(4,1fr);",
-  "async function fetchData(){", "await res.json()}", "box-shadow:0 4px 12px rgba(0,0,0,.4);",
-  "if(user&&user.isActive){", "return true}", "z-index:10;overflow:hidden;",
-  "for(let i=0;i<arr.length;i++){", "export default function App(){",
-  ".nav a{text-decoration:none;", "color:#fff}", "width:100%;height:100vh;",
-  "backdrop-filter:blur(8px);", "cursor:pointer;user-select:none;",
-  "flex-direction:column;align-items:center;", "letter-spacing:-.02em;",
-  "font-family:monospace;font-size:14px;", "border:1px solid rgba(255,255,255,.1);",
-  "import{useState}from 'react';", "export const App=()=>{",
-  "return(<div className=", "onClick={()=>setOpen(!open)}",
-  "margin:0 auto;max-width:1200px;", "opacity:.85;mix-blend-mode:screen;",
-  "@media (min-width:768px){", "overflow-y:auto;scroll-behavior:smooth;}",
+  "display:flex;",
+  "padding:0 24px;",
+  "border-radius:12px;",
+  "position:absolute;",
+  "transform:rotate(-45deg);",
+  "transition:all .3s ease;",
+  "background:#0f0f14;",
+  "@keyframes fade-in{",
+  "from{opacity:0}",
+  "to{opacity:1}}",
+  "animation:spin 2s linear infinite;",
+  "const handleClick=()=>{",
+  "setState(true)}",
+  "grid-template-columns:repeat(4,1fr);",
+  "async function fetchData(){",
+  "await res.json()}",
+  "box-shadow:0 4px 12px rgba(0,0,0,.4);",
+  "if(user&&user.isActive){",
+  "return true}",
+  "z-index:10;overflow:hidden;",
+  "for(let i=0;i<arr.length;i++){",
+  "export default function App(){",
+  ".nav a{text-decoration:none;",
+  "color:#fff}",
+  "width:100%;height:100vh;",
+  "backdrop-filter:blur(8px);",
+  "cursor:pointer;user-select:none;",
+  "flex-direction:column;align-items:center;",
+  "letter-spacing:-.02em;",
+  "font-family:monospace;font-size:14px;",
+  "border:1px solid rgba(255,255,255,.1);",
+  "import{useState}from 'react';",
+  "export const App=()=>{",
+  "return(<div className=",
+  "onClick={()=>setOpen(!open)}",
+  "margin:0 auto;max-width:1200px;",
+  "opacity:.85;mix-blend-mode:screen;",
+  "@media (min-width:768px){",
+  "overflow-y:auto;scroll-behavior:smooth;}",
 ];
 
 const TILE_W = 480;
@@ -97,7 +121,13 @@ export function CodeGridSpotlight() {
       el.style.transform = `translate3d(${e.clientX - SPOTLIGHT_SIZE / 2}px, ${
         e.clientY - SPOTLIGHT_SIZE / 2
       }px, 0)`;
-      el.style.opacity = "0.5";
+      // Reducimos el halo sobre texto, controles y tarjetas para que el
+      // contenido conserve protagonismo y legibilidad.
+      const target = e.target instanceof Element ? e.target : null;
+      const overContent = target?.closest(
+        "h1, h2, h3, h4, h5, h6, p, a, button, input, select, textarea, label, summary, article, li, .spotlight-card, [role='dialog']",
+      );
+      el.style.opacity = overContent ? "0.025" : "0.15";
     };
     const onLeave = () => {
       el.style.opacity = "0";
@@ -112,8 +142,8 @@ export function CodeGridSpotlight() {
 
   return (
     <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden" aria-hidden="true">
-      {/* Grilla de fragmentos, siempre visible y muy tenue */}
-      <div className="absolute inset-0 bg-white/[0.05]" style={tileMaskStyle} />
+      {/* Grilla de fragmentos, siempre visible y tenue */}
+      <div className="absolute inset-0 bg-white/[0.04]" style={tileMaskStyle} />
 
       {/* La misma grilla como máscara del contenedor del spotlight, para que
           el círculo que sigue al mouse solo ilumine los fragmentos, no un

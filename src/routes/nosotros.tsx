@@ -1,19 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
-import { BackButton } from "@/components/site/BackButton";
 import { TiltedCard } from "@/components/site/TiltedCard";
 import { FloatingNav } from "@/components/site/FloatingNav";
+import { IsoBadge } from "@/components/site/IsoBadge";
+import { useContactModal } from "@/components/site/ContactModal";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { LogoMark } from "@/components/site/LogoMark";
-import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-import felixPhoto from "@/assets/team/felix-melinsky.png";
-import josePhoto from "@/assets/team/jose-romanutti.png";
-import adrianPhoto from "@/assets/team/adrian-ferrari.png";
-import constanzaPhoto from "@/assets/team/constanza-giordano.png";
+import { TEAM_PHOTOS } from "@/components/site/team-photos";
 
 export const Route = createFileRoute("/nosotros")({
   head: () => ({
@@ -38,15 +35,17 @@ export const Route = createFileRoute("/nosotros")({
   component: PeoplePage,
 });
 
-const PHOTOS = [felixPhoto, josePhoto, adrianPhoto, constanzaPhoto];
+const PRIMARY =
+  "inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white";
+const SECONDARY =
+  "inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30";
 
 function PeoplePage() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
+  const openContact = useContactModal();
   // Desde esta página, los anchors del nav apuntan a la home.
-  const navItems = c.nav.map((n) =>
-    n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n,
-  );
+  const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
@@ -54,12 +53,12 @@ function PeoplePage() {
         items={navItems}
         ctaLabel={c.cta.talk}
         ctaHref="/#contacto"
+        logoHref="/"
+        activeHref="/nosotros"
+        revealAt={-1}
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline
-              play={visible}
-              className="h-8 w-auto shrink-0 text-foreground sm:h-9"
-            />
+            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
             <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
           </span>
         )}
@@ -76,7 +75,7 @@ function PeoplePage() {
                 aria-pressed={lang === l}
                 onClick={() => setLang(l)}
                 className={`rounded px-2 py-1 transition-colors ${
-                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  lang === l ? "text-brand-text" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {l}
@@ -86,40 +85,69 @@ function PeoplePage() {
         }
       />
 
-      <main className="px-5 pt-20 pb-8 sm:pt-24">
+      <main className="px-5 pt-28 pb-8 sm:pt-32">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <BackButton label={c.people.backLink} />
-            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
-              {c.people.heading}
-            </h1>
-            <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.people.statement}</p>
+            <div>
+              <div>
+                <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                  {c.people.heading}
+                </h1>
+                <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+                  {c.people.statement}
+                </p>
+              </div>
+            </div>
           </AnimatedContent>
-          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+          <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {c.people.items.map((p, i) => (
-              <AnimatedContent key={p.name} delay={i * 60}>
-                <figure className="flex flex-col items-center text-center">
-                  <TiltedCard className="w-full max-w-[140px]">
-                    <div className="flex aspect-square w-full items-center justify-center overflow-hidden rounded-xl bg-secondary p-2">
+              <li key={p.name}>
+                <AnimatedContent delay={i * 60} className="h-full">
+                  <article className="flex h-full flex-col rounded-2xl border border-border bg-card p-6">
+                    <TiltedCard className="mx-auto w-full max-w-[190px]">
                       <img
-                        src={PHOTOS[i]}
+                        src={TEAM_PHOTOS[i]}
                         alt={c.people.portraitAlt(p.name)}
+                        width={190}
+                        height={190}
                         loading="lazy"
-                        className="aspect-square w-full rounded-full object-cover ring-1 ring-primary/25"
+                        decoding="async"
+                        className="aspect-square w-full rounded-full bg-secondary object-cover ring-1 ring-primary/25"
                       />
-                    </div>
-                  </TiltedCard>
-                  <figcaption className="mt-4">
-                    <p className="font-semibold">{p.name}</p>
-                    <p className="text-sm text-muted-foreground">{p.role}</p>
-                  </figcaption>
-                  <blockquote className="mt-3 text-sm text-foreground italic">
-                    “{p.quote}”
-                  </blockquote>
-                </figure>
-              </AnimatedContent>
+                    </TiltedCard>
+                    <h2 className="mt-6 text-center font-display text-lg font-bold">{p.name}</h2>
+                    <p className="mt-1 text-center text-sm font-semibold text-brand-text">
+                      {p.role}
+                    </p>
+                    <blockquote className="mt-5 border-t border-border pt-5 text-sm leading-relaxed text-muted-foreground">
+                      “{p.quote}”
+                    </blockquote>
+                  </article>
+                </AnimatedContent>
+              </li>
             ))}
-          </div>
+          </ul>
+
+          <section className="mt-20 mb-8">
+            <AnimatedContent>
+              <div className="flex flex-col gap-6 rounded-2xl border border-primary/30 bg-card p-8 md:flex-row md:items-center md:justify-between md:p-10">
+                <h2 className="text-2xl font-bold tracking-tight">{c.people.joinHeading}</h2>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link to="/trabaja-con-nosotros" className={PRIMARY}>
+                    {c.people.careersLink}
+                  </Link>
+                  <button
+                    type="button"
+                    onClick={() => openContact({ type: "postulante" })}
+                    className={`${SECONDARY} cursor-pointer`}
+                  >
+                    {c.cta.talk}
+                  </button>
+                </div>
+              </div>
+            </AnimatedContent>
+          </section>
         </div>
       </main>
 

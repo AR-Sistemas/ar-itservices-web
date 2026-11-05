@@ -44,7 +44,7 @@ function Content({ card, large = false }: { card: BentoCard; large?: boolean }) 
   return (
     <>
       {card.label && (
-        <p className="font-mono text-[11px] tracking-widest text-primary uppercase">{card.label}</p>
+        <p className="font-mono text-xs tracking-widest text-brand-text uppercase">{card.label}</p>
       )}
       <h3 className={`mt-3 font-semibold ${large ? "text-2xl" : "text-lg"}`}>{card.title}</h3>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{card.desc}</p>
