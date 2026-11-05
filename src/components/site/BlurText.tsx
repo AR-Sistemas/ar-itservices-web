@@ -10,7 +10,7 @@ export function BlurText({
   className = "",
   highlightFrom,
   highlightTo,
-  highlightClassName = "text-primary",
+  highlightClassName = "text-brand",
 }: {
   text: string;
   delay?: number;
