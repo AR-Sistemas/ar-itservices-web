@@ -76,8 +76,7 @@ export const NEWSLETTER_ISSUE: NewsletterIssue = {
   kicker: "Boletín informativo",
   title: "Julio 2026",
   subtitle: "Novedades de inteligencia artificial y tecnología",
-  description:
-    "Una recorrida por los anuncios, herramientas y conversaciones que marcaron el mes.",
+  description: "Una recorrida por los anuncios, herramientas y conversaciones que marcaron el mes.",
   closingDate: "Fecha de cierre: 31 de julio de 2026 · Córdoba, Argentina",
   podcast: {
     title: "La IA pasa de chatear a ejecutar",
@@ -342,7 +341,8 @@ export const NEWSLETTER_ISSUE: NewsletterIssue = {
       kind: "timeline",
       number: "07",
       heading: "Argentina y Córdoba",
-      intro: "La agenda local combinó formación, programas de adopción y búsqueda de aplicaciones concretas.",
+      intro:
+        "La agenda local combinó formación, programas de adopción y búsqueda de aplicaciones concretas.",
       items: [
         {
           tag: "17 JUL · ECOSISTEMA LOCAL",

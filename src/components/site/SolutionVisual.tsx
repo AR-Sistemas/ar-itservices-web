@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import ariaAnim from "@/assets/products/animations/aria.svg?raw";
+import { AriaFramework } from "./AriaFramework";
+import criteriaAnim from "@/assets/products/animations/criteria.svg?raw";
 import arioAnim from "@/assets/products/animations/ario.svg?raw";
 import meetingmateAnim from "@/assets/products/animations/meetingmate.svg?raw";
-import sddAnim from "@/assets/products/animations/sdd.svg?raw";
 import { PRODUCT_LOGOS as LOGOS } from "./product-logos";
 import { useLang } from "@/i18n/language";
 import type { SolutionProduct } from "@/i18n/content";
@@ -10,34 +10,29 @@ import type { SolutionProduct } from "@/i18n/content";
 type ProductId = SolutionProduct["id"];
 
 const ANIMATIONS: Partial<Record<ProductId, string>> = {
-  aria: ariaAnim,
   ario: arioAnim,
   meetingmate: meetingmateAnim,
-  sdd: sddAnim,
+  sdd: criteriaAnim,
 };
 
 // Descripción accesible de cada animación (el SVG original solo la trae en español).
 const ANIM_LABELS: Partial<Record<ProductId, { ES: string; EN: string }>> = {
-  aria: {
-    ES: "Framework ARIA: nueve bloques operando como un sistema integrado alrededor de un núcleo estratégico",
-    EN: "ARIA framework: nine blocks working as an integrated system around a strategic core",
-  },
   ario: {
-    ES: "Ario: los documentos entran, se leen, se extraen los campos y salen datos ordenados en una tabla",
-    EN: "Ario: documents come in, are read, their fields are extracted and orderly data comes out in a table",
+    ES: "ARIO: los documentos entran, se leen, se extraen los campos y salen datos ordenados en una tabla",
+    EN: "ARIO: documents come in, are read, their fields are extracted and orderly data comes out in a table",
   },
   meetingmate: {
     ES: "MeetingMate: una reunión se transcribe y genera un resumen y las tareas acordadas",
     EN: "MeetingMate: a meeting is transcribed and produces a summary and the agreed tasks",
   },
   sdd: {
-    ES: "CriterIA: un pedido pasa por especificación, desarrollo y verificaciones hasta quedar aprobado",
-    EN: "CriterIA: a request goes through specification, development and checks until it is approved",
+    ES: "CriterIA: personas y agentes trabajan con contexto disperso; se acuerda un contexto compartido, el trabajo se revisa y otra persona puede continuarlo",
+    EN: "CriterIA: people and agents work with scattered context; a shared context is agreed, the work is reviewed and someone else can pick it up",
   },
 };
 
 const PANEL =
-  "flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-card/40";
+  "flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl border border-border bg-card";
 
 /** Panel con el logo del producto (tarjetas del home). */
 export function SolutionVisual({
@@ -64,7 +59,21 @@ export function SolutionVisual({
  * está a la vista y, si la persona pidió reducir el movimiento, se muestra
  * el logo estático en lugar de la animación.
  */
-export function SolutionAnimation({
+export function SolutionAnimation(props: { id: ProductId; alt: string; className?: string }) {
+  // Solo la animación, sin tarjeta ni logo. En celular no se muestra: ahí la lista de pasos
+  // lleva el efecto (números que se van completando).
+  return (
+    <div className={`hidden lg:block ${props.className ?? ""}`}>
+      {props.id === "aria" ? (
+        <AriaFramework className="max-w-md" />
+      ) : (
+        <SolutionAnimationCard {...props} />
+      )}
+    </div>
+  );
+}
+
+function SolutionAnimationCard({
   id,
   alt,
   className = "",
@@ -105,7 +114,11 @@ export function SolutionAnimation({
       : null;
 
   return (
-    <div ref={ref} data-paused={!visible} className={`sol-anim ${PANEL} flex-col p-3 ${className}`}>
+    <div
+      ref={ref}
+      data-paused={!visible}
+      className={`sol-anim flex aspect-[4/3] w-full items-center justify-center ${className}`}
+    >
       {reduceMotion || !svg ? (
         <img
           src={LOGOS[id]}
@@ -114,15 +127,7 @@ export function SolutionAnimation({
           className="h-full w-full object-contain p-6"
         />
       ) : (
-        <>
-          <img
-            src={LOGOS[id]}
-            alt={alt}
-            loading="lazy"
-            className="mt-1 h-12 w-auto max-w-[60%] shrink-0 object-contain sm:h-14"
-          />
-          <div className="min-h-0 w-full flex-1" dangerouslySetInnerHTML={{ __html: svg }} />
-        </>
+        <div className="h-full w-full" dangerouslySetInnerHTML={{ __html: svg }} />
       )}
     </div>
   );

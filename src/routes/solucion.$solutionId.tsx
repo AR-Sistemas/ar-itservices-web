@@ -1,37 +1,82 @@
 import { useState } from "react";
-import type { SolutionProduct } from "@/i18n/content";
-import { BackButton } from "@/components/site/BackButton";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
+import { FloatingNav } from "@/components/site/FloatingNav";
 import { FrameworkRequestModal } from "@/components/site/FrameworkRequestModal";
-import { LogoMark } from "@/components/site/LogoMark";
 import { IsoBadge } from "@/components/site/IsoBadge";
+import { LogoDrawInline } from "@/components/site/LogoDrawInline";
+import { LogoMark } from "@/components/site/LogoMark";
+import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { SocialLinks } from "@/components/site/SocialLinks";
-import { SolutionsNav } from "@/components/site/SolutionsNav";
-import { ProductDetail } from "@/components/site/ProductDetail";
+import { SolutionDetail } from "@/components/site/SolutionDetail";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
+import { getPublicSolutionSlug, getSolutionIdFromSlug } from "@/lib/solution-slugs";
 
-export function SolutionsPage({
-  productId,
-  fromQr = false,
-}: {
-  productId: SolutionProduct["id"];
-  fromQr?: boolean;
-}) {
+export const Route = createFileRoute("/solucion/$solutionId")({
+  beforeLoad: ({ params }) => {
+    if (params.solutionId === "sdd") {
+      throw redirect({
+        to: "/solucion/$solutionId",
+        params: { solutionId: "criteria" },
+        replace: true,
+      });
+    }
+  },
+  loader: ({ params }) => {
+    const product = getContent("ES").solutions.products.find(
+      (item) => item.id === getSolutionIdFromSlug(params.solutionId),
+    );
+    if (!product) throw notFound();
+    return {
+      id: product.id,
+      slug: getPublicSolutionSlug(product.id),
+      name: product.name,
+      description: product.short,
+    };
+  },
+  head: ({ loaderData }) => ({
+    meta: [
+      { title: `${loaderData?.name ?? "Solución"} | AR IT Services` },
+      { name: "description", content: loaderData?.description ?? "Soluciones de AR IT Services" },
+      { property: "og:title", content: `${loaderData?.name ?? "Solución"} | AR IT Services` },
+      {
+        property: "og:description",
+        content: loaderData?.description ?? "Soluciones de AR IT Services",
+      },
+    ],
+    links: loaderData
+      ? [{ rel: "canonical", href: `https://ar-itservices.com/solucion/${loaderData.slug}` }]
+      : [],
+  }),
+  component: SolutionPage,
+});
+
+function SolutionPage() {
   const { lang, setLang } = useLang();
   const c = getContent(lang);
   const s = c.solutions;
+  const { id, slug } = Route.useLoaderData();
+  const product = s.products.find((item) => item.id === id)!;
   const [requestOpen, setRequestOpen] = useState<string | null>(null);
   // Desde esta página, los anchors del nav apuntan a la home.
   const navItems = c.nav.map((n) => (n.href.startsWith("#") ? { ...n, href: `/${n.href}` } : n));
 
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
-      <SolutionsNav
-        products={s.products}
-        current={productId}
-        fromQr={fromQr}
-        jumpLabel={s.jumpLabel}
-        backLabel={s.backLink}
+      {/* Misma barra que la home; acá visible desde arriba, con el logo hacia el inicio. */}
+      <FloatingNav
+        items={navItems}
+        ctaLabel={c.cta.talk}
+        ctaHref="/#contacto"
+        logoHref="/"
+        activeHref={`/solucion/${slug}`}
+        revealAt={-1}
+        logo={(visible) => (
+          <span className="flex items-center gap-2.5 sm:gap-3">
+            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
+            <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
+          </span>
+        )}
         rightSlot={
           <div
             className="flex items-center gap-1 text-xs font-semibold"
@@ -45,7 +90,7 @@ export function SolutionsPage({
                 aria-pressed={lang === l}
                 onClick={() => setLang(l)}
                 className={`rounded px-2 py-1 transition-colors ${
-                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  lang === l ? "text-brand-text" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {l}
@@ -55,31 +100,15 @@ export function SolutionsPage({
         }
       />
 
-      <main className="px-5 pt-20 pb-8 sm:pt-24">
+      <main className="px-5 pt-24 pb-8 sm:pt-28">
         <div className="mx-auto max-w-6xl">
-          <div className="mb-8">
-            {fromQr ? (
-              <BackButton to="/qr" label={lang === "ES" ? "Volver al menu" : "Back to menu"} />
-            ) : (
-              <BackButton
-                to="/"
-                hash="soluciones"
-                label={lang === "ES" ? "Volver a soluciones" : "Back to solutions"}
-              />
-            )}
-          </div>
-
-          {s.products
-            .filter((product) => product.id === productId)
-            .map((product) => (
-              <ProductDetail
-                key={product.id}
-                product={product}
-                content={s}
-                lang={lang}
-                onRequest={setRequestOpen}
-              />
-            ))}
+          <SolutionDetail
+            product={product}
+            labels={s.labels}
+            logoAlt={s.logoAlt(product.name)}
+            contactCta={s.contactCta}
+            onRequest={setRequestOpen}
+          />
         </div>
       </main>
 

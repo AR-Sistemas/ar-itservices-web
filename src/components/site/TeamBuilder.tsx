@@ -28,8 +28,7 @@ export function TeamBuilder() {
   return (
     <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       <div>
-        <p className="font-mono text-xs tracking-widest text-primary">{t.eyebrow}</p>
-        <h2 className="mt-4 text-3xl font-bold text-foreground sm:text-4xl">{t.heading}</h2>
+        <h2 className="text-3xl font-bold text-foreground sm:text-4xl">{t.heading}</h2>
         <p className="mt-4 max-w-md text-muted-foreground">{t.paragraph}</p>
 
         <div className="mt-8 flex flex-wrap gap-2" role="group" aria-label={t.disciplinesAria}>
@@ -54,18 +53,23 @@ export function TeamBuilder() {
         </div>
       </div>
 
-      <div className="rounded-2xl border border-border bg-card p-6 sm:p-8">
-        <div className="flex items-baseline justify-between">
-          <p className="font-mono text-xs tracking-widest text-muted-foreground">{t.proposed}</p>
-          <p className="font-mono text-sm text-muted-foreground">
+      <div className="flex flex-col rounded-2xl border border-border bg-card p-6 sm:p-8">
+        <div className="flex min-h-6 items-baseline justify-between gap-4">
+          {/* Sin disciplinas, el aviso va en la misma línea que el contador. */}
+          <p className="text-sm text-muted-foreground" aria-live="polite">
+            {team.length === 0 ? t.empty : ""}
+          </p>
+          <p className="shrink-0 font-mono text-sm text-muted-foreground">
             {total} {total === 1 ? t.person : t.people}
           </p>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2" aria-live="polite">
-          {team.length === 0 && (
-            <p className="text-sm text-muted-foreground sm:col-span-2">{t.empty}</p>
-          )}
+        {/* Alto fijo (cabe el equipo base de 4 roles; si hay más, scrollea adentro): la card no cambia de tamaño al elegir
+            disciplinas; solo se acomodan las cards de roles adentro. */}
+        <div
+          className="mt-6 mb-8 grid h-[13.75rem] content-start gap-3 overflow-y-auto sm:h-[6.5rem] sm:grid-cols-2"
+          aria-live="polite"
+        >
           {team.map((tm) => (
             <div
               key={tm.role}
@@ -83,10 +87,13 @@ export function TeamBuilder() {
           onClick={() => {
             // El formulario de #contacto escucha este evento y precarga el mensaje.
             const labels = t.disciplines.filter((d) => selected.includes(d.id)).map((d) => d.label);
-            prefillContactMessage(labels.length ? t.proposalMessage(labels, team, total) : "");
+            // Con 0 personas igual se puede consultar: va un mensaje genérico.
+            prefillContactMessage(
+              total === 0 ? t.emptyProposalMessage : t.proposalMessage(labels, team, total),
+            );
           }}
           href="#contacto"
-          className="mt-8 inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+          className="mt-auto inline-flex w-full items-center justify-center rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
         >
           {t.cta}
         </a>

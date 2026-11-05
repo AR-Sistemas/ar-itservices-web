@@ -5,7 +5,10 @@
  */
 export function Beams({ className = "" }: { className?: string }) {
   return (
-    <div className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`} aria-hidden="true">
+    <div
+      className={`pointer-events-none absolute inset-0 overflow-hidden ${className}`}
+      aria-hidden="true"
+    >
       <div className="beam beam-1" />
       <div className="beam beam-2" />
       <div className="beam beam-3" />

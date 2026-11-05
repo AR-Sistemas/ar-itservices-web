@@ -16,7 +16,7 @@ import { Route as QrRouteImport } from './routes/qr'
 import { Route as SolucionesRouteImport } from './routes/soluciones'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
 import { Route as AvisoAvisoIdRouteImport } from './routes/aviso.$avisoId'
-import { Route as SolucionesProductIdRouteImport } from './routes/soluciones_.$productId'
+import { Route as SolucionSolutionIdRouteImport } from './routes/solucion.$solutionId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -53,9 +53,9 @@ const AvisoAvisoIdRoute = AvisoAvisoIdRouteImport.update({
   path: '/aviso/$avisoId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SolucionesProductIdRoute = SolucionesProductIdRouteImport.update({
-  id: '/soluciones_/$productId',
-  path: '/soluciones/$productId',
+const SolucionSolutionIdRoute = SolucionSolutionIdRouteImport.update({
+  id: '/solucion/$solutionId',
+  path: '/solucion/$solutionId',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -67,7 +67,7 @@ export interface FileRoutesByFullPath {
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
-  '/soluciones/$productId': typeof SolucionesProductIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,7 +77,7 @@ export interface FileRoutesByTo {
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
-  '/soluciones/$productId': typeof SolucionesProductIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,7 +88,7 @@ export interface FileRoutesById {
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
-  '/soluciones_/$productId': typeof SolucionesProductIdRoute
+  '/solucion/$solutionId': typeof SolucionSolutionIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -100,7 +100,7 @@ export interface FileRouteTypes {
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
-    | '/soluciones/$productId'
+    | '/solucion/$solutionId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -110,7 +110,7 @@ export interface FileRouteTypes {
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
-    | '/soluciones/$productId'
+    | '/solucion/$solutionId'
   id:
     | '__root__'
     | '/'
@@ -120,7 +120,7 @@ export interface FileRouteTypes {
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
-    | '/soluciones_/$productId'
+    | '/solucion/$solutionId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,7 +131,7 @@ export interface RootRouteChildren {
   SolucionesRoute: typeof SolucionesRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
   AvisoAvisoIdRoute: typeof AvisoAvisoIdRoute
-  SolucionesProductIdRoute: typeof SolucionesProductIdRoute
+  SolucionSolutionIdRoute: typeof SolucionSolutionIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -185,11 +185,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AvisoAvisoIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/soluciones_/$productId': {
-      id: '/soluciones_/$productId'
-      path: '/soluciones/$productId'
-      fullPath: '/soluciones/$productId'
-      preLoaderRoute: typeof SolucionesProductIdRouteImport
+    '/solucion/$solutionId': {
+      id: '/solucion/$solutionId'
+      path: '/solucion/$solutionId'
+      fullPath: '/solucion/$solutionId'
+      preLoaderRoute: typeof SolucionSolutionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -203,7 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   SolucionesRoute: SolucionesRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
   AvisoAvisoIdRoute: AvisoAvisoIdRoute,
-  SolucionesProductIdRoute: SolucionesProductIdRoute,
+  SolucionSolutionIdRoute: SolucionSolutionIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

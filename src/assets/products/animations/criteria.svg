@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" width="1200" height="900" role="img" aria-label="CriterIA: personas y agentes trabajan con contexto disperso; se acuerda un contexto compartido, el trabajo se revisa y otra persona puede continuarlo">
+<style>
+.cri-fx{transform-box:fill-box;transform-origin:center}
+/* Fase 1 (0-24%): contexto fragmentado, piezas sueltas y líneas que no coinciden */
+#cri-sueltas{animation:cri-sueltas 10s ease-in-out infinite}
+@keyframes cri-sueltas{0%{opacity:0}6%,20%{opacity:1}30%,100%{opacity:0}}
+.cri-s1{animation:cri-s1 10s ease-in-out infinite}
+.cri-s2{animation:cri-s2 10s ease-in-out infinite}
+.cri-s3{animation:cri-s3 10s ease-in-out infinite}
+.cri-s4{animation:cri-s4 10s ease-in-out infinite}
+@keyframes cri-s1{0%,6%{transform:translate(0,0)}14%{transform:translate(-14px,10px)}22%{transform:translate(8px,-8px)}30%,100%{transform:translate(120px,40px)}}
+@keyframes cri-s2{0%,6%{transform:translate(0,0)}14%{transform:translate(12px,-12px)}22%{transform:translate(-10px,8px)}30%,100%{transform:translate(-130px,70px)}}
+@keyframes cri-s3{0%,6%{transform:translate(0,0)}14%{transform:translate(-8px,-14px)}22%{transform:translate(12px,6px)}30%,100%{transform:translate(110px,-80px)}}
+@keyframes cri-s4{0%,6%{transform:translate(0,0)}14%{transform:translate(10px,12px)}22%{transform:translate(-12px,-6px)}30%,100%{transform:translate(-120px,-60px)}}
+/* Fase 2 (24-48%): se acuerda el contexto compartido */
+#cri-hub{animation:cri-hub 10s cubic-bezier(.34,1.56,.64,1) infinite}
+@keyframes cri-hub{0%,24%{opacity:0;transform:scale(.3)}34%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(1)}}
+#cri-halo{animation:cri-halo 2.4s ease-in-out infinite}
+@keyframes cri-halo{0%,100%{opacity:.25;transform:scale(1)}50%{opacity:.5;transform:scale(1.08)}}
+.cri-lnk{fill:none;stroke-width:7;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0}
+#cri-l1{animation:cri-l1 10s ease-out infinite}
+#cri-l2{animation:cri-l2 10s ease-out infinite}
+#cri-l3{animation:cri-l3 10s ease-out infinite}
+@keyframes cri-l1{0%,28%{stroke-dashoffset:1;opacity:0}30%{opacity:1}40%,90%{stroke-dashoffset:0;opacity:1}97%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes cri-l2{0%,31%{stroke-dashoffset:1;opacity:0}33%{opacity:1}43%,90%{stroke-dashoffset:0;opacity:1}97%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes cri-l3{0%,34%{stroke-dashoffset:1;opacity:0}36%{opacity:1}46%,90%{stroke-dashoffset:0;opacity:1}97%,100%{stroke-dashoffset:0;opacity:0}}
+/* Fase 3 (48-72%): contribución con revisión humana */
+#cri-aporte{animation:cri-aporte 10s ease-out infinite}
+@keyframes cri-aporte{0%,48%{opacity:0;transform:translateX(-60px)}58%,90%{opacity:1;transform:translateX(0)}97%,100%{opacity:0;transform:translateX(0)}}
+#cri-lnk-out{fill:none;stroke:#ffffff;stroke-width:7;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:cri-out 10s ease-out infinite}
+@keyframes cri-out{0%,48%{stroke-dashoffset:1;opacity:0}50%{opacity:.9}58%,90%{stroke-dashoffset:0;opacity:.9}97%,100%{stroke-dashoffset:0;opacity:0}}
+#cri-check{animation:cri-check 10s cubic-bezier(.34,1.56,.64,1) infinite}
+@keyframes cri-check{0%,62%{opacity:0;transform:scale(.2)}68%,90%{opacity:1;transform:scale(1)}97%,100%{opacity:0;transform:scale(1)}}
+/* Fase 4 (72-92%): otra persona continúa */
+#cri-cont{fill:none;stroke:#ff666e;stroke-width:7;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0;animation:cri-cont 10s ease-out infinite}
+@keyframes cri-cont{0%,72%{stroke-dashoffset:1;opacity:0}74%{opacity:1}84%,92%{stroke-dashoffset:0;opacity:1}98%,100%{stroke-dashoffset:0;opacity:0}}
+#cri-nodo-d{animation:cri-nodod 10s ease-out infinite}
+@keyframes cri-nodod{0%,70%{opacity:.25;transform:scale(1)}84%{opacity:1;transform:scale(1.12)}92%{opacity:1;transform:scale(1)}98%,100%{opacity:.25;transform:scale(1)}}
+#cri-pulso{fill:none;stroke:#ffffff;stroke-width:6;stroke-linecap:round;stroke-dasharray:.06 .94;opacity:0;animation:cri-pulso 10s linear infinite}
+@keyframes cri-pulso{0%,50%{opacity:0;stroke-dashoffset:0}52%{opacity:1}92%{opacity:1;stroke-dashoffset:-3}98%,100%{opacity:0;stroke-dashoffset:-3}}
+@media (prefers-reduced-motion:reduce){svg *{animation:none !important}#cri-sueltas{opacity:0}#cri-pulso{display:none}.cri-lnk,#cri-lnk-out,#cri-cont{stroke-dashoffset:0;opacity:1}}
+</style>
+<defs>
+<linearGradient id="cri-g-hub" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fafaf9"/><stop offset=".48" stop-color="#ff666e"/><stop offset="1" stop-color="#ff000d"/></linearGradient>
+</defs>
+
+<!-- Enlaces persona/agente -> contexto compartido -->
+<path id="cri-l1" class="cri-lnk" pathLength="1" stroke="#e6e8ec" d="M226 250 C 360 250 430 410 520 440"/>
+<path id="cri-l2" class="cri-lnk" pathLength="1" stroke="#b5b8bf" d="M226 450 L 510 450"/>
+<path id="cri-l3" class="cri-lnk" pathLength="1" stroke="#8fa3bf" d="M226 650 C 360 650 430 490 520 460"/>
+<path id="cri-lnk-out" pathLength="1" d="M690 450 L 790 450"/>
+<path id="cri-pulso" pathLength="1" d="M226 450 L 510 450 M690 450 L 790 450"/>
+
+<!-- Personas y agentes -->
+<g>
+<circle cx="180" cy="250" r="46" fill="#232234" stroke="#e6e8ec" stroke-width="6"/>
+<circle cx="180" cy="238" r="12" fill="#e6e8ec"/><path d="M158 272 a22 18 0 0 1 44 0 z" fill="#e6e8ec"/>
+<circle cx="180" cy="450" r="46" fill="#232234" stroke="#b5b8bf" stroke-width="6"/>
+<rect x="160" y="432" width="40" height="34" rx="9" fill="#b5b8bf"/><circle cx="171" cy="446" r="4.5" fill="#232234"/><circle cx="189" cy="446" r="4.5" fill="#232234"/><rect x="171" y="456" width="18" height="4" rx="2" fill="#232234"/>
+<circle cx="180" cy="650" r="46" fill="#232234" stroke="#8fa3bf" stroke-width="6"/>
+<circle cx="180" cy="638" r="12" fill="#8fa3bf"/><path d="M158 672 a22 18 0 0 1 44 0 z" fill="#8fa3bf"/>
+</g>
+
+<!-- Fase 1: contexto fragmentado -->
+<g id="cri-sueltas">
+<g class="cri-s1"><rect x="430" y="300" width="70" height="86" rx="12" fill="#ffffff" fill-opacity=".85"/><rect x="444" y="318" width="42" height="7" rx="3.5" fill="#706F6F"/><rect x="444" y="334" width="30" height="6" rx="3" fill="#C9C9D6"/></g>
+<g class="cri-s2"><rect x="520" y="540" width="70" height="86" rx="12" fill="#ffffff" fill-opacity=".6"/><rect x="534" y="558" width="42" height="7" rx="3.5" fill="#706F6F"/><rect x="534" y="574" width="34" height="6" rx="3" fill="#C9C9D6"/></g>
+<g class="cri-s3"><rect x="560" y="290" width="70" height="86" rx="12" fill="#ffffff" fill-opacity=".7"/><rect x="574" y="308" width="42" height="7" rx="3.5" fill="#706F6F"/><rect x="574" y="324" width="26" height="6" rx="3" fill="#C9C9D6"/></g>
+<g class="cri-s4"><rect x="410" y="520" width="70" height="86" rx="12" fill="#ffffff" fill-opacity=".5"/><rect x="424" y="538" width="42" height="7" rx="3.5" fill="#706F6F"/><rect x="424" y="554" width="32" height="6" rx="3" fill="#C9C9D6"/></g>
+</g>
+
+<!-- Fase 2: contexto compartido -->
+<g id="cri-hub" class="cri-fx">
+<circle id="cri-halo" class="cri-fx" cx="600" cy="450" r="128" fill="#ff666e"/>
+<circle cx="600" cy="450" r="92" fill="url(#cri-g-hub)"/>
+<rect x="566" y="410" width="68" height="80" rx="10" fill="#ffffff"/>
+<rect x="578" y="426" width="44" height="7" rx="3.5" fill="#706F6F"/><rect x="578" y="441" width="44" height="6" rx="3" fill="#C9C9D6"/><rect x="578" y="454" width="30" height="6" rx="3" fill="#C9C9D6"/><rect x="578" y="467" width="38" height="6" rx="3" fill="#C9C9D6"/>
+</g>
+
+<!-- Fase 3: contribución revisada -->
+<g id="cri-aporte">
+<rect x="790" y="300" width="230" height="300" rx="20" fill="#ffffff"/>
+<rect x="818" y="330" width="110" height="12" rx="6" fill="#706F6F"/>
+<rect x="818" y="356" width="170" height="8" rx="4" fill="#C9C9D6"/><rect x="818" y="376" width="150" height="8" rx="4" fill="#C9C9D6"/><rect x="818" y="396" width="160" height="8" rx="4" fill="#C9C9D6"/>
+<rect x="818" y="440" width="170" height="64" rx="10" fill="#f1f1f6" stroke="#C9C9D6" stroke-width="2"/>
+<rect x="832" y="458" width="100" height="8" rx="4" fill="#C9C9D6"/><rect x="832" y="476" width="70" height="8" rx="4" fill="#C9C9D6"/>
+</g>
+<g id="cri-check" class="cri-fx">
+<circle cx="1004" cy="316" r="40" fill="#ff000d" stroke="#14131c" stroke-width="8"/>
+<path d="M986 316 l13 14 l22 -26" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+
+<!-- Fase 4: otra persona continúa -->
+<path id="cri-cont" pathLength="1" d="M905 600 C 905 740 760 760 276 780"/>
+<g id="cri-nodo-d" class="cri-fx">
+<circle cx="230" cy="780" r="46" fill="#232234" stroke="#ff666e" stroke-width="6"/>
+<circle cx="230" cy="768" r="12" fill="#ff666e"/><path d="M208 802 a22 18 0 0 1 44 0 z" fill="#ff666e"/>
+</g>
+</svg>

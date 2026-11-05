@@ -15,9 +15,7 @@ const STORAGE_KEY = "ar-lang";
 function detectFromBrowser(): Lang {
   try {
     const nav =
-      (typeof navigator !== "undefined" &&
-        (navigator.languages?.[0] || navigator.language)) ||
-      "";
+      (typeof navigator !== "undefined" && (navigator.languages?.[0] || navigator.language)) || "";
     return nav.toLowerCase().startsWith("es") ? "ES" : "EN";
   } catch {
     return "ES";

@@ -74,7 +74,8 @@ interface DragState {
 const DEFAULT_ITEMS: DepthCarouselItem[] = [];
 
 const clamp = (v: number, min: number, max: number) => Math.min(Math.max(v, min), max);
-const normalizeItem = (it: DepthCarouselItem) => (typeof it === "string" ? { image: it, alt: "" } : it);
+const normalizeItem = (it: DepthCarouselItem) =>
+  typeof it === "string" ? { image: it, alt: "" } : it;
 
 export function DepthCarousel({
   items = DEFAULT_ITEMS,
@@ -168,7 +169,8 @@ export function DepthCarousel({
       if (!shown) opacity = 0;
 
       const brightness = Math.max(0.15, 1 - back * cfg.falloff);
-      const blurPx = cfg.blur > 0 ? Math.min(cfg.blur, (back / Math.max(1, cfg.visibleCards)) * cfg.blur) : 0;
+      const blurPx =
+        cfg.blur > 0 ? Math.min(cfg.blur, (back / Math.max(1, cfg.visibleCards)) * cfg.blur) : 0;
       const zi = Math.round(2000 - d * 20);
 
       el.style.transform = `translate(-50%, -50%) scale(${sc}) translateX(${tx.toFixed(2)}px) translateZ(${tz.toFixed(2)}px) rotateY(${ry.toFixed(3)}deg)`;
@@ -185,7 +187,8 @@ export function DepthCarousel({
   const notify = useCallback(
     (idx: number) => {
       setActive(idx);
-      onChangeRef.current?.(idx, data[idx]);
+      const item = data[idx];
+      if (item) onChangeRef.current?.(idx, item);
     },
     [data],
   );
@@ -234,13 +237,18 @@ export function DepthCarousel({
     [tweenTo, notify],
   );
 
-  const navigateBy = useCallback((step: number) => setFocus(focusRef.current + step, true), [setFocus]);
+  const navigateBy = useCallback(
+    (step: number) => setFocus(focusRef.current + step, true),
+    [setFocus],
+  );
 
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
     const ro = new ResizeObserver((entries) => {
-      const w = entries[0].contentRect.width;
+      const entry = entries[0];
+      if (!entry) return;
+      const w = entry.contentRect.width;
       const cfg = cfgRef.current;
       const needed = cfg.cardWidth + Math.abs(cfg.spread) * 2 + 120;
       scaleRef.current = clamp(w / needed, 0.4, 1);
@@ -345,7 +353,8 @@ export function DepthCarousel({
 
   useEffect(() => {
     reducedRef.current =
-      typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!autoplay || reducedRef.current || count < 2) return;
     const root = rootRef.current;
     let hovered = false;
@@ -391,7 +400,20 @@ export function DepthCarousel({
 
   useEffect(() => {
     layout(posRef.current);
-  }, [layout, depth, spread, tilt, tiltDirection, visibleCards, falloff, blur, cardWidth, cardHeight, radius, count]);
+  }, [
+    layout,
+    depth,
+    spread,
+    tilt,
+    tiltDirection,
+    visibleCards,
+    falloff,
+    blur,
+    cardWidth,
+    cardHeight,
+    radius,
+    count,
+  ]);
 
   useEffect(
     () => () => {

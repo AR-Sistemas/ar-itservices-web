@@ -41,7 +41,8 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
     const honeypot = get("sitio_web");
     const startedAt = Number(get("formStartedAt"));
     const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
-    const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
+    const isLikelyBot =
+      honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
     return {
       nombre: get("nombre"),
@@ -62,11 +63,9 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
       throw new Error("Falta el email.");
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = process.env["RESEND_API_KEY"];
     if (!apiKey) {
-      throw new Error(
-        "Falta configurar RESEND_API_KEY en las variables de entorno del servidor.",
-      );
+      throw new Error("Falta configurar RESEND_API_KEY en las variables de entorno del servidor.");
     }
 
     const resend = new Resend(apiKey);

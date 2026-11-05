@@ -218,6 +218,10 @@ levantado y el sitio pegarle a su URL:
 # server-only, sin prefijo VITE_ (nunca al bundle del cliente).
 # Default: http://localhost:8080
 AVISOS_API_URL=http://localhost:8080
+
+# Clave compartida con AR Recruiting (allá se llama PUBLIC_SITE_API_KEY). El feed responde
+# 401 sin ella. Se manda como header x-site-key desde el servidor; nunca va al bundle.
+AVISOS_API_KEY=
 ```
 
 El fetch se hace **desde el servidor** (server functions), no desde el browser: por

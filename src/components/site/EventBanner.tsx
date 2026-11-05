@@ -2,14 +2,13 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import cordobaTechWeekLogo from "@/assets/events/cordoba-tech-week.png";
+import cordobaTechWeekStand from "@/assets/events/cordoba-tech-week-stand-19.png";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { isEventBannerActive } from "@/lib/event-banner";
 
-// El cierre dura lo que dura la visita: vive en memoria del módulo (no en
-// localStorage), así que al recargar la página o volver a abrir el navegador el
-// aviso aparece de nuevo, pero no reaparece al navegar entre páginas del sitio.
-let dismissedThisVisit = false;
+// Incluye el evento en la clave para que un aviso futuro no herede el cierre de este.
+const DISMISS_KEY = "ar-event-banner-dismissed-cordoba-tech-week-2026";
 
 /**
  * Aviso de Córdoba Tech Week arriba del home, con el logo oficial del evento
@@ -22,15 +21,24 @@ let dismissedThisVisit = false;
  * pantalla y se apaga con "reducir movimiento".
  *
  * Se retira solo al pasar la fecha de src/lib/event-banner.ts, o con
- * `enabled: false`. La cruz lo cierra solo durante la visita actual: no se
- * guarda nada en el navegador, así que vuelve a verse al recargar.
+ * `enabled: false`. El cierre se recuerda en el navegador; como localStorage
+ * puede fallar (ventana privada, datos bloqueados), todo acceso va protegido y
+ * el aviso se ve igual.
  */
 export function EventBanner() {
   const { lang } = useLang();
   const c = getContent(lang).eventBanner;
   const ref = useRef<HTMLDivElement>(null);
-  const [dismissed, setDismissed] = useState(dismissedThisVisit);
+  const [dismissed, setDismissed] = useState(false);
   const [visible, setVisible] = useState(true);
+
+  useEffect(() => {
+    try {
+      if (localStorage.getItem(DISMISS_KEY) === "1") setDismissed(true);
+    } catch {
+      // sin almacenamiento: el aviso queda visible hasta recargar
+    }
+  }, []);
 
   // Pausa las animaciones cuando el cartel sale de pantalla.
   useEffect(() => {
@@ -46,8 +54,12 @@ export function EventBanner() {
   if (!isEventBannerActive() || dismissed) return null;
 
   const close = () => {
-    dismissedThisVisit = true;
     setDismissed(true);
+    try {
+      localStorage.setItem(DISMISS_KEY, "1");
+    } catch {
+      // idem: no persiste, pero se cierra en esta visita
+    }
   };
 
   return (
@@ -74,9 +86,25 @@ export function EventBanner() {
           <span aria-hidden="true" className="ctw-shine" />
         </span>
         <p className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4">
-          <span className="font-semibold text-foreground">
-            <span className="hidden sm:inline">{c.lead} · </span>
-            {c.dates}
+          <span className="inline-flex items-center gap-2.5 font-semibold tracking-wide text-foreground sm:gap-3">
+            <span className="hidden sm:inline">{c.lead}</span>
+            <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
+              ·
+            </span>
+            <span>{c.dates}</span>
+            <span aria-hidden="true" className="text-[#c4f023]">
+              ·
+            </span>
+            <span className="ctw-stand-badge relative isolate inline-flex shrink-0">
+              <img
+                src={cordobaTechWeekStand}
+                alt={c.stand}
+                className="relative h-6 w-auto sm:h-7"
+              />
+            </span>
+          </span>
+          <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
+            ·
           </span>
           <Link to="/" hash="soluciones" className="ctw-cta font-bold">
             {c.cta} →
