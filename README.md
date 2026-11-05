@@ -1,4 +1,4 @@
-# AR IT Services: Engineering Excellence
+# AR IT Services: Engineering Excellence Premium
 
 # Prompt para Lovable — Sitio web AR IT Services (v1)
 
