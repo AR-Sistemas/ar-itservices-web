@@ -1,12 +1,17 @@
-import { useEffect, useRef } from "react";
-import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX } from "./LogoMark";
+import { useEffect, useId, useRef } from "react";
+import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX, ArLogoDefs } from "./LogoMark";
 
 /**
  * Isotipo "AR" real vectorizado del logotipo institucional, animado con
  * Anime.js svg.createDrawable(). Se dibuja una sola vez al entrar al sitio.
+ *
+ * Lleva el sombreado de la versión con degradé del logotipo: la "R" pasa de
+ * blanco a gris claro hacia la derecha y la pierna derecha de la "A" se oscurece
+ * hacia arriba (rojo vino → rojo de marca).
  */
 export function LogoDraw({ className = "" }: { className?: string }) {
   const ref = useRef<SVGSVGElement>(null);
+  const id = `ar-hero-${useId().replace(/:/g, "")}`;
 
   useEffect(() => {
     const el = ref.current;
@@ -56,11 +61,12 @@ export function LogoDraw({ className = "" }: { className?: string }) {
       role="img"
       aria-label="AR IT Services"
     >
+      <ArLogoDefs id={id} />
       <path
         id="ar-logo-r"
         className="ar-logo-path"
-        fill="#FFFFFF"
-        stroke="#FFFFFF"
+        fill={`url(#${id}-r)`}
+        stroke={`url(#${id}-r)`}
         strokeWidth={0.6}
         strokeLinejoin="round"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
@@ -74,6 +80,14 @@ export function LogoDraw({ className = "" }: { className?: string }) {
         stroke="#FF000D"
         strokeWidth={0.6}
         strokeLinejoin="round"
+        style={{ fillOpacity: 0, strokeOpacity: 0 }}
+        d={AR_PATH_A}
+      />
+      <path
+        className="ar-logo-path"
+        clipPath={`url(#${id}-clip)`}
+        fill={`url(#${id}-a)`}
+        fillRule="evenodd"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
         d={AR_PATH_A}
       />
