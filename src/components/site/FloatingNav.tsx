@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { useSpringPress } from "./useSpringPress";
 import { useIslandReveal } from "./useIslandReveal";
 import { useContactModal } from "./ContactModal";
+import { RobotBadge } from "./RobotBadge";
 import type { NavItem } from "@/i18n/content";
 
 export type { NavItem };
@@ -134,11 +135,7 @@ export function FloatingNav({
                   style={{ transitionDelay: delay(i + 1) }}
                 >
                   {n.label}
-                  {n.badge && (
-                    <span className="rounded-full bg-primary px-1.5 py-px text-xs leading-4 font-bold tracking-wide text-primary-foreground uppercase">
-                      {n.badge}
-                    </span>
-                  )}
+                  {n.badge && <RobotBadge label={n.badge} />}
                 </a>
               ))}
             </div>
@@ -234,11 +231,7 @@ export function FloatingNav({
                       }`}
                     >
                       {n.label}
-                      {n.badge && (
-                        <span className="rounded-full bg-primary px-1.5 py-px text-xs leading-4 font-bold tracking-wide text-primary-foreground uppercase">
-                          {n.badge}
-                        </span>
-                      )}
+                      {n.badge && <RobotBadge label={n.badge} />}
                     </a>
                     {n.children?.map((child) => (
                       <a

@@ -42,16 +42,34 @@ const STEP_MS = 1500;
 const START_MS = 700;
 const SYSTEM_MS = 5000;
 
-/** Avanza solo 0 → 1…9 → 10 → 0… mientras `active`; `hold` fija un paso (hover en la lista). */
-export function useAriaStep(active: boolean, hold: number | null = null) {
+/**
+ * Avanza solo 0 → 1…9 → 10 mientras `active`; `hold` fija un paso (hover en la lista).
+ * - `loop` (por defecto sí): al llegar al sistema completo vuelve a empezar. Sin loop se
+ *   queda en el cuadro final y solo se repite cuando la persona sale de la sección y vuelve.
+ * - `durationFor`: cuánto dura cada paso (p. ej. según el largo del texto, para dar
+ *   tiempo de lectura).
+ */
+export function useAriaStep(
+  active: boolean,
+  hold: number | null = null,
+  options: { loop?: boolean; durationFor?: (step: number) => number } = {},
+) {
+  const { loop = true, durationFor } = options;
   const [step, setStep] = useState(0);
 
   useEffect(() => {
+    // Sin loop, al salir de la sección se rebobina: al volver se ve de nuevo desde el principio.
+    if (!active && !loop) setStep(0);
+  }, [active, loop]);
+
+  useEffect(() => {
     if (!active || hold !== null) return;
-    const wait = step === 0 ? START_MS : step === SYSTEM_STEP ? SYSTEM_MS : STEP_MS;
+    if (!loop && step >= SYSTEM_STEP) return;
+    const wait =
+      step === 0 ? START_MS : step === SYSTEM_STEP ? SYSTEM_MS : (durationFor?.(step) ?? STEP_MS);
     const id = window.setTimeout(() => setStep((s) => (s >= SYSTEM_STEP ? 0 : s + 1)), wait);
     return () => window.clearTimeout(id);
-  }, [active, hold, step]);
+  }, [active, hold, step, loop, durationFor]);
 
   return hold ?? step;
 }
@@ -61,6 +79,7 @@ export function useAriaPlayback() {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [tabVisible, setTabVisible] = useState(true);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -68,6 +87,14 @@ export function useAriaPlayback() {
     const onChange = () => setReduceMotion(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  // Pestaña en segundo plano: no se avanza ni se hace scroll.
+  useEffect(() => {
+    const onChange = () => setTabVisible(document.visibilityState !== "hidden");
+    onChange();
+    document.addEventListener("visibilitychange", onChange);
+    return () => document.removeEventListener("visibilitychange", onChange);
   }, []);
 
   useEffect(() => {
@@ -83,7 +110,7 @@ export function useAriaPlayback() {
     return () => io.disconnect();
   }, []);
 
-  return { ref, active: visible && !reduceMotion, reduceMotion };
+  return { ref, active: visible && tabVisible && !reduceMotion, reduceMotion };
 }
 
 export function AriaFramework({

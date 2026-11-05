@@ -1,12 +1,14 @@
-import { useEffect, useRef } from "react";
-import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX } from "./LogoMark";
+import { useEffect, useId, useRef } from "react";
+import { AR_PATH_A, AR_PATH_R, AR_VIEWBOX, ArLogoDefs } from "./LogoMark";
 
 /**
  * Variante animada del isotipo "AR" para la barra de navegación: reusa el mismo
  * efecto de "reescritura" del logo del hero. El trazo se dibuja en rojo y al
  * rellenarse queda en la versión de marca "Negativo color" (Brand Book 1.3):
- * la "A" en rojo #ff000d y la "R" en blanco (fillColor / currentColor), que es
- * la versión correcta sobre fondos oscuros. La "A" va por encima de la "R".
+ * la "A" en rojo #ff000d y la "R" en blanco, que es la versión correcta sobre
+ * fondos oscuros, con el sombreado del logotipo con degradé (R blanco → gris
+ * claro, pierna derecha de la "A" más oscura arriba). La "A" va por encima de la "R".
+ * `fillColor` solo se aplica si se pasa uno distinto del de marca.
  *
  * Usa ids propios (nav-logo-*) para no colisionar con el `svg.createDrawable`
  * del logo del hero, que selecciona por id global.
@@ -17,7 +19,7 @@ export function LogoDrawInline({
   className = "",
   play,
   strokeColor = "#FF000D",
-  fillColor = "currentColor",
+  fillColor,
 }: {
   className?: string;
   play: boolean;
@@ -25,6 +27,7 @@ export function LogoDrawInline({
   fillColor?: string;
 }) {
   const ref = useRef<SVGSVGElement>(null);
+  const id = `ar-nav-${useId().replace(/:/g, "")}`;
 
   useEffect(() => {
     if (!play) return;
@@ -88,11 +91,12 @@ export function LogoDrawInline({
       className={className}
       role="img"
       aria-label="AR IT Services"
-      fill={fillColor}
     >
+      <ArLogoDefs id={id} />
       <path
         id="nav-logo-r"
         className="ar-draw-path"
+        fill={fillColor ?? `url(#${id}-r)`}
         stroke={strokeColor}
         strokeWidth={0.8}
         strokeLinejoin="round"
@@ -109,6 +113,15 @@ export function LogoDrawInline({
         strokeWidth={0.8}
         strokeLinejoin="round"
         strokeLinecap="round"
+        style={{ fillOpacity: 0, strokeOpacity: 0 }}
+        d={AR_PATH_A}
+      />
+      {/* Degradé oscuro de la pierna derecha de la "A": solo relleno, sin contorno. */}
+      <path
+        className="ar-draw-path"
+        clipPath={`url(#${id}-clip)`}
+        fill={`url(#${id}-a)`}
+        fillRule="evenodd"
         style={{ fillOpacity: 0, strokeOpacity: 0 }}
         d={AR_PATH_A}
       />

@@ -32,6 +32,8 @@ export type ServiceGroup = {
 export type SolutionProduct = {
   id: "aria" | "ario" | "meetingmate" | "sdd";
   name: string;
+  /** Clasificación que se muestra como etiqueta en la tarjeta: marco de trabajo o producto. */
+  kind: "framework" | "product";
   tagline: string;
   short: string;
   problem: string;
@@ -136,6 +138,7 @@ export type SiteContent = {
     contactCta: string;
     labels: { problem: string; example: string; how: string; features: string; audience: string };
     logoAlt: (name: string) => string;
+    kindLabels: { framework: string; product: string };
     products: SolutionProduct[];
   };
   frameworkModal: {
@@ -508,7 +511,7 @@ const ES: SiteContent = {
   solutions: {
     heading: "Tecnología que se convierte en soluciones concretas",
     subtitle:
-      "Productos propios de AR IT Services para resolver problemas reales de equipos y empresas.",
+      "Desarrollamos productos propios y frameworks para acompañar a las organizaciones en la adopción y el uso efectivo de la inteligencia artificial.",
     teaserCta: "Ver todas las soluciones",
     cardCta: "Conocer más",
     navBadge: "Nuevo",
@@ -522,13 +525,15 @@ const ES: SiteContent = {
       audience: "A quién está dirigido",
     },
     logoAlt: (n) => `Logo de ${n}`,
+    kindLabels: { framework: "Framework", product: "Producto" },
     products: [
       {
         id: "aria",
         name: "ARIA",
-        tagline: "Adopción Responsable de Inteligencia Artificial.",
+        kind: "framework",
+        tagline: "Planificá la adopción de IA en tu empresa.",
         short:
-          "Nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo, no un catálogo de herramientas para el corto plazo.",
+          "Un marco de trabajo para definir objetivos, identificar casos de uso, establecer responsables y evaluar resultados durante la incorporación de inteligencia artificial.",
         problem:
           "Convertir «usar IA» en «ganar terreno de negocio con IA» requiere que todas las piezas de la organización apunten hacia el mismo lado. Sin un núcleo estratégico claro, los bloques restantes optimizan hacia direcciones distintas, y una falla persistente en cualquiera degrada al conjunto.",
         howLabel: "Cómo se articulan los 9 bloques",
@@ -587,9 +592,10 @@ const ES: SiteContent = {
       {
         id: "ario",
         name: "ARIO",
-        tagline: "Tus documentos, convertidos en datos.",
+        kind: "product",
+        tagline: "Convertí documentos en datos utilizables.",
         short:
-          "ARIO lee tus documentos y convierte facturas, DNI y PDFs en datos listos para usar, en segundos.",
+          "Extrae y organiza información de facturas y otros documentos para que puedas revisarla y utilizarla en tus procesos de trabajo.",
         problem:
           "Muchas empresas siguen pasando a mano los datos de facturas, comprobantes y documentos de identidad. Es lento, repetitivo y genera errores.",
         example:
@@ -630,9 +636,10 @@ const ES: SiteContent = {
       {
         id: "meetingmate",
         name: "MeetingMate",
-        tagline: "Tu reunión, con copiloto.",
+        kind: "product",
+        tagline: "Identificá lo importante de cada reunión.",
         short:
-          "El compañero de reunión con IA que escucha la conversación y te sugiere en pantalla preguntas, riesgos y acciones mientras la reunión sigue.",
+          "Analiza la conversación y sugiere preguntas, posibles riesgos y acciones mientras el equipo se reúne.",
         problem:
           "En las reuniones se habla rápido y lo importante se pierde: una pregunta que nadie hizo, un riesgo que quedó en el aire, un compromiso sin responsable. Hoy alguien toma notas a mano y se pierde parte de la charla, o se revisa todo recién después, cuando ya no se puede reaccionar.",
         example:
@@ -676,38 +683,39 @@ const ES: SiteContent = {
       {
         id: "sdd",
         name: "CriterIA",
-        tagline: "Una forma compartida de desarrollar con agentes de IA.",
+        kind: "framework",
+        tagline: "Un criterio compartido para desarrollar con agentes de IA.",
         short:
-          "Un acompañamiento de AR para integrar agentes de IA a la forma de desarrollar de un equipo: acuerdos, contexto compartido y revisión, adaptados a cada proyecto.",
+          "Un marco de trabajo para que los equipos definan instrucciones, registren decisiones y establezcan prácticas de revisión al desarrollar software con agentes de inteligencia artificial.",
         problem:
           "Un mismo equipo puede usar agentes con instrucciones, fuentes y hábitos distintos. Cada resultado parece útil por separado, pero al integrarlo hay que corregirlo porque no consideró una decisión vigente o el trabajo de otra persona, y el conocimiento queda atrapado en conversaciones aisladas.",
         steps: [
-          "Descubrir: se releva con el equipo un caso real, quiénes participan, qué herramientas usan, dónde deciden y cómo validan.",
-          "Acordar: se define qué se delega, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
-          "Diseñar lo necesario: se eligen instrucciones, herramientas y verificaciones; la arquitectura solo si el caso la requiere.",
-          "Probar: la práctica se aplica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
-          "Evaluar y continuar: se compara calidad, retrabajo y esfuerzo total con la práctica anterior, y se registran los aprendizajes para seguir.",
+          "Descubrir: relevamos con el equipo un caso real, quiénes participan, qué herramientas de IA usan, dónde deciden y cómo validan.",
+          "Acordar: definimos juntos qué se delega a los agentes, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
+          "Implementar lo necesario: preparamos el contexto, las reglas y las decisiones e implementamos agentes, skills, verificaciones y buenas prácticas en las herramientas existentes, ajustados a cada rol. La arquitectura propia, solo si el caso la requiere.",
+          "Probar: aplicamos la práctica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
+          "Evaluar y mejorar: comparamos calidad, retrabajo y esfuerzo total con la práctica anterior y actualizamos agentes, skills y referencias con lo aprendido.",
         ],
         features: [
           {
-            title: "Acuerdos de trabajo",
-            desc: "Qué delegar, qué revisar, quién decide y cómo escalar, acordado entre AR y el equipo.",
+            title: "Acuerdos y contexto compartido",
+            desc: "Definimos qué delegar, quién revisa y decide, y qué referencias y decisiones vigentes comparte el equipo.",
           },
           {
-            title: "Contexto compartido",
-            desc: "Referencias y decisiones vigentes del proyecto, con responsables y acceso controlado.",
+            title: "Agentes, skills y verificaciones",
+            desc: "Los configuramos para cada proyecto y rol, en las herramientas que el equipo ya usa.",
           },
           {
             title: "Revisión humana proporcional",
             desc: "El equipo conserva el criterio y la responsabilidad; los controles se ajustan a la tarea y al riesgo.",
           },
           {
-            title: "Profundidad a medida",
-            desc: "Se adapta a las personas, el proyecto y las herramientas existentes, con la menor complejidad suficiente.",
+            title: "Límites y permisos",
+            desc: "El acceso se controla en las herramientas y las acciones relevantes requieren aprobación previa.",
           },
           {
-            title: "Conocimiento que continúa",
-            desc: "Decisiones y evidencia registradas para que otra persona retome el trabajo sin reconstruir todo.",
+            title: "Acompañamiento y mejora continua",
+            desc: "Registramos decisiones, probamos en un caso acotado y ajustamos la práctica junto al equipo.",
           },
         ],
         audience:
@@ -1109,7 +1117,8 @@ const EN: SiteContent = {
   },
   solutions: {
     heading: "Technology that turns into concrete solutions",
-    subtitle: "AR IT Services' own products, built to solve real problems for teams and companies.",
+    subtitle:
+      "We develop our own products and frameworks to support organizations in the adoption and effective use of artificial intelligence.",
     teaserCta: "See all solutions",
     cardCta: "Learn more",
     navBadge: "New",
@@ -1123,13 +1132,15 @@ const EN: SiteContent = {
       audience: "Who it's for",
     },
     logoAlt: (n) => `${n} logo`,
+    kindLabels: { framework: "Framework", product: "Product" },
     products: [
       {
         id: "aria",
         name: "ARIA",
-        tagline: "Responsible AI Adoption.",
+        kind: "framework",
+        tagline: "Plan AI adoption in your company.",
         short:
-          "Our 9-block framework to design the AI-Native company for the medium and long term, not a catalog of tools for the short term.",
+          "A framework to define objectives, identify use cases, assign owners and evaluate results while artificial intelligence is brought into the company.",
         problem:
           "Turning “using AI” into “gaining business ground with AI” takes every part of the organization pulling the same way. Without a clear strategic core, the other blocks optimize in different directions, and a persistent failure in any one of them degrades the whole.",
         howLabel: "How the 9 blocks fit together",
@@ -1188,9 +1199,10 @@ const EN: SiteContent = {
       {
         id: "ario",
         name: "ARIO",
-        tagline: "Your documents, turned into data.",
+        kind: "product",
+        tagline: "Turn documents into usable data.",
         short:
-          "ARIO reads your documents and turns invoices, ID cards and PDFs into ready-to-use data, in seconds.",
+          "Extracts and organizes information from invoices and other documents so you can review it and use it in your work processes.",
         problem:
           "Many companies still copy data by hand from invoices, receipts and ID documents. It is slow, repetitive and error-prone.",
         example:
@@ -1231,9 +1243,10 @@ const EN: SiteContent = {
       {
         id: "meetingmate",
         name: "MeetingMate",
-        tagline: "Your meeting, with a copilot.",
+        kind: "product",
+        tagline: "Spot what matters in every meeting.",
         short:
-          "The AI meeting companion that listens to the conversation and suggests questions, risks and actions on screen while the meeting is still going.",
+          "Analyzes the conversation and suggests questions, possible risks and actions while the team is meeting.",
         problem:
           "In meetings people talk fast and what matters gets lost: a question nobody asked, a risk left hanging, a commitment with no owner. Today someone takes notes by hand and misses part of the conversation, or everything is reviewed only afterwards, when it is too late to react.",
         example:
@@ -1277,38 +1290,39 @@ const EN: SiteContent = {
       {
         id: "sdd",
         name: "CriterIA",
-        tagline: "A shared way to develop with AI agents.",
+        kind: "framework",
+        tagline: "A shared criterion for developing with AI agents.",
         short:
-          "An AR engagement to bring AI agents into a team's way of developing software: agreements, shared context and review, adapted to each project.",
+          "A framework for teams to define instructions, record decisions and set review practices when developing software with artificial intelligence agents.",
         problem:
           "The same team can use agents with different instructions, sources and habits. Each output looks useful on its own, but needs fixing when integrated because it ignored a current decision or someone else's work, and knowledge gets stuck in isolated conversations.",
         steps: [
           "Discover: together with the team we map a real case, who takes part, which tools they use, where they decide and how they validate.",
           "Agree: we define what is delegated, what context is shared, who reviews and who accepts the work.",
-          "Design what is needed: instructions, tools and checks are chosen; architecture only if the case requires it.",
+          "Implement what is needed: we prepare context, rules and decisions and implement agents, skills, checks and good practices in existing tools for each role. Custom architecture only if the case requires it.",
           "Test: the practice is applied to focused, reversible tasks, with tests and the team's observations.",
-          "Evaluate and continue: quality, rework and total effort are compared with the previous practice, and learnings are recorded to keep going.",
+          "Evaluate and improve: we compare quality, rework and total effort with the previous practice and use what we learn to update agents, skills and references.",
         ],
         features: [
           {
-            title: "Working agreements",
-            desc: "What to delegate, what to review, who decides and how to escalate, agreed between AR and the team.",
+            title: "Agreements and shared context",
+            desc: "Together we define what to delegate, who reviews and decides, and the current references and decisions the team shares.",
           },
           {
-            title: "Shared context",
-            desc: "Current project references and decisions, with owners and controlled access.",
+            title: "Agents, skills and checks",
+            desc: "Configured for each project and role in the tools the team already uses.",
           },
           {
             title: "Proportional human review",
             desc: "The team keeps judgment and responsibility; controls scale with the task and the risk.",
           },
           {
-            title: "Right-sized depth",
-            desc: "Adapted to the people, the project and the existing tools, with the least complexity that works.",
+            title: "Limits and permissions",
+            desc: "Access is controlled in tools and significant actions require prior approval.",
           },
           {
-            title: "Knowledge that carries on",
-            desc: "Decisions and evidence recorded so someone else can pick the work up without rebuilding everything.",
+            title: "Ongoing support and improvement",
+            desc: "We record decisions, test in a focused case and adjust the practice together with the team.",
           },
         ],
         audience:

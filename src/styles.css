@@ -655,3 +655,276 @@ html {
   background-image: none;
   background-color: var(--brand-dark);
 }
+
+/* Robotito de la navbar (RobotBadge): flota todo el tiempo y el componente le
+   pone un data-gesto al azar (parpadeo, guiño, mirada, salto, inclinación,
+   sorpresa). Cada gesto anima un grupo distinto para que no se pisen entre sí. */
+.robot-cuerpo,
+.robot-gesto,
+.robot-mirada,
+.robot-ojos,
+.robot-ojo,
+.robot-bulbo {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+/* Halo rojo suave; al pasar el mouse el robotito se alegra: brilla más, los ojos se agrandan y flota más rápido. */
+.robot {
+  filter: drop-shadow(0 0 2.5px rgb(255 0 13 / 0.5));
+  transition: filter 0.25s ease;
+}
+.robot[data-alegre="true"] {
+  filter: drop-shadow(0 0 6px rgb(255 60 60 / 0.95));
+}
+.robot[data-alegre="true"] .robot-cuerpo {
+  animation-duration: 1.2s;
+}
+/* La mirada sigue al cursor (variables --ox / --oy que escribe el componente). */
+.robot-mirada {
+  transform: translate(calc(var(--ox, 0) * 1px), calc(var(--oy, 0) * 1px));
+  transition: transform 0.14s ease-out;
+}
+.robot[data-alegre="true"] .robot-mirada {
+  transform: translate(calc(var(--ox, 0) * 1px), calc(var(--oy, 0) * 1px)) scale(1.14);
+}
+.robot-bulbo {
+  animation: robot-bulbo 1.8s ease-in-out infinite;
+}
+@keyframes robot-bulbo {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+.robot-cuerpo {
+  animation: robot-flota 4.5s ease-in-out infinite;
+}
+.robot:hover .robot-cuerpo {
+  animation-duration: 1.6s;
+}
+@keyframes robot-flota {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+.robot[data-gesto="parpadeo"] .robot-ojos {
+  animation: robot-parpadeo 0.42s ease-in-out;
+}
+.robot[data-gesto="parpadeo-doble"] .robot-ojos {
+  animation: robot-parpadeo-doble 0.8s ease-in-out;
+}
+.robot[data-gesto="guino-izq"] .robot-ojo-izq,
+.robot[data-gesto="guino-der"] .robot-ojo-der {
+  animation: robot-guino 0.8s ease-in-out;
+}
+.robot[data-gesto="guino-izq"] .robot-gesto {
+  animation: robot-ladea-izq 0.8s ease-in-out;
+}
+.robot[data-gesto="guino-der"] .robot-gesto {
+  animation: robot-ladea-der 0.8s ease-in-out;
+}
+.robot[data-gesto="mira-izq"] .robot-ojos {
+  animation: robot-mira-izq 1s ease-in-out;
+}
+.robot[data-gesto="mira-der"] .robot-ojos {
+  animation: robot-mira-der 1s ease-in-out;
+}
+.robot[data-gesto="salto"] .robot-gesto {
+  animation: robot-salto 0.75s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.robot[data-gesto="salto-doble"] .robot-gesto {
+  animation: robot-salto-doble 1.3s cubic-bezier(0.3, 0.7, 0.4, 1);
+}
+.robot[data-gesto="giro"] .robot-gesto {
+  animation: robot-giro 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.robot[data-gesto="vuelta"] .robot-gesto {
+  animation: robot-vuelta 0.8s ease-in-out;
+}
+.robot[data-gesto="tiembla"] .robot-gesto {
+  animation: robot-tiembla 0.65s linear;
+}
+.robot[data-gesto="baila"] .robot-gesto {
+  animation: robot-baila 1.5s ease-in-out;
+}
+.robot[data-gesto="inclina"] .robot-gesto {
+  animation: robot-inclina 1s ease-in-out;
+}
+.robot[data-gesto="sorpresa"] .robot-ojos {
+  animation: robot-sorpresa 0.9s ease-in-out;
+}
+.robot[data-gesto="sorpresa"] .robot-gesto {
+  animation: robot-infla 0.9s ease-in-out;
+}
+@keyframes robot-parpadeo {
+  50% {
+    transform: scaleY(0.08);
+  }
+}
+@keyframes robot-parpadeo-doble {
+  20%,
+  60% {
+    transform: scaleY(0.08);
+  }
+  40% {
+    transform: scaleY(1);
+  }
+}
+@keyframes robot-guino {
+  25%,
+  70% {
+    transform: scaleY(0.08);
+  }
+}
+@keyframes robot-ladea-izq {
+  30%,
+  70% {
+    transform: rotate(-14deg) translateX(-2px);
+  }
+}
+@keyframes robot-ladea-der {
+  30%,
+  70% {
+    transform: rotate(14deg) translateX(2px);
+  }
+}
+@keyframes robot-mira-izq {
+  25%,
+  75% {
+    transform: translateX(-8px);
+  }
+}
+@keyframes robot-mira-der {
+  25%,
+  75% {
+    transform: translateX(8px);
+  }
+}
+@keyframes robot-salto {
+  0% {
+    transform: translateY(0) scale(1.12, 0.86);
+  }
+  40% {
+    transform: translateY(-22px) scale(0.92, 1.1);
+  }
+  75% {
+    transform: translateY(0) scale(1.12, 0.86);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes robot-salto-doble {
+  0%,
+  45%,
+  100% {
+    transform: translateY(0) scale(1.12, 0.86);
+  }
+  22% {
+    transform: translateY(-20px) scale(0.92, 1.1);
+  }
+  72% {
+    transform: translateY(-28px) scale(0.9, 1.12) rotate(8deg);
+  }
+  90% {
+    transform: translateY(0) scale(1.14, 0.84);
+  }
+}
+@keyframes robot-giro {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  40% {
+    transform: rotate(200deg) scale(1.25);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+@keyframes robot-vuelta {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.02);
+  }
+}
+@keyframes robot-tiembla {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  50%,
+  90% {
+    transform: translateX(-4px) rotate(-4deg);
+  }
+  30%,
+  70% {
+    transform: translateX(4px) rotate(4deg);
+  }
+}
+@keyframes robot-baila {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  12% {
+    transform: translateY(-8px) rotate(-16deg);
+  }
+  25% {
+    transform: translateY(0) rotate(0deg);
+  }
+  37% {
+    transform: translateY(-8px) rotate(16deg);
+  }
+  50% {
+    transform: translateY(0) rotate(0deg);
+  }
+  62% {
+    transform: translateY(-8px) rotate(-16deg);
+  }
+  75% {
+    transform: translateY(0) rotate(0deg);
+  }
+  87% {
+    transform: translateY(-8px) rotate(16deg);
+  }
+}
+@keyframes robot-inclina {
+  25%,
+  75% {
+    transform: rotate(16deg) translateX(3px);
+  }
+}
+@keyframes robot-sorpresa {
+  30%,
+  70% {
+    transform: scale(1.35, 1.25);
+  }
+}
+@keyframes robot-infla {
+  30%,
+  70% {
+    transform: scale(1.18) translateY(-3px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .robot-cuerpo,
+  .robot-bulbo {
+    animation: none;
+  }
+  .robot-mirada {
+    transition: none;
+  }
+}
