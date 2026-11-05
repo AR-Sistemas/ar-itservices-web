@@ -120,15 +120,6 @@ function CardTab() {
       aria-hidden="true"
     >
       <path d={`M0,0 L${w},0 L${NOTCH_HALF},${h} Z`} fill="var(--color-card)" />
-      {/* Mismo tono que el glow de SpotlightCard; sin seguir el cursor
-          (evita el desacople entre elementos separados que ya dio
-          problemas antes), solo se enciende con el :hover heredado del
-          botón contenedor — así no queda "apagada" al pasar el mouse. */}
-      <path
-        d={`M0,0 L${w},0 L${NOTCH_HALF},${h} Z`}
-        fill="rgba(255, 0, 13, 0.12)"
-        className="opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-      />
       <path
         d={`M0,${TAB_OVERLAP} L${NOTCH_HALF},${h} L${w},${TAB_OVERLAP}`}
         fill="none"
@@ -155,7 +146,7 @@ function PanelItems({
       <div className="grid gap-x-8 gap-y-5 sm:grid-cols-2">
         {group.items.map((item) => (
           <div key={item.title}>
-            <h4 className="font-semibold text-primary">{item.title}</h4>
+            <h4 className="font-semibold text-brand-text">{item.title}</h4>
             <p className="mt-1.5 leading-relaxed text-muted-foreground">{item.desc}</p>
           </div>
         ))}
@@ -173,7 +164,7 @@ function PanelItems({
               ),
             )
           }
-          className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+          className="mt-6 inline-flex w-fit items-center gap-1 text-sm font-semibold text-brand-text transition-colors hover:text-foreground"
         >
           {group.items[0].cta} →
         </a>
