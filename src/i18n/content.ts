@@ -89,6 +89,8 @@ export type SiteContent = {
     heading: string;
     statement: string;
     ctaLink: string;
+    /** Descripción de la página /nosotros (el home usa `statement`). */
+    intro: string;
     items: { name: string; role: string; quote: string }[];
     portraitAlt: (name: string) => string;
     careersLink: string;
@@ -404,11 +406,14 @@ const ES: SiteContent = {
     years: "25+",
     yearsLabel: "años de trayectoria",
     joinHeading: "¿Querés ser parte del equipo?",
+    intro:
+      "Conocé a las personas que lideran AR IT Services, una empresa con más de 25 años de trayectoria en servicios tecnológicos.",
     items: [
       {
         name: "Felix Melinsky",
         role: "Fundador & Presidente",
-        quote: "Empezamos hace 25 años haciendo el trabajo. Seguimos haciéndolo.",
+        quote:
+          "Después de tantos años, sigo creyendo que lo más importante es cumplir con lo que nos comprometemos.",
       },
       {
         name: "Jose Romanutti",
@@ -423,13 +428,14 @@ const ES: SiteContent = {
       {
         name: "Constanza Giordano",
         role: "Directora de Talento",
-        quote: "Buscamos gente que quiera quedarse, no perfiles que encajen en una grilla.",
+        quote:
+          "Nos interesa lo que una persona sabe hacer, pero también sus ganas de aprender y crecer con otros.",
       },
     ],
   },
   contact: {
     heading: "Contanos tu proyecto",
-    subtitle: "Respondemos con una propuesta de equipo, no con un folleto.",
+    subtitle: "",
     candidateHeading: "Sumate al equipo",
     candidateSubtitle:
       "Dejanos tus datos y tu CV: te escribimos cuando haya una búsqueda que encaje con tu perfil.",
@@ -756,13 +762,13 @@ const ES: SiteContent = {
     eyebrow: "// selecciona las disciplinas",
     heading: "Armá el equipo que tu proyecto necesita",
     paragraph:
-      "Tocá las disciplinas y mirá cómo se arma el equipo. Es exactamente lo que hacemos con nuestros clientes: perfiles concretos, cantidades concretas.",
+      "Seleccioná las especialidades y visualizá una propuesta inicial de equipo. Te ayudamos a definir los perfiles y la cantidad de profesionales según las necesidades y el alcance de tu proyecto.",
     disciplinesAria: "Disciplinas",
     proposed: "// equipo propuesto",
     person: "persona",
     people: "personas",
     empty: "Seleccioná al menos una disciplina para ver tu equipo.",
-    cta: "Agendar una llamada con tu equipo propuesto",
+    cta: "Agendá una reunión para definir tu equipo",
     emptyProposalMessage:
       "Hola, me gustaría conversar sobre armar un equipo para mi proyecto. Todavía no tengo definidos los perfiles: me ayudarían a pensarlos.",
     proposalMessage: (disciplines, team, total) =>
@@ -1021,11 +1027,14 @@ const EN: SiteContent = {
     years: "25+",
     yearsLabel: "years of experience",
     joinHeading: "Want to be part of the team?",
+    intro:
+      "Meet the people who lead AR IT Services, a company with more than 25 years of experience in technology services.",
     items: [
       {
         name: "Felix Melinsky",
         role: "Founder & President",
-        quote: "We started 25 years ago doing the work. We still do.",
+        quote:
+          "After so many years, I still believe the most important thing is to deliver on what we commit to.",
       },
       {
         name: "Jose Romanutti",
@@ -1040,13 +1049,14 @@ const EN: SiteContent = {
       {
         name: "Constanza Giordano",
         role: "Head of Talent",
-        quote: "We look for people who want to stay, not profiles that fit a grid.",
+        quote:
+          "We care about what a person knows how to do, but also about their drive to learn and grow with others.",
       },
     ],
   },
   contact: {
     heading: "Tell us about your project",
-    subtitle: "We reply with a team proposal, not a brochure.",
+    subtitle: "",
     candidateHeading: "Join the team",
     candidateSubtitle:
       "Leave us your details and your CV: we'll get in touch when a search matches your profile.",
@@ -1363,13 +1373,13 @@ const EN: SiteContent = {
     eyebrow: "// select the disciplines",
     heading: "Build the team your project needs",
     paragraph:
-      "Tap the disciplines and watch the team come together. It's exactly what we do with our clients: concrete profiles, concrete numbers.",
+      "Select the specialties and see an initial team proposal. We help you define the profiles and the number of professionals based on the needs and scope of your project.",
     disciplinesAria: "Disciplines",
     proposed: "// proposed team",
     person: "person",
     people: "people",
     empty: "Select at least one discipline to see your team.",
-    cta: "Book a call with your proposed team",
+    cta: "Book a meeting to define your team",
     emptyProposalMessage:
       "Hi, I'd like to talk about building a team for my project. I haven't defined the profiles yet, so I'd appreciate your help working them out.",
     proposalMessage: (disciplines, team, total) =>
