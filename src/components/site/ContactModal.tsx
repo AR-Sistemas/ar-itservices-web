@@ -160,15 +160,17 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                     ? c.contact.generalHeading
                     : c.contact.heading}
             </h2>
-            {!locked && (
-              <p className="mt-2 text-sm text-muted-foreground">
-                {type === "postulante"
-                  ? c.contact.candidateSubtitle
-                  : type === "consulta"
-                    ? c.contact.generalSubtitle
-                    : c.contact.subtitle}
-              </p>
-            )}
+            {!locked &&
+              (() => {
+                const sub =
+                  type === "postulante"
+                    ? c.contact.candidateSubtitle
+                    : type === "consulta"
+                      ? c.contact.generalSubtitle
+                      : c.contact.subtitle;
+                // La bajada de "empresa" se eliminó (queda vacía): no se dibuja un párrafo vacío.
+                return sub ? <p className="mt-2 text-sm text-muted-foreground">{sub}</p> : null;
+              })()}
 
             {!typeSelectorHidden && (
               <div

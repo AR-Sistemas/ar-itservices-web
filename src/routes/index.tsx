@@ -576,13 +576,18 @@ function Home() {
                     ? c.contact.generalHeading
                     : c.contact.heading}
               </h2>
-              <p className="mt-3 text-lg leading-relaxed text-muted-foreground">
-                {contactType === "postulante"
-                  ? c.contact.candidateSubtitle
-                  : contactType === "consulta"
-                    ? c.contact.generalSubtitle
-                    : c.contact.subtitle}
-              </p>
+              {(() => {
+                const sub =
+                  contactType === "postulante"
+                    ? c.contact.candidateSubtitle
+                    : contactType === "consulta"
+                      ? c.contact.generalSubtitle
+                      : c.contact.subtitle;
+                // La bajada de "empresa" se eliminó (queda vacía): no se dibuja un párrafo vacío.
+                return sub ? (
+                  <p className="mt-3 text-lg leading-relaxed text-muted-foreground">{sub}</p>
+                ) : null;
+              })()}
 
               <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-2xl border border-border bg-card p-1.5">
                 {(
