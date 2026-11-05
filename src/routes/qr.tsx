@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowUpRight, BriefcaseBusiness, Layers3, MessageCircle, X } from "lucide-react";
+import { ArrowUpRight, BookOpen, BriefcaseBusiness, Layers3, MessageCircle, X } from "lucide-react";
 import { LogoMark } from "@/components/site/LogoMark";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { useContactModal } from "@/components/site/ContactModal";
@@ -90,6 +90,17 @@ function QrPage() {
               />
             </button>
           ))}
+          <a
+            href="https://boletin-ar-consultores.vercel.app/"
+            className="group flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card px-5 py-5 text-left text-lg font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+          >
+            <BookOpen aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />
+            <span className="flex-1">{en ? "AI Magazine" : "Revista de IA"}</span>
+            <ArrowUpRight
+              aria-hidden="true"
+              className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-brand-text"
+            />
+          </a>
         </div>
       </div>
 
