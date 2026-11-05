@@ -678,36 +678,36 @@ const ES: SiteContent = {
         name: "CriterIA",
         tagline: "Una forma compartida de desarrollar con agentes de IA.",
         short:
-          "Un acompañamiento de AR para integrar agentes de IA a la forma de desarrollar de un equipo: acuerdos, contexto compartido y revisión, adaptados a cada proyecto.",
+          "AR acompaña a tu equipo para implementar agentes, skills y buenas prácticas en las herramientas de IA que ya usan, con un criterio compartido y decisiones en manos de las personas.",
         problem:
           "Un mismo equipo puede usar agentes con instrucciones, fuentes y hábitos distintos. Cada resultado parece útil por separado, pero al integrarlo hay que corregirlo porque no consideró una decisión vigente o el trabajo de otra persona, y el conocimiento queda atrapado en conversaciones aisladas.",
         steps: [
-          "Descubrir: se releva con el equipo un caso real, quiénes participan, qué herramientas usan, dónde deciden y cómo validan.",
-          "Acordar: se define qué se delega, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
-          "Diseñar lo necesario: se eligen instrucciones, herramientas y verificaciones; la arquitectura solo si el caso la requiere.",
-          "Probar: la práctica se aplica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
-          "Evaluar y continuar: se compara calidad, retrabajo y esfuerzo total con la práctica anterior, y se registran los aprendizajes para seguir.",
+          "Descubrir: relevamos con el equipo un caso real, quiénes participan, qué herramientas de IA usan, dónde deciden y cómo validan.",
+          "Acordar: definimos juntos qué se delega a los agentes, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
+          "Implementar lo necesario: preparamos el contexto, las reglas y las decisiones e implementamos agentes, skills, verificaciones y buenas prácticas en las herramientas existentes, ajustados a cada rol. La arquitectura propia, solo si el caso la requiere.",
+          "Probar: aplicamos la práctica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
+          "Evaluar y mejorar: comparamos calidad, retrabajo y esfuerzo total con la práctica anterior y actualizamos agentes, skills y referencias con lo aprendido.",
         ],
         features: [
           {
-            title: "Acuerdos de trabajo",
-            desc: "Qué delegar, qué revisar, quién decide y cómo escalar, acordado entre AR y el equipo.",
+            title: "Acuerdos y contexto compartido",
+            desc: "Definimos qué delegar, quién revisa y decide, y qué referencias y decisiones vigentes comparte el equipo.",
           },
           {
-            title: "Contexto compartido",
-            desc: "Referencias y decisiones vigentes del proyecto, con responsables y acceso controlado.",
+            title: "Agentes, skills y verificaciones",
+            desc: "Los configuramos para cada proyecto y rol, en las herramientas que el equipo ya usa.",
           },
           {
             title: "Revisión humana proporcional",
             desc: "El equipo conserva el criterio y la responsabilidad; los controles se ajustan a la tarea y al riesgo.",
           },
           {
-            title: "Profundidad a medida",
-            desc: "Se adapta a las personas, el proyecto y las herramientas existentes, con la menor complejidad suficiente.",
+            title: "Límites y permisos",
+            desc: "El acceso se controla en las herramientas y las acciones relevantes requieren aprobación previa.",
           },
           {
-            title: "Conocimiento que continúa",
-            desc: "Decisiones y evidencia registradas para que otra persona retome el trabajo sin reconstruir todo.",
+            title: "Acompañamiento y mejora continua",
+            desc: "Registramos decisiones, probamos en un caso acotado y ajustamos la práctica junto al equipo.",
           },
         ],
         audience:
@@ -1279,36 +1279,36 @@ const EN: SiteContent = {
         name: "CriterIA",
         tagline: "A shared way to develop with AI agents.",
         short:
-          "An AR engagement to bring AI agents into a team's way of developing software: agreements, shared context and review, adapted to each project.",
+          "AR helps your team implement agents, skills and good practices in the AI tools you already use, with shared context and people in charge of decisions.",
         problem:
           "The same team can use agents with different instructions, sources and habits. Each output looks useful on its own, but needs fixing when integrated because it ignored a current decision or someone else's work, and knowledge gets stuck in isolated conversations.",
         steps: [
           "Discover: together with the team we map a real case, who takes part, which tools they use, where they decide and how they validate.",
           "Agree: we define what is delegated, what context is shared, who reviews and who accepts the work.",
-          "Design what is needed: instructions, tools and checks are chosen; architecture only if the case requires it.",
+          "Implement what is needed: we prepare context, rules and decisions and implement agents, skills, checks and good practices in existing tools for each role. Custom architecture only if the case requires it.",
           "Test: the practice is applied to focused, reversible tasks, with tests and the team's observations.",
-          "Evaluate and continue: quality, rework and total effort are compared with the previous practice, and learnings are recorded to keep going.",
+          "Evaluate and improve: we compare quality, rework and total effort with the previous practice and use what we learn to update agents, skills and references.",
         ],
         features: [
           {
-            title: "Working agreements",
-            desc: "What to delegate, what to review, who decides and how to escalate, agreed between AR and the team.",
+            title: "Agreements and shared context",
+            desc: "Together we define what to delegate, who reviews and decides, and the current references and decisions the team shares.",
           },
           {
-            title: "Shared context",
-            desc: "Current project references and decisions, with owners and controlled access.",
+            title: "Agents, skills and checks",
+            desc: "Configured for each project and role in the tools the team already uses.",
           },
           {
             title: "Proportional human review",
             desc: "The team keeps judgment and responsibility; controls scale with the task and the risk.",
           },
           {
-            title: "Right-sized depth",
-            desc: "Adapted to the people, the project and the existing tools, with the least complexity that works.",
+            title: "Limits and permissions",
+            desc: "Access is controlled in tools and significant actions require prior approval.",
           },
           {
-            title: "Knowledge that carries on",
-            desc: "Decisions and evidence recorded so someone else can pick the work up without rebuilding everything.",
+            title: "Ongoing support and improvement",
+            desc: "We record decisions, test in a focused case and adjust the practice together with the team.",
           },
         ],
         audience:

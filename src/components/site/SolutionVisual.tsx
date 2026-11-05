@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AriaFramework } from "./AriaFramework";
 import criteriaAnim from "@/assets/products/animations/criteria.svg?raw";
+import criteriaGifEs from "@/assets/products/animations/criteria-explainer-es.gif";
+import criteriaGifEn from "@/assets/products/animations/criteria-explainer-en.gif";
 import arioAnim from "@/assets/products/animations/ario.svg?raw";
 import meetingmateAnim from "@/assets/products/animations/meetingmate.svg?raw";
 import { PRODUCT_LOGOS as LOGOS } from "./product-logos";
@@ -119,7 +121,13 @@ function SolutionAnimationCard({
       data-paused={!visible}
       className={`sol-anim flex aspect-[4/3] w-full items-center justify-center ${className}`}
     >
-      {reduceMotion || !svg ? (
+      {id === "sdd" && !reduceMotion && visible ? (
+        <img
+          src={lang === "EN" ? criteriaGifEn : criteriaGifEs}
+          alt={labels?.[lang]}
+          className="h-full w-full object-contain"
+        />
+      ) : reduceMotion || !svg ? (
         <img
           src={LOGOS[id]}
           alt={alt}
