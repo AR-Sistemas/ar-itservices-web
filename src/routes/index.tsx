@@ -316,16 +316,37 @@ function Home() {
               </h2>
               <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
             </AnimatedContent>
-            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {/* Desde sm cada tarjeta es un subgrid de 4 filas (etiqueta, logo, título, descripción) que
+                comparte las filas con las demás: título y descripción arrancan a la misma altura. En una
+                sola columna (celular) las filas son iguales (auto-rows-fr), así las cuatro miden lo mismo.
+                Desde lg (1024 px) las cuatro van una al lado de la otra. */}
+            <div className="mt-10 grid auto-rows-fr gap-x-5 gap-y-5 sm:auto-rows-auto sm:grid-cols-2 lg:grid-cols-4">
               {c.solutions.products.map((p, i) => (
-                <AnimatedContent key={p.id} delay={i * 80} distance={30}>
+                <AnimatedContent
+                  key={p.id}
+                  delay={i * 80}
+                  distance={30}
+                  className="h-full sm:row-span-4 sm:grid sm:h-auto sm:grid-rows-subgrid sm:gap-y-0"
+                >
                   <Link
                     to="/solucion/$solutionId"
                     params={{ solutionId: getPublicSolutionSlug(p.id) }}
-                    className="group flex h-full flex-col rounded-2xl border border-white/10 bg-card/35 p-5 shadow-[0_8px_24px_rgb(0_0_0_/_0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-text/65 hover:bg-card/80 hover:shadow-[0_18px_42px_rgb(0_0_0_/_0.26)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    className="group flex h-full flex-col rounded-2xl border border-white/10 sm:row-span-4 sm:grid sm:grid-rows-subgrid sm:gap-y-0 bg-card/35 p-5 shadow-[0_8px_24px_rgb(0_0_0_/_0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-text/65 hover:bg-card/80 hover:shadow-[0_18px_42px_rgb(0_0_0_/_0.26)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
                     aria-label={`${p.name}: ${p.tagline}`}
                   >
-                    <div className="flex h-32 items-center justify-center overflow-hidden">
+                    {/* Etiqueta de clasificación en la esquina superior derecha, en su propia fila para no tocar el logo. */}
+                    <div className="flex justify-end">
+                      <span
+                        className={`inline-flex h-7 items-center rounded-full border px-3 text-xs leading-none font-medium tracking-wide text-foreground ${
+                          p.kind === "framework"
+                            ? "border-white/15 bg-[#2b2a30]"
+                            : "border-[#FF000D]/50 bg-[#3a0b17]"
+                        }`}
+                      >
+                        {c.solutions.kindLabels[p.kind]}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex h-32 items-center justify-center overflow-hidden">
                       <img
                         src={PRODUCT_LOGOS[p.id]}
                         alt=""
@@ -334,8 +355,10 @@ function Home() {
                         className={`h-full w-full object-contain transition duration-300 group-hover:brightness-110 ${HOME_PRODUCT_LOGO_SCALE[p.id]}`}
                       />
                     </div>
-                    <p className="mt-5 text-sm font-semibold text-brand-text">{p.tagline}</p>
-                    <p className="mt-3 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                    <h3 className="mt-6 self-start text-[15px] leading-snug font-semibold tracking-tight text-balance text-foreground">
+                      {p.tagline}
+                    </h3>
+                    <p className="mt-3 self-start text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground">
                       {p.short}
                     </p>
                   </Link>

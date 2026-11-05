@@ -32,6 +32,8 @@ export type ServiceGroup = {
 export type SolutionProduct = {
   id: "aria" | "ario" | "meetingmate" | "sdd";
   name: string;
+  /** Clasificación que se muestra como etiqueta en la tarjeta: marco de trabajo o producto. */
+  kind: "framework" | "product";
   tagline: string;
   short: string;
   problem: string;
@@ -136,6 +138,7 @@ export type SiteContent = {
     contactCta: string;
     labels: { problem: string; example: string; how: string; features: string; audience: string };
     logoAlt: (name: string) => string;
+    kindLabels: { framework: string; product: string };
     products: SolutionProduct[];
   };
   frameworkModal: {
@@ -508,7 +511,7 @@ const ES: SiteContent = {
   solutions: {
     heading: "Tecnología que se convierte en soluciones concretas",
     subtitle:
-      "Productos propios de AR IT Services para resolver problemas reales de equipos y empresas.",
+      "Desarrollamos productos propios y frameworks para acompañar a las organizaciones en la adopción y el uso efectivo de la inteligencia artificial.",
     teaserCta: "Ver todas las soluciones",
     cardCta: "Conocer más",
     navBadge: "Nuevo",
@@ -522,13 +525,15 @@ const ES: SiteContent = {
       audience: "A quién está dirigido",
     },
     logoAlt: (n) => `Logo de ${n}`,
+    kindLabels: { framework: "Framework", product: "Producto" },
     products: [
       {
         id: "aria",
         name: "ARIA",
-        tagline: "Adopción Responsable de Inteligencia Artificial.",
+        kind: "framework",
+        tagline: "Planificá la adopción de IA en tu empresa.",
         short:
-          "Nuestro framework de 9 bloques para diseñar la empresa AI-Native del mediano y largo plazo, no un catálogo de herramientas para el corto plazo.",
+          "Un marco de trabajo para definir objetivos, identificar casos de uso, establecer responsables y evaluar resultados durante la incorporación de inteligencia artificial.",
         problem:
           "Convertir «usar IA» en «ganar terreno de negocio con IA» requiere que todas las piezas de la organización apunten hacia el mismo lado. Sin un núcleo estratégico claro, los bloques restantes optimizan hacia direcciones distintas, y una falla persistente en cualquiera degrada al conjunto.",
         howLabel: "Cómo se articulan los 9 bloques",
@@ -587,9 +592,10 @@ const ES: SiteContent = {
       {
         id: "ario",
         name: "ARIO",
-        tagline: "Tus documentos, convertidos en datos.",
+        kind: "product",
+        tagline: "Convertí documentos en datos utilizables.",
         short:
-          "ARIO lee tus documentos y convierte facturas, DNI y PDFs en datos listos para usar, en segundos.",
+          "Extrae y organiza información de facturas y otros documentos para que puedas revisarla y utilizarla en tus procesos de trabajo.",
         problem:
           "Muchas empresas siguen pasando a mano los datos de facturas, comprobantes y documentos de identidad. Es lento, repetitivo y genera errores.",
         example:
@@ -630,9 +636,10 @@ const ES: SiteContent = {
       {
         id: "meetingmate",
         name: "MeetingMate",
-        tagline: "Tu reunión, con copiloto.",
+        kind: "product",
+        tagline: "Identificá lo importante de cada reunión.",
         short:
-          "El compañero de reunión con IA que escucha la conversación y te sugiere en pantalla preguntas, riesgos y acciones mientras la reunión sigue.",
+          "Analiza la conversación y sugiere preguntas, posibles riesgos y acciones mientras el equipo se reúne.",
         problem:
           "En las reuniones se habla rápido y lo importante se pierde: una pregunta que nadie hizo, un riesgo que quedó en el aire, un compromiso sin responsable. Hoy alguien toma notas a mano y se pierde parte de la charla, o se revisa todo recién después, cuando ya no se puede reaccionar.",
         example:
@@ -676,9 +683,10 @@ const ES: SiteContent = {
       {
         id: "sdd",
         name: "CriterIA",
-        tagline: "Una forma compartida de desarrollar con agentes de IA.",
+        kind: "framework",
+        tagline: "Un criterio compartido para desarrollar con agentes de IA.",
         short:
-          "AR acompaña a tu equipo para implementar agentes, skills y buenas prácticas en las herramientas de IA que ya usan, con un criterio compartido y decisiones en manos de las personas.",
+          "Un marco de trabajo para que los equipos definan instrucciones, registren decisiones y establezcan prácticas de revisión al desarrollar software con agentes de inteligencia artificial.",
         problem:
           "Un mismo equipo puede usar agentes con instrucciones, fuentes y hábitos distintos. Cada resultado parece útil por separado, pero al integrarlo hay que corregirlo porque no consideró una decisión vigente o el trabajo de otra persona, y el conocimiento queda atrapado en conversaciones aisladas.",
         steps: [
@@ -1109,7 +1117,8 @@ const EN: SiteContent = {
   },
   solutions: {
     heading: "Technology that turns into concrete solutions",
-    subtitle: "AR IT Services' own products, built to solve real problems for teams and companies.",
+    subtitle:
+      "We develop our own products and frameworks to support organizations in the adoption and effective use of artificial intelligence.",
     teaserCta: "See all solutions",
     cardCta: "Learn more",
     navBadge: "New",
@@ -1123,13 +1132,15 @@ const EN: SiteContent = {
       audience: "Who it's for",
     },
     logoAlt: (n) => `${n} logo`,
+    kindLabels: { framework: "Framework", product: "Product" },
     products: [
       {
         id: "aria",
         name: "ARIA",
-        tagline: "Responsible AI Adoption.",
+        kind: "framework",
+        tagline: "Plan AI adoption in your company.",
         short:
-          "Our 9-block framework to design the AI-Native company for the medium and long term, not a catalog of tools for the short term.",
+          "A framework to define objectives, identify use cases, assign owners and evaluate results while artificial intelligence is brought into the company.",
         problem:
           "Turning “using AI” into “gaining business ground with AI” takes every part of the organization pulling the same way. Without a clear strategic core, the other blocks optimize in different directions, and a persistent failure in any one of them degrades the whole.",
         howLabel: "How the 9 blocks fit together",
@@ -1188,9 +1199,10 @@ const EN: SiteContent = {
       {
         id: "ario",
         name: "ARIO",
-        tagline: "Your documents, turned into data.",
+        kind: "product",
+        tagline: "Turn documents into usable data.",
         short:
-          "ARIO reads your documents and turns invoices, ID cards and PDFs into ready-to-use data, in seconds.",
+          "Extracts and organizes information from invoices and other documents so you can review it and use it in your work processes.",
         problem:
           "Many companies still copy data by hand from invoices, receipts and ID documents. It is slow, repetitive and error-prone.",
         example:
@@ -1231,9 +1243,10 @@ const EN: SiteContent = {
       {
         id: "meetingmate",
         name: "MeetingMate",
-        tagline: "Your meeting, with a copilot.",
+        kind: "product",
+        tagline: "Spot what matters in every meeting.",
         short:
-          "The AI meeting companion that listens to the conversation and suggests questions, risks and actions on screen while the meeting is still going.",
+          "Analyzes the conversation and suggests questions, possible risks and actions while the team is meeting.",
         problem:
           "In meetings people talk fast and what matters gets lost: a question nobody asked, a risk left hanging, a commitment with no owner. Today someone takes notes by hand and misses part of the conversation, or everything is reviewed only afterwards, when it is too late to react.",
         example:
@@ -1277,9 +1290,10 @@ const EN: SiteContent = {
       {
         id: "sdd",
         name: "CriterIA",
-        tagline: "A shared way to develop with AI agents.",
+        kind: "framework",
+        tagline: "A shared criterion for developing with AI agents.",
         short:
-          "AR helps your team implement agents, skills and good practices in the AI tools you already use, with shared context and people in charge of decisions.",
+          "A framework for teams to define instructions, record decisions and set review practices when developing software with artificial intelligence agents.",
         problem:
           "The same team can use agents with different instructions, sources and habits. Each output looks useful on its own, but needs fixing when integrated because it ignored a current decision or someone else's work, and knowledge gets stuck in isolated conversations.",
         steps: [
