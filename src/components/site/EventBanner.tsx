@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import cordobaTechWeekLogo from "@/assets/events/cordoba-tech-week.png";
+import cordobaTechWeekStand from "@/assets/events/cordoba-tech-week-stand-19.png";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 import { isEventBannerActive } from "@/lib/event-banner";
@@ -85,11 +86,27 @@ export function EventBanner() {
           <span aria-hidden="true" className="ctw-shine" />
         </span>
         <p className="flex flex-col gap-0.5 sm:flex-row sm:items-center sm:gap-4">
-          <span className="font-semibold text-foreground">
-            <span className="hidden sm:inline">{c.lead} · </span>
-            {c.dates}
+          <span className="inline-flex items-center gap-2.5 font-semibold tracking-wide text-foreground sm:gap-3">
+            <span className="hidden sm:inline">{c.lead}</span>
+            <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
+              ·
+            </span>
+            <span>{c.dates}</span>
+            <span aria-hidden="true" className="text-[#c4f023]">
+              ·
+            </span>
+            <span className="ctw-stand-badge relative isolate inline-flex shrink-0">
+              <img
+                src={cordobaTechWeekStand}
+                alt={c.stand}
+                className="relative h-6 w-auto sm:h-7"
+              />
+            </span>
           </span>
-          <Link to="/soluciones" className="ctw-cta font-bold">
+          <span aria-hidden="true" className="hidden text-[#c4f023] sm:inline">
+            ·
+          </span>
+          <Link to="/" hash="soluciones" className="ctw-cta font-bold">
             {c.cta} →
           </Link>
         </p>

@@ -25,6 +25,7 @@
   --color-ink: var(--ink);
   --color-brand: var(--brand);
   --color-brand-dark: var(--brand-dark);
+  --color-brand-text: var(--brand-text);
   --color-corp-gray: var(--corp-gray);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -71,8 +72,10 @@
 :root {
   --radius: 0.625rem;
   /* Paleta oficial AR IT Services (Brand Book) */
+  /* Manual de marca: rojo #ff000d, rojo oscuro #990f1b y gris #706f6f; tintes 80/60/40/20 %. brand-text = tinte 60 % del rojo (#ff666e): texto rojo sobre fondo oscuro con más contraste que antes (6,5:1 sobre el fondo, 5,5:1 sobre tarjetas); el borde de los campos es el gris corporativo al 70 %. */
   --brand: #ff000d;
   --brand-dark: #990f1b;
+  --brand-text: #ff666e;
   --corp-gray: #706f6f;
   --ink: #232234;
   --background: #14131c;
@@ -92,7 +95,7 @@
   --destructive: #990f1b;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
+  --input: rgba(112, 111, 111, 0.7);
   --ring: #ff000d;
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -127,7 +130,7 @@
   --destructive: #990f1b;
   --destructive-foreground: #ffffff;
   --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
+  --input: rgba(112, 111, 111, 0.7);
   --ring: #ff000d;
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -162,7 +165,7 @@
   }
 
   :focus-visible {
-    outline: 2px solid var(--brand);
+    outline: 2px solid var(--brand-text);
     outline-offset: 2px;
   }
 }
@@ -591,6 +594,26 @@ html {
   color: transparent;
   animation: ctw-text 2.8s linear infinite;
 }
+.ctw-stand-badge::before {
+  position: absolute;
+  inset: -65% -22%;
+  z-index: -1;
+  content: "";
+  background: radial-gradient(ellipse at center, rgb(196 240 35 / 0.38), transparent 66%);
+  filter: blur(7px);
+  animation: ctw-stand-pulse 2.8s ease-in-out infinite;
+}
+@keyframes ctw-stand-pulse {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(-14%) scale(0.9);
+  }
+  50% {
+    opacity: 0.8;
+    transform: translateX(14%) scale(1.1);
+  }
+}
 @keyframes ctw-text {
   from {
     background-position: 120% 0;
@@ -616,4 +639,19 @@ html {
     color: var(--ctw-lime);
     background-image: none;
   }
+}
+
+/*
+ * Rellenos de marca con texto blanco: degradé del rojo #ff000d al rojo oscuro #990f1b del
+ * manual (el mismo que usa el manual en sus paneles). El rojo plano da 4:1 con texto blanco;
+ * el degradé deja el texto (zona media) en ~5,8:1, por encima del mínimo AA de 4,5:1, y el
+ * rojo vivo sigue en el borde superior del botón. Al pasar el mouse, rojo oscuro plano (8,6:1).
+ */
+.bg-primary {
+  background-image: linear-gradient(180deg, var(--brand) 0%, var(--brand-dark) 100%);
+}
+.hover\:bg-brand-dark:hover,
+.hover\:bg-primary\/90:hover {
+  background-image: none;
+  background-color: var(--brand-dark);
 }
