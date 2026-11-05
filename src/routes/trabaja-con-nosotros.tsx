@@ -1,8 +1,14 @@
-import { createFileRoute, Link, redirect, useRouter } from "@tanstack/react-router";
-import { isIntermedio } from "@/lib/site-mode";
-import { getAvisos, formatFecha, titleCase, type AvisoListItem } from "@/lib/avisos.server";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import {
+  getAvisos,
+  formatFecha,
+  formatSeniority,
+  titleCase,
+  type AvisoListItem,
+} from "@/lib/avisos.server";
 import { useMemo, useState, useTransition } from "react";
 import { SearchIcon, XIcon as CloseIcon } from "lucide-react";
+import { IsoBadge } from "@/components/site/IsoBadge";
 import {
   Select,
   SelectContent,
@@ -11,22 +17,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
-import { BackButton } from "@/components/site/BackButton";
 import { SpotlightCard } from "@/components/site/SpotlightCard";
+import { useContactModal } from "@/components/site/ContactModal";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoDrawInline } from "@/components/site/LogoDrawInline";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { LogoMark } from "@/components/site/LogoMark";
-import { IsoBadge } from "@/components/site/IsoBadge";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
 
 export const Route = createFileRoute("/trabaja-con-nosotros")({
-  // En la versión intermedia la página no existe: se redirige al inicio.
-  beforeLoad: () => {
-    if (isIntermedio) throw redirect({ to: "/", replace: true });
-  },
   // Las vacantes vienen del feed público de AR Recruiting. El origen no
   // pagina ni cachea, así que cada visita a la ruta vuelve a pegarle: eso
   // mantiene `vacantes_disponibles` al día y hace que un aviso que se acaba
@@ -109,9 +110,9 @@ function normalize(value: string): string {
  * Arma los filtros combinables de la página.
  *
  * Los tres ejes (área, tecnología, ubicación) se acumulan con AND, y el texto
- * libre se aplica encima con OR sobre los campos de texto de cada aviso. Un
- * AND entre ejes y OR dentro del texto es lo que espera alguien buscando: si
- * pide React *y* Córdoba no quiere ver roles de Python en Buenos Aires.
+ * libre también: todas las palabras escritas tienen que estar en algún campo
+ * del aviso. Es lo que espera alguien buscando: si pide React *y* Córdoba no
+ * quiere ver roles de Python en Buenos Aires.
  *
  * Se matchea con `includes` sobre el texto normalizado y no con tokens sueltos
  * para no hacer falsos positivos con palabras muy cortas ("go", "r").
@@ -144,7 +145,7 @@ function matchesFilters(
 
   if (filtros.texto) {
     const texto = normalize(filtros.texto);
-    const tokens = texto.split(" ").filter((t) => t.length > 1);
+    const tokens = texto.split(" ").filter(Boolean);
     if (tokens.length === 0) return true;
     const campos = normalize(
       [
@@ -152,14 +153,21 @@ function matchesFilters(
         aviso.area,
         aviso.ubicacion,
         aviso.modalidad,
-        aviso.seniority,
+        // La sigla del feed y su nombre en ambos idiomas: "senior" encuentra "SR".
+        aviso.seniority &&
+          `${aviso.seniority} ${formatSeniority(aviso.seniority, "ES")} ${formatSeniority(aviso.seniority, "EN")}`,
         aviso.descripcion_corta,
         aviso.stack.join(" "),
       ]
         .filter(Boolean)
         .join(" "),
     );
-    if (!tokens.some((t) => campos.includes(t))) return false;
+    // Todas las palabras tienen que aparecer (AND): "react senior" acota, no
+    // amplía. Las de una letra ("c" de "C#", "r") se comparan como palabra
+    // entera para no matchear cualquier aviso que tenga esa letra.
+    const palabras = new Set(campos.split(" "));
+    const aparece = (t: string) => (t.length === 1 ? palabras.has(t) : campos.includes(t));
+    if (!tokens.every(aparece)) return false;
   }
 
   return true;
@@ -198,7 +206,7 @@ function FacetSelect({
 }) {
   return (
     <label className="block">
-      <span className="mb-2 block font-mono text-[11px] tracking-widest text-muted-foreground uppercase">
+      <span className="mb-2 block font-mono text-xs tracking-widest text-muted-foreground uppercase">
         {label}
       </span>
       <Select
@@ -217,7 +225,15 @@ function FacetSelect({
         >
           <SelectValue placeholder={allLabel} />
         </SelectTrigger>
-        <SelectContent>
+        {/* Siempre hacia abajo: con colisión activa, Radix lo giraba hacia arriba
+            cuando la lista no entraba, y quedaba una abierta arriba y otra abajo
+            según su largo. Sin giro, el alto se limita al espacio disponible y
+            la lista scrollea por dentro. */}
+        <SelectContent
+          side="bottom"
+          avoidCollisions={false}
+          className="max-h-[min(18rem,var(--radix-select-content-available-height))]"
+        >
           <SelectItem value="">{allLabel}</SelectItem>
           {options.map((opt) => (
             <SelectItem key={opt.value} value={opt.value}>
@@ -235,6 +251,7 @@ function CareersPage() {
   const c = getContent(lang);
   const result = Route.useLoaderData();
   const router = useRouter();
+  const openContact = useContactModal();
   const [isPending, startTransition] = useTransition();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -347,6 +364,9 @@ function CareersPage() {
         items={navItems}
         ctaLabel={c.cta.talk}
         ctaHref="/#contacto"
+        logoHref="/"
+        activeHref="/trabaja-con-nosotros"
+        revealAt={-1}
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
             <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
@@ -366,7 +386,7 @@ function CareersPage() {
                 aria-pressed={lang === l}
                 onClick={() => setLang(l)}
                 className={`rounded px-2 py-1 transition-colors ${
-                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  lang === l ? "text-brand-text" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {l}
@@ -376,25 +396,24 @@ function CareersPage() {
         }
       />
 
-      <main className="px-5 pt-20 pb-8 sm:pt-24">
+      <main className="px-5 pt-28 pb-8 sm:pt-32">
         <div className="mx-auto max-w-6xl">
           <AnimatedContent>
-            <BackButton label={c.careers.backLink} />
-            <h1 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
-              {c.careers.heading}
-            </h1>
-            <p className="mt-2 max-w-2xl text-base text-muted-foreground">{c.careers.intro}</p>
+            <h1 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.careers.heading}</h1>
+            <p className="mt-3 max-w-2xl text-lg leading-relaxed text-muted-foreground">
+              {c.careers.intro}
+            </p>
           </AnimatedContent>
 
-          <AnimatedContent className="mt-14" distance={30}>
+          <AnimatedContent className="mt-8" distance={30}>
             {/* Sin botón de "actualizar": el origen no manda webhooks, pero la
                 ruta se re-fetchea en cada visita, así que recargar la
                 página alcanza. El botón duplicaba una acción que el browser
                 ya resuelve. El refresh manual sigue disponible en el estado
                 de error, que es donde sí aporta. */}
-            <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
-              {c.careers.positionsHeading}
-            </h2>
+            {/* Solo para lectores de pantalla: mantiene la jerarquía h1 → h2 → h3 sin
+                repetir en pantalla lo que ya dice el título de la página. */}
+            <h2 className="sr-only">{c.careers.positionsHeading}</h2>
 
             {lang === "EN" && !hasError && avisos.length > 0 && (
               <p className="mt-3 text-xs text-muted-foreground">{c.careers.enNoticeBody}</p>
@@ -407,7 +426,7 @@ function CareersPage() {
                 <button
                   type="button"
                   onClick={refresh}
-                  className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                  className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white"
                 >
                   {c.careers.refreshLabel}
                 </button>
@@ -485,7 +504,7 @@ function CareersPage() {
                     <button
                       type="button"
                       onClick={limpiarFiltros}
-                      className="cursor-pointer text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                      className="cursor-pointer text-sm font-semibold text-brand-text transition-colors hover:text-foreground"
                     >
                       {c.careers.clearFiltersLabel}
                     </button>
@@ -500,7 +519,7 @@ function CareersPage() {
                 <button
                   type="button"
                   onClick={limpiarFiltros}
-                  className="mt-4 cursor-pointer text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
+                  className="mt-4 cursor-pointer text-sm font-semibold text-brand-text transition-colors hover:text-foreground"
                 >
                   {c.careers.clearFiltersLabel}
                 </button>
@@ -549,7 +568,7 @@ function CareersPage() {
                         <div className="flex flex-wrap items-start justify-between gap-3">
                           <div className="min-w-0">
                             {aviso.area && (
-                              <p className="font-mono text-[11px] tracking-widest text-primary uppercase">
+                              <p className="font-mono text-xs tracking-widest text-brand-text uppercase">
                                 {titleCase(aviso.area)}
                               </p>
                             )}
@@ -568,18 +587,24 @@ function CareersPage() {
                               </Link>
                             </h3>
                             <p className="mt-1 text-sm text-muted-foreground">
-                              {[aviso.ubicacion, aviso.modalidad, aviso.seniority]
+                              {[
+                                aviso.ubicacion && titleCase(aviso.ubicacion),
+                                aviso.modalidad && titleCase(aviso.modalidad),
+                                aviso.seniority && formatSeniority(aviso.seniority, lang),
+                              ]
                                 .filter(Boolean)
-                                .map((part) => titleCase(part as string))
                                 .join(" · ")}
                             </p>
                           </div>
-                          <a
-                            href={`/?aviso=${encodeURIComponent(aviso.id)}#contacto`}
-                            className="relative z-10 inline-flex shrink-0 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                          <button
+                            type="button"
+                            onClick={() =>
+                              openContact({ avisoId: aviso.id, puesto: aviso.nombre_posicion })
+                            }
+                            className="relative z-10 inline-flex shrink-0 cursor-pointer rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white"
                           >
                             {c.careers.positionCtaLabel}
-                          </a>
+                          </button>
                         </div>
 
                         {/* min-h para reservar el espacio aunque el aviso no
@@ -589,13 +614,13 @@ function CareersPage() {
                           {aviso.stack.slice(0, STACK_CHIPS).map((s) => (
                             <span
                               key={s}
-                              className="rounded-full border border-border px-3 py-1 font-mono text-[11px] text-muted-foreground"
+                              className="rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground"
                             >
                               {s}
                             </span>
                           ))}
                           {aviso.stack.length > STACK_CHIPS && (
-                            <span className="px-1 py-1 font-mono text-[11px] text-muted-foreground">
+                            <span className="px-1 py-1 font-mono text-xs text-muted-foreground">
                               +{aviso.stack.length - STACK_CHIPS}
                             </span>
                           )}
@@ -624,7 +649,7 @@ function CareersPage() {
                             card y el grid haciendo stretch, todas las cards de
                             una fila terminan con el pie en la misma Y. */}
                         <div className="mt-auto flex flex-wrap items-center gap-x-4 gap-y-1 pt-5 text-xs text-muted-foreground">
-                          <span className="text-primary">
+                          <span className="text-brand-text">
                             {aviso.vacantes_disponibles === 1
                               ? c.careers.vacancyOne
                               : `${aviso.vacantes_disponibles} ${c.careers.vacancyMany}`}
@@ -647,12 +672,13 @@ function CareersPage() {
               <div className="mt-5 rounded-2xl border border-border bg-card p-8 sm:p-10">
                 <p className="text-lg font-semibold">{c.careers.emptyHeading}</p>
                 <p className="mt-2 max-w-xl text-sm text-muted-foreground">{c.careers.emptyBody}</p>
-                <a
-                  href="/#contacto"
-                  className="mt-6 inline-flex rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark"
+                <button
+                  type="button"
+                  onClick={() => openContact({ type: "postulante" })}
+                  className="mt-6 inline-flex cursor-pointer rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white"
                 >
                   {c.careers.applyCta}
-                </a>
+                </button>
               </div>
             )}
           </AnimatedContent>
