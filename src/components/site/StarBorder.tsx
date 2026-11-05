@@ -35,7 +35,7 @@ export function StarBorder({
         style={{ animationDuration: speed }}
         aria-hidden="true"
       />
-      <span className="relative z-10 block rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-brand-dark">
+      <span className="relative z-10 block rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors group-hover:bg-brand-dark group-hover:text-white">
         {children}
       </span>
     </a>

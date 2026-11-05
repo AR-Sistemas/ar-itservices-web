@@ -5,7 +5,6 @@ import { sendContactEmail } from "@/lib/contact.server";
 import { toast } from "sonner";
 import { AnimatedContent } from "@/components/site/AnimatedContent";
 import { Counter } from "@/components/site/Counter";
-import { SpotlightCard } from "@/components/site/SpotlightCard";
 
 import { useSpringPress } from "@/components/site/useSpringPress";
 import { Beams } from "@/components/site/Beams";
@@ -16,19 +15,29 @@ import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { FloatingNav } from "@/components/site/FloatingNav";
 import { LogoLoop } from "@/components/site/LogoLoop";
 import { ServiceAreaCards } from "@/components/site/ServiceAreaCards";
-import { FrameworkHighlight } from "@/components/site/FrameworkHighlight";
 import { StarBorder } from "@/components/site/StarBorder";
-import { StarBorderCard } from "@/components/site/StarBorderCard";
-import { IsoBadge } from "@/components/site/IsoBadge";
 import { TeamBuilder } from "@/components/site/TeamBuilder";
 import { CONTACT_PREFILL_EVENT } from "@/lib/contact-prefill";
 import { SocialLinks } from "@/components/site/SocialLinks";
 import { NewsMagazineCover } from "@/components/site/NewsMagazineCover";
+import { IsoBadge } from "@/components/site/IsoBadge";
+import { NEWSLETTER_ISSUE } from "@/data/newsletter";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
+import { HOME_PRODUCT_LOGO_SCALE, PRODUCT_LOGOS } from "@/components/site/product-logos";
+import { getPublicSolutionSlug } from "@/lib/solution-slugs";
 import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
-import { getContent } from "@/i18n/content";
+import { getContent, type SolutionProduct } from "@/i18n/content";
+import { EventBanner } from "@/components/site/EventBanner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { getPublicEditorial } from "@/lib/editorial.server";
+import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
 import claroLogo from "@/assets/clients/claro.png";
 import naranjaLogo from "@/assets/clients/naranja.png";
@@ -36,6 +45,7 @@ import stellantisLogo from "@/assets/clients/Stellantis-canva.png";
 import agdLogo from "@/assets/clients/AGD-canva.png";
 import aguasCordobesasLogo from "@/assets/clients/AguasCordobesas-canva.png";
 import americaMovilLogo from "@/assets/clients/17-clients-america-movil-uai-516x234.png";
+import bancorLogo from "@/assets/clients/Bancor.png";
 import ecogasLogo from "@/assets/clients/10-clients-ecogas-uai-516x234.png";
 import firenzeLogo from "@/assets/clients/Firenze.svg";
 import fcaLogo from "@/assets/clients/FCA-canva.png";
@@ -46,7 +56,7 @@ import holcimLogo from "@/assets/clients/Holcim-canva.png";
 import laVozLogo from "@/assets/clients/11-clients-la-voz-uai-516x234.png";
 import mcafeeLogo from "@/assets/clients/McAfee-canva.png";
 import minettiLogo from "@/assets/clients/Minetti-canva.png";
-import prittyLogo from "@/assets/clients/Pritty-canva.png";
+import prittyLogo from "@/assets/clients/Pritty.png";
 import tipsLogo from "@/assets/clients/Tips-canva.png";
 import vitopelLogo from "@/assets/clients/7-clients-vitopel-uai-516x234.png";
 import klocknerLogo from "@/assets/clients/13-clients-klockner-uai-516x234.png";
@@ -89,19 +99,20 @@ const TECH = [
   { name: "Kotlin", src: "/logos/kotlin.svg" },
   { name: "Power BI", src: "/logos/powerbi.svg" },
   { name: "n8n", src: "/logos/n8n.svg" },
-  { name: "AWS", src: "/logos/aws.svg" },
+  { name: "AWS", src: "/logos/aws-dark.svg" },
   { name: "Azure", src: "/logos/azure.svg" },
   { name: "GCP", src: "/logos/gcp.svg" },
   { name: "Jira", src: "/logos/jira.svg" },
 ];
 
-const CLIENTS: { name: string; src: string; scale?: number }[] = [
+const CLIENTS: { name: string; src: string; scale?: number; monochrome?: boolean }[] = [
   { name: "Claro", src: claroLogo },
   { name: "Naranja", src: naranjaLogo },
-  { name: "Stellantis", src: stellantisLogo },
+  { name: "Stellantis", src: stellantisLogo, monochrome: true },
   { name: "AGD", src: agdLogo },
   { name: "Aguas Cordobesas", src: aguasCordobesasLogo },
-  { name: "América Móvil", src: americaMovilLogo },
+  { name: "América Móvil", src: americaMovilLogo, monochrome: true },
+  { name: "Bancor", src: bancorLogo },
   { name: "Ecogas", src: ecogasLogo, scale: 1.35 },
   { name: "Firenze", src: firenzeLogo },
   { name: "FCA", src: fcaLogo },
@@ -111,7 +122,7 @@ const CLIENTS: { name: string; src: string; scale?: number }[] = [
   { name: "Holcim", src: holcimLogo },
   { name: "La Voz del Interior", src: laVozLogo },
   { name: "McAfee", src: mcafeeLogo },
-  { name: "Minetti", src: minettiLogo },
+  { name: "Minetti", src: minettiLogo, monochrome: true },
   { name: "Pritty", src: prittyLogo },
   { name: "Tips", src: tipsLogo },
   { name: "Vitopel", src: vitopelLogo },
@@ -130,6 +141,10 @@ function Home() {
   const sendContact = useServerFn(sendContactEmail);
   const [contactType, setContactType] = useState<ContactType>("empresa");
   const [selectedPosition, setSelectedPosition] = useState("");
+  // Id del aviso del feed de AR Recruiting (cuando se postula con ?aviso=).
+  const [avisoId, setAvisoId] = useState("");
+  // Producto de /soluciones desde el que se llegó al formulario (?producto=ario).
+  const [producto, setProducto] = useState<SolutionProduct["id"] | null>(null);
   // Levantados a estado (en vez de no controlados) para que no se pierdan si
   // el visitante cambia de pestaña de tipo de consulta y vuelve.
   const [empresaValue, setEmpresaValue] = useState("");
@@ -140,17 +155,59 @@ function Home() {
   // Trampa de tiempo anti-bot: momento en que se montó el formulario, para
   // comparar contra cuándo se envía (ver src/lib/contact.server.ts).
   const [formStartedAt] = useState(() => Date.now());
-  const finalCta = useSpringPress<HTMLAnchorElement>();
   const submitCta = useSpringPress<HTMLButtonElement>();
 
   // Si venimos de "Postularme" en /trabaja-con-nosotros, precargamos el
   // formulario en modo postulante con el puesto ya seleccionado.
   useEffect(() => {
-    const puesto = new URLSearchParams(window.location.search).get("puesto");
+    const params = new URLSearchParams(window.location.search);
+    const puesto = params.get("puesto");
     if (puesto) {
       setContactType("postulante");
       setSelectedPosition(puesto);
     }
+    const prod = params.get("producto");
+    if (prod === "ario" || prod === "meetingmate" || prod === "sdd") {
+      setContactType("empresa");
+      setProducto(prod);
+      const product = c.solutions.products.find((p) => p.id === prod);
+      if (product) setMensajeValue(c.contact.productMessage(product.name));
+    }
+  }, []);
+
+  // "?aviso={id}" viene del botón Postularme del feed de AR Recruiting. No
+  // alcanza con pasar el título: el aviso vive en el otro proyecto y su
+  // nombre no siempre coincide con las opciones del select (que hoy son
+  // textuales). Traemos el aviso del servidor para mostrar su nombre real y
+  // mandar el id como campo propio, que es lo que después puede leer RRHH.
+  useEffect(() => {
+    // `requestedId` y no `avisoId`: el state `avisoId` es el id ya validado
+    // contra el origen (lo devuelve `getAviso`), no el string crudo de la URL.
+    // Con el mismo nombre el `setAvisoId(result.aviso.id)` de adentro se
+    // leía como un no-op sobre la variable local.
+    const requestedId = new URLSearchParams(window.location.search).get("aviso");
+    if (!requestedId) return;
+    let cancelled = false;
+    setContactType("postulante");
+    void getAviso({ data: requestedId }).then((result) => {
+      if (cancelled || !result.ok) return;
+      setAvisoId(result.aviso.id);
+      setSelectedPosition(result.aviso.nombre_posicion);
+      // Mensaje prellenado: el candidato ve qué va a enviar antes de tocar
+      // nada. Es un borrador con huecos para completar, no un texto cerrado:
+      // el que sigue escribiendo encima elige replacearlo por completo.
+      // Solo si el campo está vacío, para no pisar algo que el visitante ya
+      // escribió antes de que llegara la respuesta del origen.
+      setMensajeValue((prev) =>
+        prev ? prev : c.contact.applicationDraft.replace("{puesto}", result.aviso.nombre_posicion),
+      );
+    });
+    return () => {
+      cancelled = true;
+    };
+    // `c` y `getAviso` son estables; correrlo una vez al montar es lo que
+    // queremos (lee la query string una sola vez).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Otras secciones (armado de equipo, "Qué hacemos") precargan el mensaje con
@@ -166,27 +223,17 @@ function Home() {
     return () => window.removeEventListener(CONTACT_PREFILL_EVENT, onPrefill);
   }, []);
 
-  // El puesto puede venir de un link generado en otro idioma (o de una
-  // posición que ya no existe): si no matchea ninguna opción actual del
-  // idioma activo, mostramos "otro" en vez de dejar el select en blanco.
-  const puestoSelectValue =
-    selectedPosition && !c.careers.positions.some((p) => p.title === selectedPosition)
-      ? "otro"
-      : selectedPosition;
-
   return (
     <div className="min-h-screen overflow-x-clip bg-background">
       <CodeGridSpotlight />
+      <EventBanner />
       <FloatingNav
         items={c.nav}
         ctaLabel={c.cta.talk}
         ctaHref="#contacto"
         logo={(visible) => (
           <span className="flex items-center gap-2.5 sm:gap-3">
-            <LogoDrawInline
-              play={visible}
-              className="h-8 w-auto shrink-0 text-foreground sm:h-9"
-            />
+            <LogoDrawInline play={visible} className="h-8 w-auto shrink-0 text-foreground sm:h-9" />
             <LogoWordmark className="h-[13px] w-auto shrink-0 text-foreground sm:h-3.5" />
           </span>
         )}
@@ -203,7 +250,7 @@ function Home() {
                 aria-pressed={lang === l}
                 onClick={() => setLang(l)}
                 className={`rounded px-2 py-1 transition-colors ${
-                  lang === l ? "text-primary" : "text-muted-foreground hover:text-foreground"
+                  lang === l ? "text-brand-text" : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {l}
@@ -213,15 +260,12 @@ function Home() {
         }
       />
 
-      <main id="top">
+      <main id="top" className="relative z-10">
         {/* Hero */}
-        <section className="relative px-5 pt-20 pb-40 sm:pt-28">
+        <section className="relative px-5 pt-10 pb-40 sm:pt-14">
           <Beams />
           <div className="relative mx-auto max-w-4xl text-center">
-            <LogoDraw className="mx-auto h-16 w-auto text-primary" />
-            <p className="mt-6 font-mono text-xs tracking-widest text-primary uppercase">
-              {c.hero.eyebrow}
-            </p>
+            <LogoDraw className="mx-auto h-16 w-auto text-brand" />
             {/* Frases pedidas por gerencia: rotan y se traducen con el idioma del sitio */}
             <HeroHeadlineCarousel phrases={c.hero.phrases} className="mt-6" />
             <AnimatedContent delay={400} distance={24}>
@@ -248,7 +292,7 @@ function Home() {
         {/* Métricas */}
         <section className="relative -mt-28 px-5">
           <AnimatedContent className="mx-auto max-w-6xl">
-            <div className="grid grid-cols-2 gap-8 rounded-2xl border border-border bg-card px-8 py-10 shadow-[0_20px_60px_-30px_rgba(35,34,52,0.45)] lg:grid-cols-5">
+            <div className="grid grid-cols-2 gap-8 border-y border-border py-10 lg:grid-cols-5">
               {c.metrics.map((m) => (
                 <div key={m.label}>
                   <p className="font-display text-3xl font-extrabold text-foreground sm:whitespace-nowrap sm:text-5xl lg:text-4xl xl:text-5xl">
@@ -258,13 +302,51 @@ function Home() {
                   <p className="mt-2 text-sm text-muted-foreground">{m.label}</p>
                 </div>
               ))}
-              <IsoBadge label={c.iso.certified} />
+              <IsoBadge label="" />
             </div>
           </AnimatedContent>
         </section>
 
+        {/* Soluciones — tarjetas con el contexto de cada producto. */}
+        <section id="soluciones" className="px-5 pt-24 pb-12 sm:pt-32 sm:pb-16">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="max-w-3xl text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+                {c.solutions.heading}
+              </h2>
+              <p className="mt-3 max-w-2xl text-muted-foreground">{c.solutions.subtitle}</p>
+            </AnimatedContent>
+            <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+              {c.solutions.products.map((p, i) => (
+                <AnimatedContent key={p.id} delay={i * 80} distance={30}>
+                  <Link
+                    to="/solucion/$solutionId"
+                    params={{ solutionId: getPublicSolutionSlug(p.id) }}
+                    className="group flex h-full flex-col rounded-2xl border border-white/10 bg-card/35 p-5 shadow-[0_8px_24px_rgb(0_0_0_/_0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-text/65 hover:bg-card/80 hover:shadow-[0_18px_42px_rgb(0_0_0_/_0.26)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+                    aria-label={`${p.name}: ${p.tagline}`}
+                  >
+                    <div className="flex h-32 items-center justify-center overflow-hidden">
+                      <img
+                        src={PRODUCT_LOGOS[p.id]}
+                        alt=""
+                        loading="lazy"
+                        decoding="async"
+                        className={`h-full w-full object-contain transition duration-300 group-hover:brightness-110 ${HOME_PRODUCT_LOGO_SCALE[p.id]}`}
+                      />
+                    </div>
+                    <p className="mt-5 text-sm font-semibold text-brand-text">{p.tagline}</p>
+                    <p className="mt-3 text-sm text-muted-foreground transition-colors group-hover:text-foreground">
+                      {p.short}
+                    </p>
+                  </Link>
+                </AnimatedContent>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Servicios */}
-        <section id="servicios" className="px-5 py-24 sm:py-32">
+        <section id="servicios" className="px-5 pt-12 pb-24 sm:pt-16 sm:pb-32">
           <div className="mx-auto max-w-6xl">
             <AnimatedContent>
               <h2 className="max-w-2xl text-3xl font-bold tracking-tight sm:text-4xl">
@@ -272,46 +354,37 @@ function Home() {
               </h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
-              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                {c.services.hint}
-              </p>
-              <div className="mt-8">
+              <div>
                 <ServiceAreaCards
                   groups={c.services.groups}
                   inquiryMessage={c.services.inquiryMessage}
                 />
               </div>
             </AnimatedContent>
-            <AnimatedContent className="mt-12" distance={30}>
-              <FrameworkHighlight card={c.services.framework} />
-            </AnimatedContent>
           </div>
         </section>
 
         {/* Clientes */}
         <section className="px-5 py-24 sm:py-32">
-          <div className="mx-auto max-w-5xl">
+          <div className="mx-auto max-w-6xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                {c.clients.heading}
-              </h2>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.clients.heading}</h2>
             </AnimatedContent>
             <AnimatedContent className="mt-12" distance={30}>
               <LogoLoop
                 speed={32}
-                direction="left"
                 pauseOnHover
-                fadeOut
                 fadeOutColor="var(--background)"
                 logos={CLIENTS.map((cl) => (
                   <span
                     key={cl.name}
-                    className="inline-flex h-20 min-w-[7rem] items-center justify-center rounded-xl border border-border bg-card px-5"
+                    className="inline-flex h-24 w-44 items-center justify-center px-5"
                   >
                     <img
                       src={cl.src}
                       alt={c.clients.logoAlt(cl.name)}
-                      className="max-h-14 w-auto max-w-[12rem] object-contain"
+                      decoding="async"
+                      className={`max-h-14 w-auto max-w-full object-contain ${cl.monochrome ? "brightness-0 invert" : ""}`}
                       style={cl.scale ? { transform: `scale(${cl.scale})` } : undefined}
                     />
                   </span>
@@ -333,39 +406,32 @@ function Home() {
         {/* Casos */}
         {!isIntermedio && (
           <section id="casos" className="px-5 py-24 sm:py-32">
-            <div className="mx-auto max-w-5xl">
+            <div className="mx-auto max-w-6xl">
               <AnimatedContent>
-                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
-                  {c.cases.heading}
-                </h2>
+                <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.cases.heading}</h2>
               </AnimatedContent>
               <div className="mt-12 space-y-14">
                 {c.cases.items.map((cs, i) => (
                   <AnimatedContent key={cs.client} delay={i * 80}>
-                    <StarBorderCard>
-                      <SpotlightCard
-                        as="article"
-                        className="rounded-2xl border border-border bg-card p-8"
-                      >
-                        <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-                          <h3 className="text-xl font-bold">{cs.client}</h3>
-                          <div className="space-y-5">
-                            <div>
-                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                                {c.cases.challengeLabel}
-                              </p>
-                              <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
-                            </div>
-                            <div>
-                              <p className="font-mono text-xs tracking-widest text-primary uppercase">
-                                {c.cases.resultLabel}
-                              </p>
-                              <p className="mt-2 text-foreground">{cs.result}</p>
-                            </div>
+                    <article className="border-t border-border pt-8">
+                      <div className="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                        <h3 className="text-xl font-bold">{cs.client}</h3>
+                        <div className="space-y-5">
+                          <div>
+                            <p className="font-mono text-xs tracking-widest text-brand-text uppercase">
+                              {c.cases.challengeLabel}
+                            </p>
+                            <p className="mt-2 text-muted-foreground">{cs.challenge}</p>
+                          </div>
+                          <div>
+                            <p className="font-mono text-xs tracking-widest text-brand-text uppercase">
+                              {c.cases.resultLabel}
+                            </p>
+                            <p className="mt-2 text-foreground">{cs.result}</p>
                           </div>
                         </div>
-                      </SpotlightCard>
-                    </StarBorderCard>
+                      </div>
+                    </article>
                   </AnimatedContent>
                 ))}
               </div>
@@ -373,112 +439,127 @@ function Home() {
           </section>
         )}
 
-        {/* Stack */}
-        <section className="border-y border-border px-5 py-20">
-          <div className="mx-auto max-w-5xl">
-            <AnimatedContent>
-              <h2 className="text-2xl font-bold tracking-tight">{c.stack.heading}</h2>
-              <div className="mt-8">
-                <LogoLoop
-                  speed={40}
-                  direction="left"
-                  pauseOnHover
-                  fadeOut
-                  fadeOutColor="var(--background)"
-                  logos={TECH.map((t) => (
-                    <span
-                      key={t.name}
-                      className="inline-flex items-center gap-2.5 rounded-full border border-border bg-card px-4 py-2.5 text-sm font-medium text-foreground"
-                    >
-                      <img
-                        src={t.src}
-                        alt={c.stack.logoAlt(t.name)}
-                        className="h-6 w-6 shrink-0 object-contain"
-                      />
-                      {t.name}
-                    </span>
-                  ))}
-                />
-              </div>
-            </AnimatedContent>
-          </div>
-        </section>
-
         {/* Portada del boletín de novedades */}
         {!isIntermedio && (
           <section className="px-5 py-24 sm:py-32">
-            <div className="mx-auto max-w-4xl">
+            <div className="mx-auto max-w-6xl">
               <AnimatedContent>
-                {editorial.current ? (
-                  <NewsMagazineCover
-                    kicker="Boletín mensual"
-                    title={editorial.current.title}
-                    subtitle={editorial.current.period}
-                    eyebrow={c.newsTeaser.eyebrow}
-                    cta="Leer resumen editorial"
-                  />
-                ) : (
-                  <div className="rounded-3xl border border-border bg-card p-8 text-center">
-                    <p className="font-mono text-xs tracking-widest text-primary uppercase">{c.newsTeaser.eyebrow}</p>
-                    <p className="mt-4 text-sm text-muted-foreground">El resumen editorial del mes estará disponible próximamente.</p>
-                  </div>
-                )}
+                <NewsMagazineCover
+                  kicker="Boletín mensual"
+                  title={editorial.current?.title ?? NEWSLETTER_ISSUE.title}
+                  subtitle={editorial.current?.period ?? NEWSLETTER_ISSUE.subtitle}
+                  eyebrow={c.newsTeaser.eyebrow}
+                  cta="Leer resumen editorial"
+                />
               </AnimatedContent>
             </div>
           </section>
         )}
 
-        {/* Nuestra gente — frase misión/visión + link a la página del equipo */}
+        {/* Nuestra gente */}
         <section className="px-5 py-24 sm:py-32">
-          <AnimatedContent className="mx-auto max-w-3xl text-center">
-            <h2 className="font-mono text-xs tracking-widest text-primary uppercase">
-              {c.people.heading}
-            </h2>
-            <p className="mt-6 text-4xl leading-snug font-bold tracking-tight text-balance sm:text-5xl">
-              {c.people.statement}
-            </p>
-            <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
-              <Link
-                to="/nosotros"
-                className="inline-flex rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/30"
-              >
-                {c.people.ctaLink}
-              </Link>
-              {!isIntermedio && (
-                <Link
-                  to="/trabaja-con-nosotros"
-                  className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-brand-dark"
-                >
-                  {c.people.careersLink} →
-                </Link>
-              )}
+          <div className="mx-auto max-w-6xl border-t border-border pt-12 sm:pt-16">
+            <div className="grid gap-8 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,0.6fr)] lg:gap-20">
+              <AnimatedContent>
+                <h2 className="max-w-3xl text-3xl leading-tight font-bold tracking-tight text-balance sm:text-5xl">
+                  {c.people.statement}
+                </h2>
+              </AnimatedContent>
+              <AnimatedContent delay={100}>
+                <div className="border-l-2 border-brand pl-6">
+                  <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
+                    {lang === "ES"
+                      ? "Cada desafío se construye en equipo. Conocé a las personas que hacen posible nuestro trabajo."
+                      : "Every challenge is built together. Meet the people who make our work possible."}
+                  </p>
+                  <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-4">
+                    <Link
+                      to="/nosotros"
+                      className="inline-flex rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white"
+                    >
+                      {c.people.ctaLink}
+                    </Link>
+                    {!isIntermedio && (
+                      <Link
+                        to="/trabaja-con-nosotros"
+                        className="inline-flex items-center justify-center rounded-full border border-white/25 px-7 py-3.5 text-sm font-semibold text-foreground transition-colors hover:border-white/50 hover:bg-white/5"
+                      >
+                        {c.people.careersLink}
+                      </Link>
+                    )}
+                  </div>
+                </div>
+              </AnimatedContent>
             </div>
-          </AnimatedContent>
+          </div>
         </section>
 
-        {/* CTA final */}
-        <section className="bg-primary px-5 py-20">
-          <AnimatedContent className="mx-auto max-w-4xl text-center">
-            <h2 className="text-3xl font-bold text-primary-foreground sm:text-4xl">
-              {c.finalCta.heading}
-            </h2>
-            <a
-              ref={finalCta.ref}
-              onMouseDown={finalCta.press}
-              href="#contacto"
-              className="mt-8 inline-flex rounded-full bg-ink px-8 py-3.5 text-sm font-semibold text-foreground transition-opacity hover:opacity-90"
-            >
-              {c.finalCta.button}
-            </a>
+        {/* Stack: entre "Nuestra gente" y las oficinas */}
+        <section className="px-5 py-20 sm:py-24">
+          <div className="mx-auto max-w-6xl">
+            <AnimatedContent>
+              <h2 className="text-2xl font-bold tracking-tight">{c.stack.heading}</h2>
+              <LogoLoop
+                className="mt-6"
+                speed={38}
+                gap={8}
+                pauseOnHover
+                fadeOutColor="var(--background)"
+                logos={TECH.map((t) => (
+                  <span
+                    key={t.name}
+                    className="inline-flex h-28 w-32 flex-col items-center justify-center gap-2.5 px-3"
+                  >
+                    {/* El nombre ya está en texto: el logo es decorativo. */}
+                    <img
+                      src={t.src}
+                      alt=""
+                      decoding="async"
+                      width={44}
+                      height={44}
+                      className="h-11 w-11 shrink-0 object-contain"
+                    />
+                    <span className="text-xs font-medium text-muted-foreground">{t.name}</span>
+                  </span>
+                ))}
+              />
+            </AnimatedContent>
+          </div>
+        </section>
+
+        {/* Oficinas + certificación — separador entre "Nuestra gente" y el contacto */}
+        <section className="border-y border-primary bg-card/50 px-5 py-14">
+          <AnimatedContent className="mx-auto flex max-w-6xl flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
+            <h2 className="text-2xl font-bold tracking-tight">{c.footer.officesHeading}</h2>
+            <ul className="grid gap-6 sm:grid-cols-3 lg:gap-14">
+              {c.footer.offices.map((o) => (
+                <li key={o.city}>
+                  <p className="font-display text-lg font-bold">{o.city}</p>
+                  <p className="text-sm text-muted-foreground">{o.country}</p>
+                </li>
+              ))}
+            </ul>
           </AnimatedContent>
         </section>
 
         {/* Contacto */}
-        <section id="contacto" className="px-5 py-24 sm:py-32">
+        <section id="contacto" className="relative z-10 px-5 py-24 sm:py-32">
           <div className="mx-auto max-w-2xl">
             <AnimatedContent>
-              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">{c.contact.heading}</h2>
-              <p className="mt-3 text-muted-foreground">{c.contact.subtitle}</p>
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">
+                {contactType === "postulante"
+                  ? c.contact.candidateHeading
+                  : contactType === "consulta"
+                    ? c.contact.generalHeading
+                    : c.contact.heading}
+              </h2>
+              <p className="mt-3 text-lg leading-relaxed text-muted-foreground">
+                {contactType === "postulante"
+                  ? c.contact.candidateSubtitle
+                  : contactType === "consulta"
+                    ? c.contact.generalSubtitle
+                    : c.contact.subtitle}
+              </p>
 
               <div className="mt-8 inline-flex flex-wrap gap-1.5 rounded-2xl border border-border bg-card p-1.5">
                 {(
@@ -504,7 +585,8 @@ function Home() {
               </div>
 
               <form
-                className="mt-8 grid gap-5 sm:grid-cols-2"
+                id="formulario-contacto"
+                className="mt-8 grid scroll-mt-28 gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   const formEl = e.currentTarget;
@@ -516,6 +598,7 @@ function Home() {
                       toast.success(c.contact.success);
                       formEl.reset();
                       setContactType("empresa");
+                      setProducto(null);
                       setSelectedPosition("");
                       setEmpresaValue("");
                       setPaisValue("");
@@ -531,6 +614,33 @@ function Home() {
                 }}
               >
                 <input type="hidden" name="contactType" value={contactType} />
+                {/* Id del aviso del feed de AR Recruiting, si la postulación
+                    viene de una búsqueda concreta. Vacío = postulación
+                    espontánea. */}
+                <input type="hidden" name="aviso_id" value={avisoId} />
+                {producto && contactType !== "postulante" && (
+                  <div className="flex items-center gap-2 sm:col-span-2">
+                    <input
+                      type="hidden"
+                      name="producto"
+                      value={c.solutions.products.find((p) => p.id === producto)?.name ?? ""}
+                    />
+                    <span className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-card py-1.5 pr-2 pl-4 text-sm">
+                      <span className="text-muted-foreground">{c.contact.productLabel}:</span>
+                      <span className="font-semibold">
+                        {c.solutions.products.find((p) => p.id === producto)?.name}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setProducto(null)}
+                        aria-label={c.contact.productRemove}
+                        className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground transition-colors hover:text-foreground"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  </div>
+                )}
                 <input type="hidden" name="formStartedAt" value={formStartedAt} />
                 {/* Honeypot anti-bot: invisible para personas, los bots que
                     autocompletan todo el formulario sí lo llenan (ver
@@ -543,25 +653,54 @@ function Home() {
                   aria-hidden="true"
                   className="pointer-events-none absolute left-[-9999px] h-0 w-0 opacity-0"
                 />
-                <Field id="nombre" label={c.contact.fields.name} />
-                <Field id="email" label={c.contact.fields.email} type="email" />
+                <Field
+                  id="nombre"
+                  label={c.contact.fields.name}
+                  placeholder={lang === "ES" ? "Tu nombre completo" : "Your full name"}
+                />
+                <Field
+                  id="email"
+                  label={c.contact.fields.email}
+                  type="email"
+                  placeholder={lang === "ES" ? "nombre@ejemplo.com" : "name@example.com"}
+                />
 
-                {contactType === "empresa" && (
-                  <Field id="empresa" label={c.contact.fields.company} value={empresaValue} onChange={setEmpresaValue} />
-                )}
-                {contactType === "postulante" && (
-                  <Field id="telefono" label={c.contact.fields.phone} type="tel" value={telefonoValue} onChange={setTelefonoValue} />
-                )}
-
-                {contactType !== "consulta" && (
-                  <SelectField
-                    id="pais"
-                    label={c.contact.fields.country}
-                    options={c.contact.countries}
-                    value={paisValue}
-                    onChange={setPaisValue}
+                {(contactType === "empresa" || contactType === "consulta") && (
+                  <Field
+                    id="empresa"
+                    label={c.contact.fields.company}
+                    placeholder={lang === "ES" ? "Nombre de tu empresa" : "Your company name"}
+                    value={empresaValue}
+                    onChange={setEmpresaValue}
+                    required={contactType === "empresa"}
+                    optionalLabel={
+                      contactType === "consulta"
+                        ? c.frameworkModal.fields.companyOptional
+                        : undefined
+                    }
                   />
                 )}
+                {(contactType === "empresa" ||
+                  contactType === "postulante" ||
+                  contactType === "consulta") && (
+                  <Field
+                    id="telefono"
+                    label={c.contact.fields.phone}
+                    type="tel"
+                    placeholder="+54 9 351 123 4567"
+                    value={telefonoValue}
+                    onChange={setTelefonoValue}
+                  />
+                )}
+
+                <SelectField
+                  id="pais"
+                  label={c.contact.fields.country}
+                  options={c.contact.countries}
+                  value={paisValue}
+                  onChange={setPaisValue}
+                  className={contactType !== "postulante" ? "sm:col-span-2" : undefined}
+                />
 
                 {contactType === "empresa" && (
                   <div className="sm:col-span-2">
@@ -588,21 +727,23 @@ function Home() {
                       <label htmlFor="puesto" className="text-sm font-medium">
                         {c.contact.fields.position}
                       </label>
-                      <select
+                      {/* Texto libre: las búsquedas reales viven en el feed y se
+                          postula a ellas desde /trabaja-con-nosotros. Con
+                          ?aviso= el puesto llega fijo, desde el feed. */}
+                      <input
                         id="puesto"
                         name="puesto"
-                        value={puestoSelectValue}
+                        type="text"
+                        value={selectedPosition}
                         onChange={(e) => setSelectedPosition(e.target.value)}
-                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-                      >
-                        <option value="">—</option>
-                        {c.careers.positions.map((p) => (
-                          <option key={p.title} value={p.title}>
-                            {p.title}
-                          </option>
-                        ))}
-                        <option value="otro">{c.contact.fields.positionOther}</option>
-                      </select>
+                        readOnly={avisoId !== ""}
+                        placeholder={
+                          lang === "ES"
+                            ? "Ej.: Desarrollador/a Full Stack"
+                            : "e.g. Full Stack Developer"
+                        }
+                        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm read-only:opacity-70"
+                      />
                     </div>
                     <div className="sm:col-span-2">
                       <label htmlFor="cv" className="text-sm font-medium">
@@ -628,6 +769,9 @@ function Home() {
                     name="mensaje"
                     value={mensajeValue}
                     onChange={(e) => setMensajeValue(e.target.value)}
+                    placeholder={
+                      lang === "ES" ? "Contanos en qué podemos ayudarte" : "Tell us how we can help"
+                    }
                     rows={contactType === "consulta" ? 4 : 5}
                     required={contactType !== "postulante"}
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
@@ -639,7 +783,7 @@ function Home() {
                     onMouseDown={submitCta.press}
                     type="submit"
                     disabled={sendState === "sending"}
-                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark disabled:cursor-not-allowed disabled:opacity-60"
+                    className="rounded-full bg-primary px-7 py-3.5 text-sm font-semibold text-primary-foreground transition-colors hover:bg-brand-dark hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {sendState === "sending" ? c.contact.submitting : c.contact.submit}
                   </button>
@@ -650,7 +794,7 @@ function Home() {
         </section>
       </main>
 
-      <footer className="px-5 py-16 text-muted-foreground">
+      <footer className="relative z-10 px-5 py-16 text-muted-foreground">
         <div className="mx-auto grid max-w-6xl gap-10 md:grid-cols-4">
           <div>
             <LogoMark className="h-14 w-auto text-foreground" />
@@ -696,25 +840,32 @@ function Field({
   id,
   label,
   type = "text",
+  placeholder,
   value,
   onChange,
+  required = true,
+  optionalLabel,
 }: {
   id: string;
   label: string;
   type?: string;
+  placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
+  required?: boolean;
+  optionalLabel?: string;
 }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium">
-        {label}
+        {label} {optionalLabel && <span className="text-muted-foreground">{optionalLabel}</span>}
       </label>
       <input
         id={id}
         name={id}
         type={type}
-        required
+        placeholder={placeholder}
+        required={required}
         value={value}
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
@@ -729,33 +880,35 @@ function SelectField({
   options,
   value,
   onChange,
+  className,
 }: {
   id: string;
   label: string;
   options: string[];
   value: string;
   onChange: (value: string) => void;
+  className?: string;
 }) {
   return (
-    <div>
+    <div className={className}>
       <label htmlFor={id} className="text-sm font-medium">
         {label}
       </label>
-      <select
-        id={id}
-        name={id}
-        required
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
-      >
-        <option value="" disabled>
-          —
-        </option>
-        {options.map((opt) => (
-          <option key={opt}>{opt}</option>
-        ))}
-      </select>
+      <Select value={value} onValueChange={onChange} name={id} required>
+        <SelectTrigger
+          id={id}
+          className="mt-2 h-auto w-full rounded-lg border-input bg-card px-4 py-3 text-left text-sm"
+        >
+          <SelectValue placeholder="—" />
+        </SelectTrigger>
+        <SelectContent side="bottom" avoidCollisions={false} className="max-h-64">
+          {options.map((opt) => (
+            <SelectItem key={opt} value={opt}>
+              {opt}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

@@ -29,7 +29,10 @@ function EpicenterPulse({ top, left, delay = 0 }: { top: number; left: number; d
       className="absolute flex h-9 w-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center"
       style={{ top: `${top}%`, left: `${left}%` }}
     >
-      <span className="epicenter-ring absolute inset-0 rounded-full border border-primary/65" style={{ animationDelay: `${delay}s` }} />
+      <span
+        className="epicenter-ring absolute inset-0 rounded-full border border-primary/65"
+        style={{ animationDelay: `${delay}s` }}
+      />
       <span
         className="epicenter-ring absolute inset-0 rounded-full border border-primary/65"
         style={{ animationDelay: `${delay + 0.9}s` }}
@@ -88,7 +91,8 @@ export function WorldMapSpotlight() {
         style={{
           height: SPOTLIGHT_SIZE,
           width: SPOTLIGHT_SIZE,
-          background: "radial-gradient(circle, var(--primary) 0%, var(--primary) 35%, transparent 70%)",
+          background:
+            "radial-gradient(circle, var(--primary) 0%, var(--primary) 35%, transparent 70%)",
           maskImage: "radial-gradient(closest-side, #fff 0%, transparent 100%)",
           WebkitMaskImage: "radial-gradient(closest-side, #fff 0%, transparent 100%)",
           willChange: "transform",

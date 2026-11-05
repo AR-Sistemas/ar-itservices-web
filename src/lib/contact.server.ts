@@ -54,6 +54,10 @@ function buildBody(data: ContactFormData) {
     data.pais && `País: ${data.pais}`,
     data.tipo && `Tipo de proyecto: ${data.tipo}`,
     data.puesto && `Puesto: ${data.puesto}`,
+    // Cuando la postulación viene de una búsqueda del feed, el id permite
+    // cruzarla contra el aviso en AR Recruiting. Vacío = espontánea.
+    data.avisoId && `Aviso (AR Recruiting): ${data.avisoId}`,
+    data.producto && `Producto de interés: ${data.producto}`,
     "",
     "Mensaje:",
     data.mensaje || "(sin mensaje)",
@@ -70,8 +74,10 @@ interface ContactFormData {
   pais: string;
   tipo: string;
   puesto: string;
+  producto: string;
   mensaje: string;
   cv: File | null;
+  avisoId: string;
   isLikelyBot: boolean;
 }
 
@@ -89,9 +95,19 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const honeypot = get("sitio_web");
     const startedAt = Number(get("formStartedAt"));
     const fillTime = Number.isFinite(startedAt) ? Date.now() - startedAt : 0;
-    const isLikelyBot = honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
+    const isLikelyBot =
+      honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
-    const shortFields = ["nombre", "email", "empresa", "telefono", "pais", "tipo", "puesto"];
+    const shortFields = [
+      "nombre",
+      "email",
+      "empresa",
+      "telefono",
+      "pais",
+      "tipo",
+      "puesto",
+      "aviso_id",
+    ];
     if (shortFields.some((k) => get(k).length > MAX_FIELD_LENGTH)) {
       throw new Error("Campo demasiado largo");
     }
@@ -117,8 +133,10 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       pais: get("pais"),
       tipo: get("tipo"),
       puesto: get("puesto"),
+      producto: get("producto"),
       mensaje: get("mensaje"),
       cv: cv instanceof File && cv.size > 0 ? cv : null,
+      avisoId: get("aviso_id"),
       isLikelyBot,
     };
   })
@@ -129,14 +147,12 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       return { ok: true as const };
     }
 
-    const apiKey = process.env.RESEND_API_KEY;
+    const apiKey = process.env["RESEND_API_KEY"];
     if (!apiKey) {
-      throw new Error(
-        "Falta configurar RESEND_API_KEY en las variables de entorno del servidor.",
-      );
+      throw new Error("Falta configurar RESEND_API_KEY en las variables de entorno del servidor.");
     }
 
-    const to = RECIPIENTS[data.contactType] ?? RECIPIENTS.consulta;
+    const to = RECIPIENTS[data.contactType] ?? "arconsultores@arconsultores.com.ar";
     const attachments = [];
     if (data.cv) {
       const buffer = Buffer.from(await data.cv.arrayBuffer());
@@ -147,10 +163,10 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const { error } = await resend.emails.send({
       from: FROM_ADDRESS,
       to,
-      replyTo: data.email || undefined,
+      ...(data.email ? { replyTo: data.email } : {}),
       subject: `Nuevo contacto (${data.contactType}) | ${data.nombre || "sin nombre"}`,
       text: buildBody(data),
-      attachments: attachments.length ? attachments : undefined,
+      ...(attachments.length ? { attachments } : {}),
     });
 
     if (error) {

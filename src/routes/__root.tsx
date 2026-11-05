@@ -14,10 +14,12 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LanguageProvider } from "@/i18n/language";
 import { Toaster } from "@/components/ui/sonner";
+import { ContactModalProvider } from "@/components/site/ContactModal";
 
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
+      <meta name="robots" content="noindex" />
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
         <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
@@ -37,7 +39,7 @@ function NotFoundComponent() {
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function ErrorComponent({ error, reset }: { error: unknown; reset: () => void }) {
   console.error(error);
   const router = useRouter();
   useEffect(() => {
@@ -89,6 +91,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Desarrollo de software, datos e IA y equipos dedicados.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://ar-itservices.com/ar-logo-white.png" },
+      { name: "twitter:image", content: "https://ar-itservices.com/ar-logo-white.png" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
@@ -118,6 +122,22 @@ function RootShell({ children }: { children: ReactNode }) {
     <html lang="es">
       <head>
         <HeadContent />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Organization",
+              name: "AR IT Services",
+              url: "https://ar-itservices.com/",
+              logo: "https://ar-itservices.com/ar-logo-white.png",
+              sameAs: [
+                "https://www.linkedin.com/showcase/ar-consultores1/",
+                "https://www.instagram.com/ar_consultores",
+              ],
+            }),
+          }}
+        />
       </head>
       <body>
         {children}
@@ -144,7 +164,9 @@ function RootComponent() {
       if (!hash) return;
       clearTimeout(timer);
       timer = setTimeout(() => {
-        document.getElementById(hash.slice(1))?.scrollIntoView({ behavior: "smooth", block: "start" });
+        document
+          .getElementById(hash.slice(1))
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     };
     scrollToHash();
@@ -159,7 +181,9 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
+        <ContactModalProvider>
+          <Outlet />
+        </ContactModalProvider>
         <Toaster position="bottom-right" richColors />
       </LanguageProvider>
     </QueryClientProvider>

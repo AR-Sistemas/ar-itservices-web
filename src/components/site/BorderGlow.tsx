@@ -31,10 +31,7 @@ export function BorderGlow({
       className={`border-glow group relative rounded-2xl p-px ${className}`}
     >
       <span className="border-glow-line" aria-hidden="true" />
-      <div
-        className="relative h-full rounded-[calc(1rem-1px)]"
-        style={{ background }}
-      >
+      <div className="relative h-full rounded-[calc(1rem-1px)]" style={{ background }}>
         {children}
       </div>
     </div>

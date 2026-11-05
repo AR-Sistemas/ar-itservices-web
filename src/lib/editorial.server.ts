@@ -16,8 +16,11 @@ const publicEditorialItemSchema = z.object({
     z.string().min(8).max(180),
     z.string().min(8).max(180),
   ]),
-  magazineUrl: z.string().url().refine((value) => new URL(value).protocol === "https:"),
-  podcast: z.object({ episodeId: z.string().min(1).max(100) }).nullable(),
+  magazineUrl: z
+    .string()
+    .url()
+    .refine((value) => new URL(value).protocol === "https:"),
+  podcast: z.object({ episodeId: z.string().regex(/^[A-Za-z0-9]{22}$/) }).nullable(),
   updatedAt: z.string().datetime({ offset: true }),
 });
 

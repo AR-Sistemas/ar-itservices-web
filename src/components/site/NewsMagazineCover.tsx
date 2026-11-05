@@ -56,9 +56,7 @@ export function NewsMagazineCover({
 
         <div className="relative">
           <p className="font-mono text-xs tracking-widest text-white/70 uppercase">{eyebrow}</p>
-          <p className="mt-6 font-mono text-[11px] tracking-widest text-white/60 uppercase">
-            {kicker}
-          </p>
+          <p className="mt-6 font-mono text-xs tracking-widest text-white/60 uppercase">{kicker}</p>
           <h3 className="mt-2 max-w-xl text-4xl leading-[1.05] font-extrabold tracking-tight text-white sm:text-5xl">
             {title}
           </h3>

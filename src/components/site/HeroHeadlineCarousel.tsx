@@ -27,7 +27,7 @@ function renderHighlighted(phrase: string) {
     const match = /^\*\*([^*]+)\*\*$/.exec(part);
     if (!match) return <span key={i}>{part}</span>;
     return (
-      <span key={i} className="text-primary">
+      <span key={i} className="text-brand">
         {match[1]}
       </span>
     );
@@ -120,9 +120,9 @@ export function HeroHeadlineCarousel({
       aria-roledescription="carousel"
       aria-label="Frases destacadas"
     >
-      <div className="grid cursor-grab active:cursor-grabbing">
+      <h1 className="grid cursor-grab active:cursor-grabbing">
         {phrases.map((phrase, i) => (
-          <h1
+          <span
             key={phrase}
             className="col-start-1 row-start-1 text-3xl leading-[1.05] font-extrabold tracking-tight text-balance transition-all duration-500 ease-out sm:text-5xl"
             style={{
@@ -133,9 +133,9 @@ export function HeroHeadlineCarousel({
             aria-hidden={i !== index}
           >
             {renderHighlighted(phrase)}
-          </h1>
+          </span>
         ))}
-      </div>
+      </h1>
 
       {phrases.length > 1 && (
         <div

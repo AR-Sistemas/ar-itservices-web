@@ -64,7 +64,7 @@ export function AnimatedContent({
         opacity: visible ? 1 : 0,
         transform: visible ? "none" : `${axis}(${offset}px) scale(${scale})`,
         transition: `opacity ${duration}ms cubic-bezier(0.22,1,0.36,1) ${delay}ms, transform ${duration}ms cubic-bezier(0.22,1,0.36,1) ${delay}ms`,
-        willChange: "opacity, transform",
+        willChange: visible ? "auto" : "opacity, transform",
       }}
     >
       {children}
