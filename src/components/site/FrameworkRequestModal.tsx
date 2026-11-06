@@ -165,7 +165,6 @@ export function FrameworkRequestModal({
               >
                 {sendState === "sending" ? c.submitting : c.submit}
               </button>
-              <p className="text-center text-xs text-muted-foreground">{c.footnote}</p>
             </form>
           </Dialog.Content>
         </Dialog.Overlay>

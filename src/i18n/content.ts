@@ -165,7 +165,6 @@ export type SiteContent = {
     fields: { name: string; email: string; company: string; companyOptional: string };
     submit: string;
     submitting: string;
-    footnote: string;
     closeLabel: string;
     successToast: (frameworkTitle: string) => string;
     errorToast: string;
@@ -781,7 +780,6 @@ const ES: SiteContent = {
     },
     submit: "Solicitar por mail",
     submitting: "Enviando…",
-    footnote: "Te va a llegar un mail con el material adjunto en un momento.",
     closeLabel: "Cerrar",
     successToast: (frameworkTitle) => `Listo, te enviamos ${frameworkTitle} por mail.`,
     errorToast: "No pudimos enviar el material. Probá de nuevo en unos minutos.",
@@ -1416,7 +1414,6 @@ const EN: SiteContent = {
     },
     submit: "Request by email",
     submitting: "Sending…",
-    footnote: "You'll get an email with the material attached in a moment.",
     closeLabel: "Close",
     successToast: (frameworkTitle) => `Done. We sent you ${frameworkTitle} by email.`,
     errorToast: "We couldn't send the material. Please try again in a few minutes.",
