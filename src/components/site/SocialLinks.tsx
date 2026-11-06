@@ -2,12 +2,12 @@ export function SocialLinks() {
   const links = [
     {
       name: "LinkedIn",
-      href: "https://www.linkedin.com/showcase/ar-consultores1/posts/?feedView=all",
+      href: "https://ar.linkedin.com/company/ar-itservices",
       icon: LinkedInIcon,
     },
     {
       name: "Instagram",
-      href: "https://www.instagram.com/ar_consultores",
+      href: "https://www.instagram.com/ar_itservices/",
       icon: InstagramIcon,
     },
     {

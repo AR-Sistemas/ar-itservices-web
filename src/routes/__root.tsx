@@ -132,8 +132,8 @@ function RootShell({ children }: { children: ReactNode }) {
               url: "https://ar-itservices.com/",
               logo: "https://ar-itservices.com/ar-logo-white.png",
               sameAs: [
-                "https://www.linkedin.com/showcase/ar-consultores1/",
-                "https://www.instagram.com/ar_consultores",
+                "https://ar.linkedin.com/company/ar-itservices",
+                "https://www.instagram.com/ar_itservices/",
               ],
             }),
           }}
