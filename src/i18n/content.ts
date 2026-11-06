@@ -34,9 +34,25 @@ export type SolutionProduct = {
   name: string;
   /** Clasificación que se muestra como etiqueta en la tarjeta: marco de trabajo o producto. */
   kind: "framework" | "product";
+  /** Título y descripción de la cabecera de la ficha. */
   tagline: string;
   short: string;
+  /** Título y descripción de la tarjeta del home; si faltan, se usan `tagline` y `short`. */
+  cardTitle?: string;
+  cardDesc?: string;
+  /** Texto del problema; los párrafos se separan con una línea en blanco. */
   problem: string;
+  /** Sección extra después del problema (ARIA: "Cómo se aplica ARIA"). */
+  apply?: { heading: string; body: string };
+  /** Texto debajo del título de la sección de pasos. */
+  howIntro?: string;
+  /** Textos propios de los botones de la cabecera (si faltan: el título de la sección y `solutions.contactCta`). */
+  howCta?: string;
+  contactCta?: string;
+  /** Título propio de la sección "A quién está dirigido". */
+  audienceLabel?: string;
+  /** Cierre de la ficha con título, texto y un botón que abre el formulario de contacto. */
+  closing?: { heading: string; body: string; button: string };
   example?: string;
   steps: string[];
   features: { title: string; desc: string }[];
@@ -541,150 +557,173 @@ const ES: SiteContent = {
         short:
           "Un marco de trabajo para definir objetivos, identificar casos de uso, establecer responsables y evaluar resultados durante la incorporación de inteligencia artificial.",
         problem:
-          "Convertir «usar IA» en «ganar terreno de negocio con IA» requiere que todas las piezas de la organización apunten hacia el mismo lado. Sin un núcleo estratégico claro, los bloques restantes optimizan hacia direcciones distintas, y una falla persistente en cualquiera degrada al conjunto.",
-        howLabel: "Cómo se articulan los 9 bloques",
-        featuresLabel: "Los 9 bloques",
+          "Incorporar herramientas de inteligencia artificial no significa necesariamente contar con una estrategia para utilizarlas.\n\nCuando las iniciativas se desarrollan de forma aislada, pueden aparecer dificultades para establecer prioridades, gestionar riesgos, preparar a los equipos y evaluar resultados.\n\nARIA permite abordar estas decisiones de manera coordinada, vinculando las iniciativas de IA con los objetivos y las capacidades de cada organización.",
+        apply: {
+          heading: "Cómo se aplica ARIA",
+          body: "ARIA parte de un diagnóstico de la situación actual de la empresa. Se identifican las iniciativas existentes, las oportunidades de aplicación y los aspectos que necesitan atención.\n\nA partir de ese análisis, se priorizan las acciones y se define un plan de trabajo, con responsables, entregables e indicadores de seguimiento.\n\nLos nueve bloques se trabajan de manera coordinada. Su alcance y profundidad se ajustan a las necesidades y al nivel de preparación de cada organización.",
+        },
+        howLabel: "Los nueve bloques de ARIA",
+        howIntro:
+          "Una estrategia central y cuatro dimensiones complementarias permiten organizar la adopción de inteligencia artificial.",
         steps: [
-          "EA · Estrategia + IA es el núcleo: define para qué, para quién y con qué éxito, y prioriza las iniciativas.",
-          "GL · Governance y Límites pone las reglas del juego y los controles sobre cómo se usa la IA.",
-          "PR · Personas y roles define las capacidades, el entrenamiento y los roles nuevos que hacen falta.",
-          "DA · Data aporta datos de calidad y con linaje: la base sobre la que corre la IA.",
-          "IN · Ingeniería construye sobre esa base, con arquitectura de referencia y prácticas AI-native.",
-          "KS · Knowledge sharing hace que lo aprendido (prompts, agentes, patrones) se comparta y se reutilice.",
-          "IC · Innovación controlada prueba ideas nuevas en experimentos acotados antes de llevarlas a producción.",
-          "GC · Gestión del cambio acompaña la adopción de las personas, por etapas y con comunicación constante.",
-          "PM · Perfeccionamiento y madurez revisa, retira lo obsoleto y hace evolucionar el sistema completo.",
+          "Definir dónde y para qué utilizar inteligencia artificial.",
+          "Establecer reglas y controles para el uso responsable de IA.",
+          "Preparar a los equipos para trabajar con inteligencia artificial.",
+          "Preparar los datos que necesitan las iniciativas de IA.",
+          "Definir cómo desarrollar y mantener soluciones con IA.",
+          "Compartir y reutilizar el conocimiento de los equipos.",
+          "Evaluar nuevas aplicaciones de IA antes de implementarlas.",
+          "Acompañar a las personas durante la incorporación de IA.",
+          "Evaluar resultados y mejorar la adopción de IA.",
         ],
         features: [
           {
-            title: "EA · Estrategia + IA",
-            desc: "Define para qué, para quién y con qué éxito medible. Prioriza el portfolio de iniciativas y establece ownership ejecutivo.",
+            title: "EA — Estrategia + IA",
+            desc: "Identifica los objetivos empresariales y prioriza las iniciativas de IA según su impacto, esfuerzo y resultados esperados.\n\nDetalle: Incluye el análisis de oportunidades, la definición de responsables y el establecimiento de indicadores para evaluar cada iniciativa.",
           },
           {
-            title: "GL · Governance y Límites",
-            desc: "Reglas del juego y controles operativos: catálogo autorizado, políticas de datos, guardrails técnicos, monitoreo e incident response.",
+            title: "GL — Governance y Límites",
+            desc: "Define qué herramientas pueden utilizarse, cómo debe tratarse la información y quiénes son responsables de supervisar su uso.\n\nDetalle: Contempla políticas de uso, clasificación de datos, evaluación de riesgos, controles técnicos y procedimientos ante incidentes.",
           },
           {
-            title: "PR · Personas y roles",
-            desc: "Capacidades esperadas por rol, entrenamiento por nivel, roles nuevos (AI PO, MLOps, evaluadores) y modelo de madurez individual.",
+            title: "PR — Personas y roles",
+            desc: "Identifica las capacidades que necesita cada puesto de trabajo y establece las responsabilidades vinculadas al uso de IA.\n\nDetalle: Incluye el relevamiento de habilidades, la planificación de capacitaciones y la definición de nuevas funciones cuando sean necesarias.",
           },
           {
-            title: "DA · Data",
-            desc: "Arquitectura, calidad y linaje de datos, data como producto interno y patrones para IA (RAG, embeddings, vector stores).",
+            title: "DA — Data",
+            desc: "Evalúa la disponibilidad, calidad y accesibilidad de la información que se utilizará en los procesos y sistemas de inteligencia artificial.\n\nDetalle: Comprende la organización de fuentes de datos, los criterios de calidad, la trazabilidad y las condiciones de acceso y tratamiento de la información.",
           },
           {
-            title: "IN · Ingeniería",
-            desc: "Arquitectura de referencia, MLOps/LLMOps y prácticas AI-native (Copilot, spec-driven, componentes reusables).",
+            title: "IN — Ingeniería",
+            desc: "Establece prácticas técnicas para diseñar, desarrollar, probar e implementar soluciones de inteligencia artificial.\n\nDetalle: Incluye criterios de arquitectura, integración, evaluación, despliegue y monitoreo de las soluciones desarrolladas.",
           },
           {
-            title: "KS · Knowledge sharing",
-            desc: "Marketplace interno curado de prompts, agentes y patrones, con versionado y comunidades de práctica.",
+            title: "KS — Knowledge sharing",
+            desc: "Organiza los aprendizajes y recursos generados durante el uso de IA para que puedan aprovecharse en otros proyectos.\n\nDetalle: Contempla la documentación y el mantenimiento de instrucciones, agentes, componentes y buenas prácticas, con criterios de actualización y reutilización.",
           },
           {
-            title: "IC · Innovación controlada",
-            desc: "Portfolio acotado de experimentos, sandbox aislado y gates formales de prototipo a piloto y de piloto a producción.",
+            title: "IC — Innovación controlada",
+            desc: "Permite desarrollar pruebas y experimentos con objetivos definidos, recursos delimitados y criterios para evaluar los resultados.\n\nDetalle: Establece condiciones para iniciar, continuar, modificar o descartar iniciativas antes de su incorporación a los procesos habituales.",
           },
           {
-            title: "GC · Gestión del cambio",
-            desc: "Adopción escalonada por waves, comunicación consistente, champions locales y manejo de resistencias.",
+            title: "GC — Gestión del cambio",
+            desc: "Planifica las acciones necesarias para que los equipos comprendan y adopten los cambios en sus actividades y procesos de trabajo.\n\nDetalle: Incluye comunicación interna, formación, acompañamiento por áreas y seguimiento de la adopción.",
           },
           {
-            title: "PM · Perfeccionamiento y madurez",
-            desc: "Revisión periódica del portfolio, retiro disciplinado de lo obsoleto, evolución del framework y escalamiento del nivel de madurez.",
+            title: "PM — Perfeccionamiento y madurez",
+            desc: "Establece mecanismos de revisión para conocer los avances y adaptar las iniciativas a las necesidades de la organización.\n\nDetalle: Incluye el seguimiento de indicadores, la evaluación de capacidades y la actualización o finalización de iniciativas que dejaron de aportar resultados.",
           },
         ],
+        closing: {
+          heading: "¿Querés evaluar cómo incorporar IA en tu empresa?",
+          body: "Conversemos sobre las iniciativas actuales, las oportunidades de aplicación y los aspectos que conviene abordar primero.",
+          button: "Consultar sobre ARIA",
+        },
         requestCta: "Descubrí el framework",
       },
       {
         id: "ario",
         name: "ARIO",
         kind: "product",
-        tagline: "Convertí documentos en datos utilizables.",
+        tagline: "Tus documentos, convertidos en datos.",
         short:
+          "ARIO utiliza inteligencia artificial para extraer y organizar información de distintos documentos, facilitando su uso en planillas y procesos administrativos.",
+        cardTitle: "Convertí documentos en datos utilizables.",
+        cardDesc:
           "Extrae y organiza información de facturas y otros documentos para que puedas revisarla y utilizarla en tus procesos de trabajo.",
         problem:
-          "Muchas empresas siguen pasando a mano los datos de facturas, comprobantes y documentos de identidad. Es lento, repetitivo y genera errores.",
+          "La carga manual de información de facturas y otros documentos demanda tiempo y requiere revisar cada dato antes de incorporarlo a una planilla o sistema.\n\nARIO permite realizar la extracción de forma automática y revisar los resultados desde un mismo proceso de trabajo.",
         example:
-          "Una administración recibe 200 facturas de proveedores a fin de mes y alguien tiene que copiar CUIT, fecha, número e importes una por una en una planilla. Con ARIO las sube todas juntas y recibe los datos ordenados.",
+          "Un equipo administrativo recibe 200 facturas de proveedores y necesita registrar los datos de cada comprobante.\n\nEn lugar de copiar manualmente el CUIT, las fechas, los números y los importes, puede cargar los archivos en ARIO, obtener la información organizada y revisar los resultados antes de exportarlos.",
         steps: [
-          "Subís uno o varios documentos (PDF o foto).",
-          "Elegís qué tipo de documento es: general, DNI, Factura ARCA o uno con tus propios campos.",
-          "ARIO lee el documento y saca los datos automáticamente.",
-          "Revisás y corregís lo que haga falta.",
-          "Exportás los datos listos para usar.",
+          "Seleccioná uno o varios documentos en formato PDF o imagen y cargalos en ARIO.",
+          "Elegí una plantilla disponible o definí qué información necesitás extraer.",
+          "ARIO utiliza inteligencia artificial para identificar y extraer los datos solicitados de los documentos.",
+          "Revisá la información obtenida y corregí los campos que lo requieran.",
+          "Exportá los resultados organizados para utilizarlos en tus procesos de trabajo.",
         ],
         features: [
           {
-            title: "Lectura inteligente",
-            desc: "Entiende PDFs y fotos, incluso escaneados.",
+            title: "Extracción de información",
+            desc: "Identifica datos en documentos digitales y archivos escaneados compatibles.",
           },
           {
-            title: "Plantillas para Argentina",
-            desc: "Reconoce Factura ARCA y DNI sin configurar nada.",
+            title: "Plantillas de documentos",
+            desc: "Incluye opciones preconfiguradas para facturas y documentos de identidad.",
           },
           {
             title: "Campos personalizados",
-            desc: "Se adapta a cualquier documento de tu negocio.",
-          },
-          { title: "Carga en lote", desc: "Procesa muchos documentos de una sola vez." },
-          {
-            title: "Validación humana",
-            desc: "Una persona revisa antes de usar los datos, así hay control y confianza.",
+            desc: "Permite definir qué información necesitás extraer según el documento.",
           },
           {
-            title: "Exportación",
-            desc: "Los datos salen listos para planillas u otros sistemas.",
+            title: "Procesamiento por lotes",
+            desc: "Admite la carga de varios archivos para procesarlos en una misma operación.",
+          },
+          {
+            title: "Revisión de resultados",
+            desc: "Permite consultar y corregir los datos extraídos antes de exportarlos.",
+          },
+          {
+            title: "Exportación de datos",
+            desc: "Organiza los resultados para su utilización posterior en planillas y otros procesos.",
           },
         ],
+        howCta: "Conocer cómo funciona",
+        contactCta: "Consultar sobre ARIO",
+        audienceLabel: "¿A quién está dirigido?",
         audience:
-          "PyMEs y equipos administrativos, contables y de operaciones que manejan muchos documentos.",
+          "ARIO está pensado para empresas y equipos que necesitan registrar información de manera recurrente a partir de documentos.\n\nPuede aplicarse en tareas administrativas, contables y operativas que requieran extraer, revisar y organizar datos de facturas, comprobantes y otros archivos compatibles.",
       },
       {
         id: "meetingmate",
         name: "MeetingMate",
         kind: "product",
-        tagline: "Identificá lo importante de cada reunión.",
+        tagline: "Identificá lo importante durante cada reunión.",
         short:
+          "MeetingMate es un asistente de inteligencia artificial que analiza conversaciones y sugiere preguntas, posibles riesgos y acciones mientras la reunión está en curso.",
+        cardTitle: "Identificá lo importante de cada reunión.",
+        cardDesc:
           "Analiza la conversación y sugiere preguntas, posibles riesgos y acciones mientras el equipo se reúne.",
         problem:
-          "En las reuniones se habla rápido y lo importante se pierde: una pregunta que nadie hizo, un riesgo que quedó en el aire, un compromiso sin responsable. Hoy alguien toma notas a mano y se pierde parte de la charla, o se revisa todo recién después, cuando ya no se puede reaccionar.",
+          "Durante una reunión pueden surgir cambios, decisiones y compromisos que no siempre quedan registrados o se revisan a tiempo.\n\nTomar notas y participar de la conversación al mismo tiempo puede resultar difícil. Revisar lo sucedido después permite recuperar información, pero no abordar los temas mientras se están tratando.\n\nMeetingMate ayuda a identificar estas situaciones durante la reunión para que el equipo pueda evaluarlas en el momento.",
         example:
-          "En una reunión de seguimiento de proyecto el cliente menciona de pasada que cambió un requisito. Nadie lo anota y dos semanas después aparece como un retraso. MeetingMate lo muestra en pantalla como un riesgo en el momento, cuando todavía se puede aclarar.",
+          "Durante una reunión de seguimiento, un cliente menciona que cambió un requisito del proyecto.\n\nMeetingMate puede identificar ese cambio como un posible riesgo y sugerir que el equipo revise su impacto, aclare el alcance y defina los próximos pasos antes de finalizar la reunión.",
         steps: [
-          "Se prepara la reunión: se carga el proyecto, el objetivo, los participantes y los documentos de referencia.",
-          "Se graba: MeetingMate toma el audio del micrófono (reuniones presenciales) o también el de la computadora (reuniones virtuales).",
-          "Se transcribe y se analiza: la IA revisa la conversación con todo el contexto del proyecto.",
-          "Aparecen tarjetas: preguntas, riesgos y acciones, visibles para todos los presentes.",
-          "El equipo reacciona: atiende, descarta (indicando el motivo) o reabre cada tarjeta, y queda todo registrado.",
+          "Prepará la reunión con el objetivo, los participantes y la información de referencia del proyecto.",
+          "Iniciá la captura de audio desde el micrófono o la computadora, según el tipo de reunión.",
+          "MeetingMate transcribe la conversación y utiliza inteligencia artificial para analizarla con el contexto disponible.",
+          "Durante la reunión, muestra sugerencias de preguntas, posibles riesgos y acciones para que el equipo pueda revisarlas.",
+          "El equipo puede atender, descartar o reabrir las sugerencias y consultar su historial.",
         ],
         features: [
           {
             title: "Captura en vivo",
-            desc: "Graba micrófono y audio de la computadora, así funciona en reuniones presenciales y virtuales.",
+            desc: "Registra el audio desde el micrófono o la computadora para analizar reuniones presenciales y virtuales.",
           },
           {
             title: "Identificación de oradores",
-            desc: "Cada intervención queda registrada y asociable a un participante.",
+            desc: "Organiza las intervenciones por orador para facilitar la revisión de la conversación y su asociación con los participantes.",
           },
           {
-            title: "Tarjetas de pregunta, riesgo y acción",
-            desc: "Lo importante aparece en pantalla sin que nadie tenga que anotarlo.",
+            title: "Tarjetas de preguntas, riesgos y acciones",
+            desc: "Presenta sugerencias generadas mediante inteligencia artificial durante la reunión, para que el equipo pueda evaluarlas.",
           },
           {
             title: "Contexto del proyecto",
-            desc: "Usa objetivos, roles, participantes, documentos y reuniones previas para sugerir con criterio.",
+            desc: "Considera los objetivos, participantes y documentos de referencia disponibles para generar sugerencias relacionadas con los temas de la reunión.",
           },
           {
-            title: "Seguimiento automático",
-            desc: "Evita tarjetas repetidas y marca como resueltas las que la conversación ya cerró, con historial para revisarlas o reabrirlas.",
+            title: "Seguimiento de sugerencias",
+            desc: "Permite consultar el estado y el historial de las sugerencias, así como revisarlas o reabrirlas cuando sea necesario.",
           },
           {
             title: "También con audios grabados",
-            desc: "Se puede subir un archivo de audio y obtener su transcripción.",
+            desc: "Permite cargar un archivo de audio previamente grabado y obtener su transcripción para revisarla posteriormente.",
           },
         ],
+        contactCta: "Consultar sobre MeetingMate",
         audience:
-          "Equipos que se reparten el trabajo en reuniones recurrentes: líderes de proyecto, scrum masters, project managers, áreas comerciales y de cuentas, consultoras y equipos de producto o IT.",
+          "MeetingMate está pensado para equipos que realizan reuniones periódicas de planificación, seguimiento y coordinación.\n\nPuede utilizarse en la gestión de proyectos, el desarrollo de software, la consultoría y otras actividades que requieran identificar riesgos, revisar decisiones y coordinar acciones durante las reuniones.",
       },
       {
         id: "sdd",
@@ -692,40 +731,42 @@ const ES: SiteContent = {
         kind: "framework",
         tagline: "Un criterio compartido para desarrollar con agentes de IA.",
         short:
+          "CriterIA propone una forma de trabajo compartida para integrar agentes de inteligencia artificial al desarrollo de software. Junto a cada equipo, se definen criterios de delegación, contexto, revisión y registro de decisiones, según las necesidades del proyecto.",
+        cardDesc:
           "Un marco de trabajo para que los equipos definan instrucciones, registren decisiones y establezcan prácticas de revisión al desarrollar software con agentes de inteligencia artificial.",
         problem:
-          "Un mismo equipo puede usar agentes con instrucciones, fuentes y hábitos distintos. Cada resultado parece útil por separado, pero al integrarlo hay que corregirlo porque no consideró una decisión vigente o el trabajo de otra persona, y el conocimiento queda atrapado en conversaciones aisladas.",
+          "Un mismo equipo puede utilizar agentes de IA con instrucciones, referencias y formas de trabajo diferentes.\n\nLos resultados pueden requerir correcciones al integrarse porque no consideran decisiones vigentes, restricciones del proyecto o el trabajo de otros integrantes.\n\nAdemás, parte del conocimiento queda disperso en conversaciones y herramientas, lo que dificulta que otra persona pueda continuar una tarea.",
         steps: [
-          "Descubrir: relevamos con el equipo un caso real, quiénes participan, qué herramientas de IA usan, dónde deciden y cómo validan.",
-          "Acordar: definimos juntos qué se delega a los agentes, qué contexto se comparte, quién revisa y quién acepta el trabajo.",
-          "Implementar lo necesario: preparamos el contexto, las reglas y las decisiones e implementamos agentes, skills, verificaciones y buenas prácticas en las herramientas existentes, ajustados a cada rol. La arquitectura propia, solo si el caso la requiere.",
-          "Probar: aplicamos la práctica a tareas acotadas y reversibles, con pruebas y observaciones del equipo.",
-          "Evaluar y mejorar: comparamos calidad, retrabajo y esfuerzo total con la práctica anterior y actualizamos agentes, skills y referencias con lo aprendido.",
+          "Descubrir: relevamos junto al equipo un caso real, las herramientas que utiliza, sus responsabilidades y las dificultades de su forma de trabajo actual.",
+          "Acordar: definimos qué tareas conviene delegar a los agentes, qué contexto compartir, quién revisa los resultados y cómo registrar las decisiones.",
+          "Preparar lo necesario: adaptamos instrucciones, referencias y verificaciones a las herramientas existentes. Incorporamos componentes técnicos adicionales solo cuando el proyecto los necesita.",
+          "Probar: aplicamos la práctica a tareas acotadas, con criterios de aceptación y revisiones acordadas junto al equipo.",
+          "Evaluar y continuar: comparamos calidad, correcciones y esfuerzo total con la práctica anterior. Registramos los aprendizajes para mantener y mejorar la forma de trabajo.",
         ],
         features: [
           {
             title: "Acuerdos y contexto compartido",
-            desc: "Definimos qué delegar, quién revisa y decide, y qué referencias y decisiones vigentes comparte el equipo.",
+            desc: "Definimos con cada equipo qué tareas delegar, qué información utilizar, quién revisa los resultados y cómo conservar las decisiones del proyecto.",
           },
           {
             title: "Agentes, skills y verificaciones",
-            desc: "Los configuramos para cada proyecto y rol, en las herramientas que el equipo ya usa.",
+            desc: "Revisamos las herramientas y los agentes que utiliza el equipo. Ajustamos instrucciones, incorporamos recursos reutilizables y definimos verificaciones según las necesidades del proyecto.",
           },
           {
             title: "Revisión humana proporcional",
-            desc: "El equipo conserva el criterio y la responsabilidad; los controles se ajustan a la tarea y al riesgo.",
+            desc: "Establecemos quién revisa y acepta las contribuciones de los agentes, con controles adecuados a la complejidad y al riesgo de cada tarea.",
           },
           {
             title: "Límites y permisos",
-            desc: "El acceso se controla en las herramientas y las acciones relevantes requieren aprobación previa.",
+            desc: "Acordamos qué acciones pueden realizar los agentes y cuáles requieren autorización. Los permisos efectivos deben aplicarse en las herramientas y servicios correspondientes.",
           },
           {
             title: "Acompañamiento y mejora continua",
-            desc: "Registramos decisiones, probamos en un caso acotado y ajustamos la práctica junto al equipo.",
+            desc: "Probamos la práctica junto al equipo, evaluamos sus resultados y registramos decisiones y aprendizajes para facilitar su continuidad.",
           },
         ],
         audience:
-          "Equipos de desarrollo internos y de clientes que ya usan IA de manera individual y quieren una práctica compartida: dirección, responsables de proyecto, ingeniería, QA, arquitectura, datos y seguridad.",
+          "CriterIA está orientado a equipos de desarrollo de software que buscan incorporar agentes de inteligencia artificial o mejorar la forma en que ya trabajan con ellos.\n\nPuede aplicarse a equipos internos y de clientes, involucrando a responsables de proyecto, desarrolladores, QA, arquitectura y otras especialidades según las necesidades de cada caso.",
       },
     ],
   },
@@ -750,7 +791,7 @@ const ES: SiteContent = {
     officesHeading: "Oficinas",
     sectionsHeading: "Secciones",
     followHeading: "Seguinos",
-    legal: "© 2026 AR Consultores SRL. Todos los derechos reservados.",
+    legal: "© 2026 AR IT Services SRL. Todos los derechos reservados.",
     offices: [
       { city: "Dallas", country: "Estados Unidos", address: "Dallas, Texas" },
       { city: "Córdoba", country: "Argentina", address: "Córdoba Capital" },
@@ -1152,150 +1193,172 @@ const EN: SiteContent = {
         short:
           "A framework to define objectives, identify use cases, assign owners and evaluate results while artificial intelligence is brought into the company.",
         problem:
-          "Turning “using AI” into “gaining business ground with AI” takes every part of the organization pulling the same way. Without a clear strategic core, the other blocks optimize in different directions, and a persistent failure in any one of them degrades the whole.",
-        howLabel: "How the 9 blocks fit together",
-        featuresLabel: "The 9 blocks",
+          "Adopting artificial intelligence tools does not necessarily mean having a strategy for using them.\n\nWhen initiatives are developed in isolation, it can become hard to set priorities, manage risks, prepare teams and evaluate results.\n\nARIA makes it possible to address these decisions in a coordinated way, linking AI initiatives with each organization's goals and capabilities.",
+        apply: {
+          heading: "How ARIA is applied",
+          body: "ARIA starts with a diagnosis of the company's current situation. Existing initiatives, opportunities for application and areas that need attention are identified.\n\nBased on that analysis, actions are prioritized and a work plan is defined, with owners, deliverables and follow-up indicators.\n\nThe nine blocks are worked on in a coordinated way. Their scope and depth are adjusted to each organization's needs and level of readiness.",
+        },
+        howLabel: "The nine blocks of ARIA",
+        howIntro:
+          "One central strategy and four complementary dimensions help organize the adoption of artificial intelligence.",
         steps: [
-          "EA · Strategy + AI is the core: it defines what for, for whom and with what success, and prioritizes initiatives.",
-          "GL · Governance and Limits sets the rules of the game and the controls on how AI is used.",
-          "PR · People and roles defines the capabilities, training and new roles that are needed.",
-          "DA · Data provides quality data with lineage: the base AI runs on.",
-          "IN · Engineering builds on that base, with a reference architecture and AI-native practices.",
-          "KS · Knowledge sharing makes what is learned (prompts, agents, patterns) shared and reusable.",
-          "IC · Controlled innovation tests new ideas in bounded experiments before taking them to production.",
-          "GC · Change management supports people through adoption, in stages and with steady communication.",
-          "PM · Improvement and maturity reviews, retires what is obsolete and evolves the whole system.",
+          "Define where and what for to use artificial intelligence.",
+          "Set rules and controls for the responsible use of AI.",
+          "Prepare teams to work with artificial intelligence.",
+          "Prepare the data AI initiatives need.",
+          "Define how to build and maintain AI solutions.",
+          "Share and reuse the teams' knowledge.",
+          "Evaluate new AI applications before implementing them.",
+          "Support people during the adoption of AI.",
+          "Evaluate results and improve AI adoption.",
         ],
         features: [
           {
-            title: "EA · Strategy + AI",
-            desc: "Defines what for, for whom and with what measurable success. Prioritizes the initiative portfolio and sets executive ownership.",
+            title: "EA — Strategy + AI",
+            desc: "Identifies business objectives and prioritizes AI initiatives by their impact, effort and expected results.\n\nDetail: Includes opportunity analysis, defining owners and setting indicators to evaluate each initiative.",
           },
           {
-            title: "GL · Governance and Limits",
-            desc: "Rules of the game plus operational controls: authorized catalog, data policies, technical guardrails, monitoring and incident response.",
+            title: "GL — Governance and Limits",
+            desc: "Defines which tools can be used, how information must be handled and who is responsible for overseeing its use.\n\nDetail: Covers usage policies, data classification, risk assessment, technical controls and incident procedures.",
           },
           {
-            title: "PR · People and roles",
-            desc: "Expected capabilities by role, training by level, new roles (AI PO, MLOps, evaluators) and an individual maturity model.",
+            title: "PR — People and roles",
+            desc: "Identifies the capabilities each position needs and sets the responsibilities tied to the use of AI.\n\nDetail: Includes a skills assessment, training planning and the definition of new roles when needed.",
           },
           {
-            title: "DA · Data",
-            desc: "Data architecture, quality and lineage, data as an internal product, and patterns for AI (RAG, embeddings, vector stores).",
+            title: "DA — Data",
+            desc: "Assesses the availability, quality and accessibility of the information that will be used in artificial intelligence processes and systems.\n\nDetail: Covers the organization of data sources, quality criteria, traceability and the conditions for accessing and handling information.",
           },
           {
-            title: "IN · Engineering",
-            desc: "Reference architecture, MLOps/LLMOps and AI-native practices (Copilot, spec-driven, reusable components).",
+            title: "IN — Engineering",
+            desc: "Sets technical practices to design, develop, test and deploy artificial intelligence solutions.\n\nDetail: Includes criteria for architecture, integration, evaluation, deployment and monitoring of the solutions built.",
           },
           {
-            title: "KS · Knowledge sharing",
-            desc: "A curated internal marketplace of prompts, agents and patterns, with versioning and communities of practice.",
+            title: "KS — Knowledge sharing",
+            desc: "Organizes the learnings and resources generated while using AI so they can be leveraged in other projects.\n\nDetail: Covers documenting and maintaining instructions, agents, components and good practices, with criteria for updating and reuse.",
           },
           {
-            title: "IC · Controlled innovation",
-            desc: "A bounded portfolio of experiments, an isolated sandbox, and formal gates from prototype to pilot and from pilot to production.",
+            title: "IC — Controlled innovation",
+            desc: "Allows tests and experiments with defined objectives, bounded resources and criteria to evaluate the results.\n\nDetail: Sets conditions to start, continue, modify or discard initiatives before they are incorporated into regular processes.",
           },
           {
-            title: "GC · Change management",
-            desc: "Staged adoption in waves, consistent communication, local champions and handling of resistance.",
+            title: "GC — Change management",
+            desc: "Plans the actions needed for teams to understand and adopt the changes in their activities and work processes.\n\nDetail: Includes internal communication, training, support by area and follow-up of adoption.",
           },
           {
-            title: "PM · Improvement and maturity",
-            desc: "Periodic portfolio review, disciplined retirement of the obsolete, evolution of the framework itself and a rising global maturity level.",
+            title: "PM — Improvement and maturity",
+            desc: "Sets review mechanisms to track progress and adapt initiatives to the organization's needs.\n\nDetail: Includes tracking indicators, assessing capabilities and updating or ending initiatives that stopped delivering results.",
           },
         ],
+        closing: {
+          heading: "Want to evaluate how to bring AI into your company?",
+          body: "Let's talk about current initiatives, opportunities for application and what is best to address first.",
+          button: "Ask about ARIA",
+        },
         requestCta: "Discover the framework",
       },
       {
         id: "ario",
         name: "ARIO",
         kind: "product",
-        tagline: "Turn documents into usable data.",
+        tagline: "Your documents, turned into data.",
         short:
+          "ARIO uses artificial intelligence to extract and organize information from different documents, making it easier to use in spreadsheets and administrative processes.",
+        cardTitle: "Turn documents into usable data.",
+        cardDesc:
           "Extracts and organizes information from invoices and other documents so you can review it and use it in your work processes.",
         problem:
-          "Many companies still copy data by hand from invoices, receipts and ID documents. It is slow, repetitive and error-prone.",
+          "Manually entering information from invoices and other documents takes time and requires checking each piece of data before adding it to a spreadsheet or system.\n\nARIO extracts the information automatically and lets you review the results within the same work process.",
         example:
-          "An accounting office receives 200 supplier invoices at the end of the month, and someone has to copy tax ID, date, number and amounts one by one into a spreadsheet. With ARIO they upload them all together and get the data back, organized.",
+          "An administrative team receives 200 supplier invoices and needs to record the data from each one.\n\nInstead of manually copying the tax ID, dates, numbers and amounts, they can upload the files to ARIO, get the information organized and review the results before exporting them.",
         steps: [
-          "You upload one or several documents (PDF or photo).",
-          "You choose the document type: general, ID card, ARCA invoice or one with your own fields.",
-          "ARIO reads the document and extracts the data automatically.",
-          "You review and correct whatever is needed.",
-          "You export the data, ready to use.",
+          "Select one or more documents in PDF or image format and upload them to ARIO.",
+          "Choose an available template or define what information you need to extract.",
+          "ARIO uses artificial intelligence to identify and extract the requested data from the documents.",
+          "Review the information obtained and correct any fields that need it.",
+          "Export the organized results to use them in your work processes.",
         ],
         features: [
           {
-            title: "Smart reading",
-            desc: "Understands PDFs and photos, even scanned ones.",
+            title: "Information extraction",
+            desc: "Identifies data in digital documents and compatible scanned files.",
           },
           {
-            title: "Templates for Argentina",
-            desc: "Recognizes ARCA invoices and ID cards with no setup.",
+            title: "Document templates",
+            desc: "Includes preconfigured options for invoices and identity documents.",
           },
           {
             title: "Custom fields",
-            desc: "Adapts to any document in your business.",
-          },
-          { title: "Batch upload", desc: "Processes many documents at once." },
-          {
-            title: "Human validation",
-            desc: "A person reviews the data before it is used, so there is control and trust.",
+            desc: "Lets you define what information you need to extract depending on the document.",
           },
           {
-            title: "Export",
-            desc: "Data comes out ready for spreadsheets or other systems.",
+            title: "Batch processing",
+            desc: "Supports uploading several files to process them in a single operation.",
+          },
+          {
+            title: "Results review",
+            desc: "Lets you check and correct the extracted data before exporting it.",
+          },
+          {
+            title: "Data export",
+            desc: "Organizes the results for later use in spreadsheets and other processes.",
           },
         ],
+        howCta: "See how it works",
+        contactCta: "Ask about ARIO",
         audience:
-          "SMEs and administrative, accounting and operations teams that handle many documents.",
+          "ARIO is designed for companies and teams that need to record information on a recurring basis from documents.\n\nIt can be applied to administrative, accounting and operational tasks that require extracting, reviewing and organizing data from invoices, receipts and other compatible files.",
       },
       {
         id: "meetingmate",
         name: "MeetingMate",
         kind: "product",
-        tagline: "Spot what matters in every meeting.",
+        tagline: "Spot what matters during every meeting.",
         short:
+          "MeetingMate is an artificial intelligence assistant that analyzes conversations and suggests questions, possible risks and actions while the meeting is under way.",
+        cardTitle: "Spot what matters in every meeting.",
+        cardDesc:
           "Analyzes the conversation and suggests questions, possible risks and actions while the team is meeting.",
         problem:
-          "In meetings people talk fast and what matters gets lost: a question nobody asked, a risk left hanging, a commitment with no owner. Today someone takes notes by hand and misses part of the conversation, or everything is reviewed only afterwards, when it is too late to react.",
+          "During a meeting, changes, decisions and commitments can come up that are not always recorded or reviewed in time.\n\nTaking notes while taking part in the conversation can be hard. Reviewing what happened afterwards lets you recover information, but not address topics while they are being discussed.\n\nMeetingMate helps identify these situations during the meeting so the team can assess them on the spot.",
         example:
-          "In a project follow-up meeting the client mentions in passing that a requirement changed. Nobody writes it down, and two weeks later it shows up as a delay. MeetingMate shows it on screen as a risk in the moment, while it can still be clarified.",
+          "During a follow-up meeting, a client mentions that a project requirement has changed.\n\nMeetingMate can flag that change as a possible risk and suggest that the team review its impact, clarify the scope and define next steps before the meeting ends.",
         steps: [
-          "The meeting is prepared: the project, goal, participants and reference documents are loaded.",
-          "It is recorded: MeetingMate captures microphone audio (in-person meetings) and also computer audio (virtual meetings).",
-          "It is transcribed and analyzed: the AI reviews the conversation with the full project context.",
-          "Cards appear: questions, risks and actions, visible to everyone in the room.",
-          "The team reacts: it addresses, dismisses (stating the reason) or reopens each card, and everything is recorded.",
+          "Prepare the meeting with the objective, the participants and the project's reference information.",
+          "Start audio capture from the microphone or the computer, depending on the type of meeting.",
+          "MeetingMate transcribes the conversation and uses artificial intelligence to analyze it with the available context.",
+          "During the meeting, it shows suggestions for questions, possible risks and actions so the team can review them.",
+          "The team can address, dismiss or reopen the suggestions and check their history.",
         ],
         features: [
           {
             title: "Live capture",
-            desc: "Records microphone and computer audio, so it works in in-person and virtual meetings.",
+            desc: "Records audio from the microphone or the computer to analyze in-person and virtual meetings.",
           },
           {
             title: "Speaker identification",
-            desc: "Each contribution is recorded and can be linked to a participant.",
+            desc: "Organizes contributions by speaker to make it easier to review the conversation and link it to participants.",
           },
           {
             title: "Question, risk and action cards",
-            desc: "What matters shows up on screen without anyone having to write it down.",
+            desc: "Presents suggestions generated by artificial intelligence during the meeting, so the team can assess them.",
           },
           {
             title: "Project context",
-            desc: "Uses goals, roles, participants, documents and previous meetings to suggest with judgment.",
+            desc: "Takes into account the available objectives, participants and reference documents to generate suggestions related to the meeting's topics.",
           },
           {
-            title: "Automatic follow-up",
-            desc: "Avoids repeated cards and marks as resolved those the conversation already closed, with a history to review or reopen them.",
+            title: "Suggestion tracking",
+            desc: "Lets you check the status and history of suggestions, and review or reopen them when needed.",
           },
           {
             title: "Works with recorded audio too",
-            desc: "You can upload an audio file and get its transcript.",
+            desc: "Lets you upload a previously recorded audio file and get its transcript to review later.",
           },
         ],
+        contactCta: "Ask about MeetingMate",
         audience:
-          "Teams that share work across recurring meetings: project leads, scrum masters, project managers, sales and account teams, consultancies, and product or IT teams.",
+          "MeetingMate is designed for teams that hold regular planning, follow-up and coordination meetings.\n\nIt can be used in project management, software development, consulting and other activities that require identifying risks, reviewing decisions and coordinating actions during meetings.",
       },
       {
         id: "sdd",
@@ -1303,40 +1366,42 @@ const EN: SiteContent = {
         kind: "framework",
         tagline: "A shared criterion for developing with AI agents.",
         short:
+          "CriterIA proposes a shared way of working to bring artificial intelligence agents into software development. Together with each team, criteria for delegation, context, review and decision logging are defined, according to the project's needs.",
+        cardDesc:
           "A framework for teams to define instructions, record decisions and set review practices when developing software with artificial intelligence agents.",
         problem:
-          "The same team can use agents with different instructions, sources and habits. Each output looks useful on its own, but needs fixing when integrated because it ignored a current decision or someone else's work, and knowledge gets stuck in isolated conversations.",
+          "The same team may use AI agents with different instructions, references and ways of working.\n\nResults may need corrections when integrated because they do not take into account current decisions, project constraints or the work of other team members.\n\nIn addition, part of the knowledge ends up scattered across conversations and tools, which makes it hard for someone else to continue a task.",
         steps: [
-          "Discover: together with the team we map a real case, who takes part, which tools they use, where they decide and how they validate.",
-          "Agree: we define what is delegated, what context is shared, who reviews and who accepts the work.",
-          "Implement what is needed: we prepare context, rules and decisions and implement agents, skills, checks and good practices in existing tools for each role. Custom architecture only if the case requires it.",
-          "Test: the practice is applied to focused, reversible tasks, with tests and the team's observations.",
-          "Evaluate and improve: we compare quality, rework and total effort with the previous practice and use what we learn to update agents, skills and references.",
+          "Discover: together with the team we map a real case, the tools it uses, its responsibilities and the difficulties of its current way of working.",
+          "Agree: we define which tasks are worth delegating to agents, what context to share, who reviews the results and how to record decisions.",
+          "Prepare what is needed: we adapt instructions, references and checks to the existing tools. We add technical components only when the project needs them.",
+          "Test: we apply the practice to focused tasks, with acceptance criteria and reviews agreed with the team.",
+          "Evaluate and continue: we compare quality, corrections and total effort against the previous practice. We record the learnings to maintain and improve the way of working.",
         ],
         features: [
           {
             title: "Agreements and shared context",
-            desc: "Together we define what to delegate, who reviews and decides, and the current references and decisions the team shares.",
+            desc: "With each team we define which tasks to delegate, what information to use, who reviews the results and how to keep the project's decisions.",
           },
           {
             title: "Agents, skills and checks",
-            desc: "Configured for each project and role in the tools the team already uses.",
+            desc: "We review the tools and agents the team uses. We adjust instructions, add reusable resources and define checks according to the project's needs.",
           },
           {
             title: "Proportional human review",
-            desc: "The team keeps judgment and responsibility; controls scale with the task and the risk.",
+            desc: "We establish who reviews and accepts the agents' contributions, with controls suited to the complexity and risk of each task.",
           },
           {
             title: "Limits and permissions",
-            desc: "Access is controlled in tools and significant actions require prior approval.",
+            desc: "We agree on which actions agents can take and which require authorization. Effective permissions must be applied in the corresponding tools and services.",
           },
           {
-            title: "Ongoing support and improvement",
-            desc: "We record decisions, test in a focused case and adjust the practice together with the team.",
+            title: "Support and continuous improvement",
+            desc: "We try the practice together with the team, evaluate its results and record decisions and learnings to make it easier to continue.",
           },
         ],
         audience:
-          "Internal and client development teams that already use AI individually and want a shared practice: leadership, project leads, engineering, QA, architecture, data and security.",
+          "CriterIA is aimed at software development teams that want to bring artificial intelligence agents in or improve how they already work with them.\n\nIt can be applied to internal and client teams, involving project leads, developers, QA, architecture and other specialties according to each case's needs.",
       },
     ],
   },
@@ -1361,7 +1426,7 @@ const EN: SiteContent = {
     officesHeading: "Offices",
     sectionsHeading: "Sections",
     followHeading: "Follow us",
-    legal: "© 2026 AR Consultores SRL. All rights reserved.",
+    legal: "© 2026 AR IT Services SRL. All rights reserved.",
     offices: [
       { city: "Dallas", country: "United States", address: "Dallas, Texas" },
       { city: "Córdoba", country: "Argentina", address: "Córdoba" },

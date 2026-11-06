@@ -332,7 +332,7 @@ function Home() {
                     to="/solucion/$solutionId"
                     params={{ solutionId: getPublicSolutionSlug(p.id) }}
                     className="group flex h-full flex-col rounded-2xl border border-white/10 sm:row-span-4 sm:grid sm:grid-rows-subgrid sm:gap-y-0 bg-card/35 p-5 shadow-[0_8px_24px_rgb(0_0_0_/_0.12)] transition-all duration-300 hover:-translate-y-1 hover:border-brand-text/65 hover:bg-card/80 hover:shadow-[0_18px_42px_rgb(0_0_0_/_0.26)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                    aria-label={`${p.name}: ${p.tagline}`}
+                    aria-label={`${p.name}: ${p.cardTitle ?? p.tagline}`}
                   >
                     {/* Etiqueta de clasificación en la esquina superior derecha, en su propia fila para no tocar el logo. */}
                     <div className="flex justify-end">
@@ -356,10 +356,10 @@ function Home() {
                       />
                     </div>
                     <h3 className="mt-6 self-start text-[15px] leading-snug font-semibold tracking-tight text-balance text-foreground">
-                      {p.tagline}
+                      {p.cardTitle ?? p.tagline}
                     </h3>
                     <p className="mt-3 self-start text-sm leading-relaxed text-muted-foreground transition-colors group-hover:text-foreground">
-                      {p.short}
+                      {p.cardDesc ?? p.short}
                     </p>
                   </Link>
                 </AnimatedContent>

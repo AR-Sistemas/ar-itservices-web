@@ -50,7 +50,7 @@ export function SolutionDetail({
       }
       className={`${CTA} cursor-pointer`}
     >
-      {contactCta}
+      {product.contactCta ?? contactCta}
     </button>
   );
 
@@ -70,7 +70,7 @@ export function SolutionDetail({
               href="#como-funciona"
               className="inline-flex rounded-full border border-primary/50 px-6 py-3 text-sm font-semibold text-foreground transition-colors hover:border-primary hover:text-brand-text"
             >
-              {product.howLabel ?? labels.how}
+              {product.howCta ?? product.howLabel ?? labels.how}
               <span aria-hidden="true" className="ml-2">
                 ↓
               </span>
@@ -84,19 +84,39 @@ export function SolutionDetail({
       >
         <div>
           <h2 className={EYEBROW}>{labels.problem}</h2>
-          <p className="mt-4 leading-relaxed text-foreground">{product.problem}</p>
+          <Paragraphs
+            text={product.problem}
+            className="mt-4 space-y-4 leading-relaxed text-foreground"
+          />
         </div>
         {product.example && (
           <div className="rounded-2xl border border-border bg-card p-6">
             <h2 className={EYEBROW}>{labels.example}</h2>
-            <p className="mt-3 text-sm leading-relaxed text-foreground">{product.example}</p>
+            <Paragraphs
+              text={product.example}
+              className="mt-3 space-y-3 text-sm leading-relaxed text-foreground"
+            />
           </div>
         )}
       </AnimatedContent>
+      {product.apply && (
+        <AnimatedContent className="mt-14 max-w-3xl sm:mt-20">
+          <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
+            {product.apply.heading}
+          </h2>
+          <Paragraphs
+            text={product.apply.body}
+            className="mt-4 space-y-4 leading-relaxed text-foreground"
+          />
+        </AnimatedContent>
+      )}
       <section id="como-funciona" className="scroll-mt-32 pt-14 sm:pt-20">
         <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
           {product.howLabel ?? labels.how}
         </h2>
+        {product.howIntro && (
+          <p className="mt-3 max-w-3xl leading-relaxed text-muted-foreground">{product.howIntro}</p>
+        )}
         {isAria ? (
           <AriaArticulation steps={product.steps} features={product.features} />
         ) : (
@@ -140,11 +160,38 @@ export function SolutionDetail({
       <AnimatedContent className="mt-14 mb-8 sm:mt-20">
         {product.audience && (
           <>
-            <h2 className={EYEBROW}>{labels.audience}</h2>
-            <p className="mt-3 max-w-3xl leading-relaxed text-foreground">{product.audience}</p>
+            <h2 className={EYEBROW}>{product.audienceLabel ?? labels.audience}</h2>
+            <Paragraphs
+              text={product.audience}
+              className="mt-3 max-w-3xl space-y-4 leading-relaxed text-foreground"
+            />
           </>
         )}
-        {!product.audience && product.id !== "aria" && (
+        {product.closing && (
+          <div className="rounded-2xl border border-border bg-card p-6 sm:p-10">
+            <h2 className="font-display max-w-3xl text-2xl font-bold tracking-tight text-balance sm:text-3xl">
+              {product.closing.heading}
+            </h2>
+            <p className="mt-3 max-w-2xl leading-relaxed text-muted-foreground">
+              {product.closing.body}
+            </p>
+            <button
+              type="button"
+              onClick={() =>
+                openContact({
+                  type: "consulta",
+                  allowedTypes: ["empresa", "consulta"],
+                  producto: product.name,
+                  message: getContent(lang).contact.productMessage(product.name),
+                })
+              }
+              className={`${CTA} mt-7 cursor-pointer`}
+            >
+              {product.closing.button}
+            </button>
+          </div>
+        )}
+        {!product.audience && !product.closing && product.id !== "aria" && (
           <p className="font-display text-xl font-semibold">
             {lang === "EN" ? "Want to see it in action?" : "¿Querés verlo en acción?"}
           </p>
@@ -234,9 +281,7 @@ function AriaArticulation({
             const n = index + 1;
             const on = step === n;
             const feature = features[index];
-            // El paso arranca con el nombre del bloque ("EA · Estrategia + IA es el núcleo…"): se muestra aparte.
             const title = feature?.title ?? "";
-            const detail = title && text.startsWith(title) ? text.slice(title.length).trim() : text;
             return (
               <li
                 key={text}
@@ -262,11 +307,11 @@ function AriaArticulation({
                   {n}
                 </span>
                 <div className="min-w-0">
+                  {title && <p className="font-semibold text-foreground">{title}</p>}
                   <p
-                    className={`leading-relaxed transition-colors ${on ? "text-foreground" : "text-muted-foreground"}`}
+                    className={`mt-0.5 leading-relaxed transition-colors ${on ? "text-foreground" : "text-muted-foreground"}`}
                   >
-                    {title && <strong className="font-semibold text-foreground">{title} </strong>}
-                    {detail}
+                    {text}
                   </p>
                   {feature && (
                     <div
@@ -274,9 +319,28 @@ function AriaArticulation({
                         on ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
                       }`}
                     >
-                      <p className="overflow-hidden text-sm leading-relaxed text-muted-foreground">
-                        <span className="block pt-2">{feature.desc}</span>
-                      </p>
+                      <div className="overflow-hidden">
+                        <div className="space-y-2 pt-2 text-sm leading-relaxed text-muted-foreground">
+                          {splitParagraphs(feature.desc).map((para) => {
+                            // "Detalle: …" / "Detail: …": la etiqueta va en negrita.
+                            const m = /^(Detalle|Detail):\s*(.*)$/s.exec(para);
+                            return (
+                              <p key={para}>
+                                {m ? (
+                                  <>
+                                    <strong className="font-semibold text-foreground">
+                                      {m[1]}:
+                                    </strong>{" "}
+                                    {m[2]}
+                                  </>
+                                ) : (
+                                  para
+                                )}
+                              </p>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -289,6 +353,25 @@ function AriaArticulation({
       <AnimatedContent delay={120} className="hidden lg:sticky lg:top-28 lg:order-2 lg:block">
         <AriaFramework step={step} className="max-w-md" />
       </AnimatedContent>
+    </div>
+  );
+}
+
+/** Parte un texto en párrafos (separados por una línea en blanco). */
+function splitParagraphs(text: string): string[] {
+  return text
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+}
+
+function Paragraphs({ text, className = "" }: { text: string; className?: string }) {
+  const parts = splitParagraphs(text);
+  return (
+    <div className={className}>
+      {parts.map((p) => (
+        <p key={p}>{p}</p>
+      ))}
     </div>
   );
 }
