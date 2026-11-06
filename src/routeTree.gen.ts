@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComunicadoCambioDeMarcaRouteImport } from './routes/comunicado-cambio-de-marca'
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as NovedadesRouteImport } from './routes/novedades'
 import { Route as QrRouteImport } from './routes/qr'
@@ -21,6 +22,11 @@ import { Route as SolucionSolutionIdRouteImport } from './routes/solucion.$solut
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComunicadoCambioDeMarcaRoute = ComunicadoCambioDeMarcaRouteImport.update({
+  id: '/comunicado-cambio-de-marca',
+  path: '/comunicado-cambio-de-marca',
   getParentRoute: () => rootRouteImport,
 } as any)
 const NosotrosRoute = NosotrosRouteImport.update({
@@ -61,6 +67,7 @@ const SolucionSolutionIdRoute = SolucionSolutionIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/comunicado-cambio-de-marca': typeof ComunicadoCambioDeMarcaRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
@@ -71,6 +78,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/comunicado-cambio-de-marca': typeof ComunicadoCambioDeMarcaRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/comunicado-cambio-de-marca': typeof ComunicadoCambioDeMarcaRoute
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/comunicado-cambio-de-marca'
     | '/nosotros'
     | '/novedades'
     | '/qr'
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/comunicado-cambio-de-marca'
     | '/nosotros'
     | '/novedades'
     | '/qr'
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/comunicado-cambio-de-marca'
     | '/nosotros'
     | '/novedades'
     | '/qr'
@@ -125,6 +137,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComunicadoCambioDeMarcaRoute: typeof ComunicadoCambioDeMarcaRoute
   NosotrosRoute: typeof NosotrosRoute
   NovedadesRoute: typeof NovedadesRoute
   QrRoute: typeof QrRoute
@@ -141,6 +154,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comunicado-cambio-de-marca': {
+      id: '/comunicado-cambio-de-marca'
+      path: '/comunicado-cambio-de-marca'
+      fullPath: '/comunicado-cambio-de-marca'
+      preLoaderRoute: typeof ComunicadoCambioDeMarcaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/nosotros': {
@@ -197,6 +217,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComunicadoCambioDeMarcaRoute: ComunicadoCambioDeMarcaRoute,
   NosotrosRoute: NosotrosRoute,
   NovedadesRoute: NovedadesRoute,
   QrRoute: QrRoute,
