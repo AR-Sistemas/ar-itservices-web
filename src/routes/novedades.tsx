@@ -33,12 +33,12 @@ export const Route = createFileRoute("/novedades")({
       { title: "Resumen editorial | Novedades de IA · AR IT Services" },
       {
         name: "description",
-        content: "Resumen mensual de inteligencia artificial y tecnología de AR Consultores.",
+        content: "Resumen mensual de inteligencia artificial y tecnología de AR IT Services.",
       },
       { property: "og:title", content: "Resumen editorial | Novedades de IA" },
       {
         property: "og:description",
-        content: "Resumen mensual de inteligencia artificial y tecnología de AR Consultores.",
+        content: "Resumen mensual de inteligencia artificial y tecnología de AR IT Services.",
       },
       { property: "og:type", content: "article" },
       { property: "og:url", content: "https://ar-itservices.com/novedades" },

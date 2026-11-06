@@ -84,7 +84,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AR IT Services" },
       { name: "description", content: "Desarrollo de software, datos e IA y equipos dedicados." },
-      { name: "author", content: "AR Consultores SRL" },
+      { name: "author", content: "AR IT Services SRL" },
       { property: "og:title", content: "AR IT Services" },
       {
         property: "og:description",
