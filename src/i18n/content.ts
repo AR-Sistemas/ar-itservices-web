@@ -123,21 +123,18 @@ export type SiteContent = {
     generalHeading: string;
     generalSubtitle: string;
     typeLabels: { company: string; candidate: string; general: string };
-    /** Aclaración de los campos obligatorios (los marca un asterisco) y error del selector de país. */
+    /** Aclaración de los campos obligatorios (los marca un asterisco). */
     requiredNote: string;
-    countryRequired: string;
     fields: {
       name: string;
       email: string;
       phone: string;
       company: string;
-      country: string;
       projectType: string;
       position: string;
       resume: string;
       message: string;
     };
-    countries: string[];
     projectOptions: string[];
     submit: string;
     submitting: string;
@@ -460,7 +457,6 @@ const ES: SiteContent = {
     generalHeading: "¿En qué podemos ayudarte?",
     generalSubtitle: "Escribinos y te respondemos a la brevedad.",
     requiredNote: "* Campos obligatorios",
-    countryRequired: "Seleccioná un país.",
     typeLabels: {
       company: "Soy una empresa",
       candidate: "Busco trabajar con ustedes",
@@ -471,42 +467,11 @@ const ES: SiteContent = {
       email: "Email",
       phone: "Teléfono",
       company: "Empresa",
-      country: "País",
       projectType: "Tipo de proyecto",
       position: "Puesto de interés",
       resume: "Currículum (PDF o Word)",
       message: "Mensaje",
     },
-    countries: [
-      "Argentina",
-      "Paraguay",
-      "Estados Unidos",
-      "España",
-      "Uruguay",
-      "Chile",
-      "Brasil",
-      "Bolivia",
-      "Perú",
-      "Colombia",
-      "Ecuador",
-      "Venezuela",
-      "México",
-      "Panamá",
-      "Costa Rica",
-      "Guatemala",
-      "Honduras",
-      "El Salvador",
-      "Nicaragua",
-      "República Dominicana",
-      "Cuba",
-      "Canadá",
-      "Reino Unido",
-      "Alemania",
-      "Francia",
-      "Italia",
-      "Portugal",
-      "Otro",
-    ],
     projectOptions: ["Desarrollo web/mobile", "Data & BI", "Staffing / equipo dedicado", "Otro"],
     submit: "Enviar consulta",
     submitting: "Enviando…",
@@ -1107,7 +1072,6 @@ const EN: SiteContent = {
     generalHeading: "How can we help?",
     generalSubtitle: "Write to us and we'll get back to you shortly.",
     requiredNote: "* Required fields",
-    countryRequired: "Select a country.",
     typeLabels: {
       company: "I'm a company",
       candidate: "I'm looking to join the team",
@@ -1118,42 +1082,11 @@ const EN: SiteContent = {
       email: "Email",
       phone: "Phone",
       company: "Company",
-      country: "Country",
       projectType: "Project type",
       position: "Position of interest",
       resume: "Resume (PDF or Word)",
       message: "Message",
     },
-    countries: [
-      "Argentina",
-      "Paraguay",
-      "United States",
-      "Spain",
-      "Uruguay",
-      "Chile",
-      "Brazil",
-      "Bolivia",
-      "Peru",
-      "Colombia",
-      "Ecuador",
-      "Venezuela",
-      "Mexico",
-      "Panama",
-      "Costa Rica",
-      "Guatemala",
-      "Honduras",
-      "El Salvador",
-      "Nicaragua",
-      "Dominican Republic",
-      "Cuba",
-      "Canada",
-      "United Kingdom",
-      "Germany",
-      "France",
-      "Italy",
-      "Portugal",
-      "Other",
-    ],
     projectOptions: ["Web/mobile development", "Data & BI", "Staffing / dedicated team", "Other"],
     submit: "Send inquiry",
     submitting: "Sending…",

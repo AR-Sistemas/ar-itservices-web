@@ -51,7 +51,6 @@ function buildBody(data: ContactFormData) {
     `Email: ${data.email || "—"}`,
     data.empresa && `Empresa: ${data.empresa}`,
     data.telefono && `Teléfono: ${data.telefono}`,
-    data.pais && `País: ${data.pais}`,
     data.tipo && `Tipo de proyecto: ${data.tipo}`,
     data.puesto && `Puesto: ${data.puesto}`,
     // Cuando la postulación viene de una búsqueda del feed, el id permite
@@ -71,7 +70,6 @@ interface ContactFormData {
   email: string;
   empresa: string;
   telefono: string;
-  pais: string;
   tipo: string;
   puesto: string;
   producto: string;
@@ -98,16 +96,7 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     const isLikelyBot =
       honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
-    const shortFields = [
-      "nombre",
-      "email",
-      "empresa",
-      "telefono",
-      "pais",
-      "tipo",
-      "puesto",
-      "aviso_id",
-    ];
+    const shortFields = ["nombre", "email", "empresa", "telefono", "tipo", "puesto", "aviso_id"];
     if (shortFields.some((k) => get(k).length > MAX_FIELD_LENGTH)) {
       throw new Error("Campo demasiado largo");
     }
@@ -133,15 +122,10 @@ export const sendContactEmail = createServerFn({ method: "POST" })
     need("nombre");
     need("email");
     need("telefono");
-    need("pais");
     if (type === "empresa") {
       need("empresa");
-      need("mensaje");
-    } else if (type === "consulta") {
-      need("mensaje");
     } else if (type === "postulante") {
       need("puesto");
-      if (!(cv instanceof File && cv.size > 0)) missing.push("cv");
     }
     if (missing.length) {
       throw new Error(`Faltan campos obligatorios: ${missing.join(", ")}`);
@@ -153,7 +137,6 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       email: get("email"),
       empresa: get("empresa"),
       telefono: get("telefono"),
-      pais: get("pais"),
       tipo: get("tipo"),
       puesto: get("puesto"),
       producto: get("producto"),
