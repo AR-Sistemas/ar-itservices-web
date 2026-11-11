@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowUpRight, BookOpen, BriefcaseBusiness, Layers3, MessageCircle, X } from "lucide-react";
 import { LogoMark } from "@/components/site/LogoMark";
@@ -45,13 +45,24 @@ function QrPage() {
   ];
 
   return (
-    <main className="relative flex min-h-dvh flex-col items-center overflow-x-clip bg-background px-5 py-5 sm:py-16">
+    <main
+      style={
+        {
+          // En celular la página ocupa todo el alto de la pantalla (h-dvh) y las cinco filas se reparten el
+          // espacio que sobra (entre 3,5 y 7 rem cada una), así crece con la pantalla sin generar scroll.
+          // El texto y los íconos también crecen con el alto (dvh), con un mínimo para pantallas chicas.
+          "--fs": "clamp(1rem, min(3dvh, 5.2vw), 1.5rem)",
+          "--ic": "clamp(1.25rem, min(3.8dvh, 6.5vw), 2rem)",
+        } as CSSProperties
+      }
+      className="relative flex h-dvh flex-col items-center overflow-x-clip bg-background px-5 py-[clamp(1rem,3dvh,2rem)] sm:h-auto sm:min-h-dvh sm:py-16"
+    >
       <CodeGridSpotlight />
       <Beams />
-      <div className="relative z-10 w-full max-w-lg">
+      <div className="relative z-10 flex min-h-0 w-full max-w-lg flex-1 flex-col sm:block sm:flex-none">
         <div className="flex items-center justify-between gap-4">
           <Link to="/" aria-label="AR IT Services" className="inline-flex items-center gap-3">
-            <LogoMark className="h-9 w-auto text-foreground sm:h-11" />
+            <LogoMark className="h-[clamp(2.25rem,5.5dvh,3rem)] w-auto text-foreground sm:h-11" />
             <LogoWordmark className="h-4 w-auto text-foreground" />
           </Link>
           <div
@@ -72,18 +83,21 @@ function QrPage() {
             ))}
           </div>
         </div>
-        <h1 className="mt-6 text-2xl font-bold tracking-tight sm:mt-16 sm:text-4xl">
+        <h1 className="mt-[clamp(1rem,3.5dvh,2.5rem)] text-[length:clamp(1.5rem,4.2dvh,2.5rem)] font-bold tracking-tight sm:mt-16 sm:text-4xl">
           {en ? "How can we help you?" : "¿Cómo podemos ayudarte?"}
         </h1>
-        <div className="mt-4 grid gap-2.5 sm:mt-8 sm:gap-4">
+        <div className="mt-[clamp(0.75rem,2.5dvh,1.5rem)] grid min-h-0 flex-1 grid-rows-[repeat(5,minmax(3.5rem,7rem))] content-center gap-[clamp(0.625rem,1.8dvh,1.25rem)] sm:mt-8 sm:flex-none sm:grid-rows-none sm:content-normal sm:gap-4">
           {options.map(({ label, icon: Icon, action }) => (
             <button
               key={label}
               type="button"
               onClick={action}
-              className="group flex min-h-14 w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
+              className="group flex h-full w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-(length:--fs) font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
             >
-              <Icon aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />
+              <Icon
+                aria-hidden="true"
+                className="h-(--ic) w-(--ic) shrink-0 text-brand-text sm:h-6 sm:w-6"
+              />
               <span className="flex-1">{label}</span>
               <ArrowUpRight
                 aria-hidden="true"
@@ -93,9 +107,12 @@ function QrPage() {
           ))}
           <a
             href="https://boletin.ar-itservices.com/"
-            className="group flex min-h-14 w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
+            className="group flex h-full w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-(length:--fs) font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
           >
-            <BookOpen aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />
+            <BookOpen
+              aria-hidden="true"
+              className="h-(--ic) w-(--ic) shrink-0 text-brand-text sm:h-6 sm:w-6"
+            />
             <span className="flex-1">{en ? "AI News" : "Novedades de IA"}</span>
             <ArrowUpRight
               aria-hidden="true"
@@ -121,9 +138,9 @@ function QrPage() {
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-border bg-card px-3 py-3 text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:text-lg"
+                className="group flex h-full items-center justify-center gap-3 rounded-2xl border border-border bg-card px-3 py-3 text-(length:--fs) font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:text-lg"
               >
-                <Icon className="h-5 w-5 shrink-0 text-brand-text" />
+                <Icon className="h-(--ic) w-(--ic) shrink-0 text-brand-text sm:h-5 sm:w-5" />
                 <span>{name}</span>
               </a>
             ))}
