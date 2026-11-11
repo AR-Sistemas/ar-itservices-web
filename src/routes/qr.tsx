@@ -91,7 +91,7 @@ function QrPage() {
             </button>
           ))}
           <a
-            href="https://boletin-ar-consultores.vercel.app/"
+            href="https://boletin.ar-itservices.com/"
             className="group flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card px-5 py-5 text-left text-lg font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
           >
             <BookOpen aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />

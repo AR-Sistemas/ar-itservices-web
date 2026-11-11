@@ -124,8 +124,31 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       }
     }
 
+    // Campos obligatorios (el formulario ya los exige; acá se vuelve a comprobar).
+    const type = get("contactType") || "consulta";
+    const missing: string[] = [];
+    const need = (key: string) => {
+      if (!get(key)) missing.push(key);
+    };
+    need("nombre");
+    need("email");
+    need("telefono");
+    need("pais");
+    if (type === "empresa") {
+      need("empresa");
+      need("mensaje");
+    } else if (type === "consulta") {
+      need("mensaje");
+    } else if (type === "postulante") {
+      need("puesto");
+      if (!(cv instanceof File && cv.size > 0)) missing.push("cv");
+    }
+    if (missing.length) {
+      throw new Error(`Faltan campos obligatorios: ${missing.join(", ")}`);
+    }
+
     return {
-      contactType: get("contactType") || "consulta",
+      contactType: type,
       nombre: get("nombre"),
       email: get("email"),
       empresa: get("empresa"),

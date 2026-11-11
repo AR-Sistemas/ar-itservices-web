@@ -44,6 +44,13 @@ export const sendFrameworkRequest = createServerFn({ method: "POST" })
     const isLikelyBot =
       honeypot !== "" || !Number.isFinite(startedAt) || fillTime < MIN_FILL_TIME_MS;
 
+    if (!get("nombre") || !get("email")) {
+      throw new Error("Faltan campos obligatorios: nombre, email");
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(get("email"))) {
+      throw new Error("Email inválido");
+    }
+
     return {
       nombre: get("nombre"),
       email: get("email"),

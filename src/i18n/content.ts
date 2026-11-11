@@ -123,6 +123,9 @@ export type SiteContent = {
     generalHeading: string;
     generalSubtitle: string;
     typeLabels: { company: string; candidate: string; general: string };
+    /** Aclaración de los campos obligatorios (los marca un asterisco) y error del selector de país. */
+    requiredNote: string;
+    countryRequired: string;
     fields: {
       name: string;
       email: string;
@@ -456,6 +459,8 @@ const ES: SiteContent = {
       "Dejanos tus datos y tu CV: te escribimos cuando haya una búsqueda que encaje con tu perfil.",
     generalHeading: "¿En qué podemos ayudarte?",
     generalSubtitle: "Escribinos y te respondemos a la brevedad.",
+    requiredNote: "* Campos obligatorios",
+    countryRequired: "Seleccioná un país.",
     typeLabels: {
       company: "Soy una empresa",
       candidate: "Busco trabajar con ustedes",
@@ -1101,6 +1106,8 @@ const EN: SiteContent = {
       "Leave us your details and your CV: we'll get in touch when a search matches your profile.",
     generalHeading: "How can we help?",
     generalSubtitle: "Write to us and we'll get back to you shortly.",
+    requiredNote: "* Required fields",
+    countryRequired: "Select a country.",
     typeLabels: {
       company: "I'm a company",
       candidate: "I'm looking to join the team",
