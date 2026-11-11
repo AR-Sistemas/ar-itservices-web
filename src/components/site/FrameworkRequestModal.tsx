@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { RequiredMark } from "./RequiredMark";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { X } from "lucide-react";
@@ -115,7 +116,7 @@ export function FrameworkRequestModal({
               />
               <div>
                 <label htmlFor="framework-name" className="text-sm font-medium">
-                  {c.fields.name}
+                  {c.fields.name} <RequiredMark />
                 </label>
                 <input
                   id="framework-name"
@@ -130,7 +131,7 @@ export function FrameworkRequestModal({
               </div>
               <div>
                 <label htmlFor="framework-email" className="text-sm font-medium">
-                  {c.fields.email}
+                  {c.fields.email} <RequiredMark />
                 </label>
                 <input
                   id="framework-email"
@@ -158,6 +159,9 @@ export function FrameworkRequestModal({
                   className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                 />
               </div>
+              <p className="text-xs text-muted-foreground">
+                {lang === "ES" ? "* Campos obligatorios" : "* Required fields"}
+              </p>
               <button
                 type="submit"
                 disabled={sendState === "sending"}

@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
+import { RequiredMark } from "./RequiredMark";
 import * as Dialog from "@radix-ui/react-dialog";
 import { useServerFn } from "@tanstack/react-start";
 import { X } from "lucide-react";
@@ -94,6 +95,9 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
         : ""),
   );
   const [sending, setSending] = useState(false);
+  // País: el <select> nativo de Radix queda oculto y no valida bien con `required`, así que se valida acá.
+  const [pais, setPais] = useState("");
+  const [paisError, setPaisError] = useState(false);
   // Trampa de tiempo anti-bot (ver contact.server.ts): el modal se monta al abrir.
   const [startedAt] = useState(() => Date.now());
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -101,8 +105,15 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!pais) {
+      setPaisError(true);
+      document.getElementById("cm-pais")?.focus();
+      return;
+    }
+    const data = new FormData(e.currentTarget);
+    data.set("pais", pais);
     setSending(true);
-    send({ data: new FormData(e.currentTarget) })
+    send({ data })
       .then(() => {
         setSending(false);
         toast.success(c.contact.success);
@@ -228,7 +239,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   de pestaña no se pierde lo que ya se escribió. */}
               <div>
                 <label htmlFor="cm-nombre" className="text-sm font-medium">
-                  {f.name}
+                  {f.name} <RequiredMark />
                 </label>
                 <input
                   id="cm-nombre"
@@ -242,7 +253,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
               </div>
               <div>
                 <label htmlFor="cm-email" className="text-sm font-medium">
-                  {f.email}
+                  {f.email} <RequiredMark />
                 </label>
                 <input
                   id="cm-email"
@@ -259,7 +270,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                 <>
                   <div>
                     <label htmlFor="cm-empresa" className="text-sm font-medium">
-                      {f.company}
+                      {f.company} <RequiredMark />
                     </label>
                     <input
                       id="cm-empresa"
@@ -273,7 +284,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   </div>
                   <div>
                     <label htmlFor="cm-telefono" className="text-sm font-medium">
-                      {f.phone}
+                      {f.phone} <RequiredMark />
                     </label>
                     <input
                       id="cm-telefono"
@@ -288,6 +299,12 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   <CountryField
                     label={f.country}
                     countries={c.contact.countries}
+                    value={pais}
+                    onChange={(v) => {
+                      setPais(v);
+                      setPaisError(false);
+                    }}
+                    error={paisError ? c.contact.countryRequired : null}
                     className="sm:col-span-2"
                   />
                   <div className="sm:col-span-2">
@@ -307,7 +324,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                 <>
                   <div>
                     <label htmlFor="cm-telefono" className="text-sm font-medium">
-                      {f.phone}
+                      {f.phone} <RequiredMark />
                     </label>
                     <input
                       id="cm-telefono"
@@ -319,18 +336,28 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                       className={INPUT}
                     />
                   </div>
-                  <CountryField label={f.country} countries={c.contact.countries} />
+                  <CountryField
+                    label={f.country}
+                    countries={c.contact.countries}
+                    value={pais}
+                    onChange={(v) => {
+                      setPais(v);
+                      setPaisError(false);
+                    }}
+                    error={paisError ? c.contact.countryRequired : null}
+                  />
                   {/* Con aviso el puesto es el de la búsqueda y viaja fijo; sin aviso
                       (postulación espontánea) se escribe a mano. */}
                   {!locked && (
                     <div className="sm:col-span-2">
                       <label htmlFor="cm-puesto" className="text-sm font-medium">
-                        {f.position}
+                        {f.position} <RequiredMark />
                       </label>
                       <input
                         id="cm-puesto"
                         name="puesto"
                         type="text"
+                        required
                         placeholder={
                           es ? "Ej.: Desarrollador/a Full Stack" : "e.g. Full Stack Developer"
                         }
@@ -341,12 +368,13 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   {locked && <input type="hidden" name="puesto" value={options.puesto} />}
                   <div className="sm:col-span-2">
                     <label htmlFor="cm-cv" className="text-sm font-medium">
-                      {f.resume}
+                      {f.resume} <RequiredMark />
                     </label>
                     <input
                       id="cm-cv"
                       name="cv"
                       type="file"
+                      required
                       accept=".pdf,.doc,.docx"
                       className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
                     />
@@ -374,7 +402,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   </div>
                   <div>
                     <label htmlFor="cm-telefono" className="text-sm font-medium">
-                      {f.phone}
+                      {f.phone} <RequiredMark />
                     </label>
                     <input
                       id="cm-telefono"
@@ -389,6 +417,12 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   <CountryField
                     label={f.country}
                     countries={c.contact.countries}
+                    value={pais}
+                    onChange={(v) => {
+                      setPais(v);
+                      setPaisError(false);
+                    }}
+                    error={paisError ? c.contact.countryRequired : null}
                     className="sm:col-span-2"
                   />
                 </>
@@ -397,6 +431,12 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
               <div className="sm:col-span-2">
                 <label htmlFor="cm-mensaje" className="text-sm font-medium">
                   {f.message}
+                  {type !== "postulante" && (
+                    <>
+                      {" "}
+                      <RequiredMark />
+                    </>
+                  )}
                 </label>
                 <textarea
                   id="cm-mensaje"
@@ -417,6 +457,9 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   className={`${INPUT} min-h-36 resize-y`}
                 />
               </div>
+              <p className="text-xs text-muted-foreground sm:col-span-2">
+                {c.contact.requiredNote}
+              </p>
               <div className="sm:col-span-2">
                 <button
                   type="submit"
@@ -441,21 +484,31 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
 function CountryField({
   label,
   countries,
+  value,
+  onChange,
+  error,
   className = "",
 }: {
   label: string;
   countries: string[];
+  value: string;
+  onChange: (value: string) => void;
+  error: string | null;
   className?: string;
 }) {
-  const [value, setValue] = useState("");
-
   return (
     <div className={className}>
       <label htmlFor="cm-pais" className="text-sm font-medium">
-        {label}
+        {label} <RequiredMark />
       </label>
-      <Select value={value} onValueChange={setValue} name="pais" required>
-        <SelectTrigger id="cm-pais" className={`${INPUT} h-auto text-left`}>
+      {/* Sin `required` ni `name`: el valor se agrega al enviar (ver handleSubmit). */}
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger
+          id="cm-pais"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? "cm-pais-error" : undefined}
+          className={`${INPUT} h-auto text-left ${error ? "border-primary" : ""}`}
+        >
           <SelectValue placeholder="—" />
         </SelectTrigger>
         <SelectContent side="bottom" avoidCollisions={false} className="max-h-64">
@@ -466,6 +519,11 @@ function CountryField({
           ))}
         </SelectContent>
       </Select>
+      {error && (
+        <p id="cm-pais-error" role="alert" className="mt-1.5 text-xs text-brand-text">
+          {error}
+        </p>
+      )}
     </div>
   );
 }

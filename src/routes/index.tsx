@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { RequiredMark } from "@/components/site/RequiredMark";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { sendContactEmail } from "@/lib/contact.server";
@@ -149,6 +150,7 @@ function Home() {
   // el visitante cambia de pestaña de tipo de consulta y vuelve.
   const [empresaValue, setEmpresaValue] = useState("");
   const [paisValue, setPaisValue] = useState("");
+  const [paisError, setPaisError] = useState(false);
   const [tipoValue, setTipoValue] = useState("");
   const [telefonoValue, setTelefonoValue] = useState("");
   const [mensajeValue, setMensajeValue] = useState("");
@@ -617,8 +619,14 @@ function Home() {
                 className="mt-8 grid scroll-mt-28 gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
+                  if (!paisValue) {
+                    setPaisError(true);
+                    document.getElementById("pais")?.focus();
+                    return;
+                  }
                   const formEl = e.currentTarget;
                   const formData = new FormData(formEl);
+                  formData.set("pais", paisValue);
                   setSendState("sending");
                   sendContact({ data: formData })
                     .then(() => {
@@ -726,7 +734,11 @@ function Home() {
                   label={c.contact.fields.country}
                   options={c.contact.countries}
                   value={paisValue}
-                  onChange={setPaisValue}
+                  onChange={(v) => {
+                    setPaisValue(v);
+                    setPaisError(false);
+                  }}
+                  error={paisError ? c.contact.countryRequired : null}
                   className={contactType !== "postulante" ? "sm:col-span-2" : undefined}
                 />
 
@@ -753,7 +765,7 @@ function Home() {
                   <>
                     <div className="sm:col-span-2">
                       <label htmlFor="puesto" className="text-sm font-medium">
-                        {c.contact.fields.position}
+                        {c.contact.fields.position} <RequiredMark />
                       </label>
                       {/* Texto libre: las búsquedas reales viven en el feed y se
                           postula a ellas desde /trabaja-con-nosotros. Con
@@ -762,6 +774,7 @@ function Home() {
                         id="puesto"
                         name="puesto"
                         type="text"
+                        required
                         value={selectedPosition}
                         onChange={(e) => setSelectedPosition(e.target.value)}
                         readOnly={avisoId !== ""}
@@ -775,12 +788,13 @@ function Home() {
                     </div>
                     <div className="sm:col-span-2">
                       <label htmlFor="cv" className="text-sm font-medium">
-                        {c.contact.fields.resume}
+                        {c.contact.fields.resume} <RequiredMark />
                       </label>
                       <input
                         id="cv"
                         name="cv"
                         type="file"
+                        required
                         accept=".pdf,.doc,.docx"
                         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
                       />
@@ -791,6 +805,12 @@ function Home() {
                 <div className="sm:col-span-2">
                   <label htmlFor="mensaje" className="text-sm font-medium">
                     {c.contact.fields.message}
+                    {contactType !== "postulante" && (
+                      <>
+                        {" "}
+                        <RequiredMark />
+                      </>
+                    )}
                   </label>
                   <textarea
                     id="mensaje"
@@ -805,6 +825,9 @@ function Home() {
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   />
                 </div>
+                <p className="text-xs text-muted-foreground sm:col-span-2">
+                  {c.contact.requiredNote}
+                </p>
                 <div className="sm:col-span-2">
                   <button
                     ref={submitCta.ref}
@@ -881,12 +904,13 @@ function Field({
   value?: string;
   onChange?: (value: string) => void;
   required?: boolean;
-  optionalLabel?: string;
+  optionalLabel?: string | undefined;
 }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-medium">
-        {label} {optionalLabel && <span className="text-muted-foreground">{optionalLabel}</span>}
+        {label} {required && !optionalLabel && <RequiredMark />}
+        {optionalLabel && <span className="text-muted-foreground">{optionalLabel}</span>}
       </label>
       <input
         id={id}
@@ -908,6 +932,7 @@ function SelectField({
   options,
   value,
   onChange,
+  error,
   className,
 }: {
   id: string;
@@ -915,17 +940,22 @@ function SelectField({
   options: string[];
   value: string;
   onChange: (value: string) => void;
-  className?: string;
+  error?: string | null;
+  className?: string | undefined;
 }) {
   return (
     <div className={className}>
       <label htmlFor={id} className="text-sm font-medium">
-        {label}
+        {label} <RequiredMark />
       </label>
-      <Select value={value} onValueChange={onChange} name={id} required>
+      {/* Sin `required` ni `name`: el <select> nativo de Radix queda oculto y no valida bien;
+          el valor se agrega al enviar y se valida en el onSubmit del formulario. */}
+      <Select value={value} onValueChange={onChange}>
         <SelectTrigger
           id={id}
-          className="mt-2 h-auto w-full rounded-lg border-input bg-card px-4 py-3 text-left text-sm"
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? `${id}-error` : undefined}
+          className={`mt-2 h-auto w-full rounded-lg bg-card px-4 py-3 text-left text-sm ${error ? "border-primary" : "border-input"}`}
         >
           <SelectValue placeholder="—" />
         </SelectTrigger>
@@ -937,6 +967,11 @@ function SelectField({
           ))}
         </SelectContent>
       </Select>
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs text-brand-text">
+          {error}
+        </p>
+      )}
     </div>
   );
 }
