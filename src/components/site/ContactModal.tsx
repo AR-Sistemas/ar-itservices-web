@@ -7,13 +7,6 @@ import { toast } from "sonner";
 import { sendContactEmail } from "@/lib/contact.server";
 import { useLang } from "@/i18n/language";
 import { getContent } from "@/i18n/content";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export type ContactType = "empresa" | "postulante" | "consulta";
 
@@ -95,9 +88,6 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
         : ""),
   );
   const [sending, setSending] = useState(false);
-  // País: el <select> nativo de Radix queda oculto y no valida bien con `required`, así que se valida acá.
-  const [pais, setPais] = useState("");
-  const [paisError, setPaisError] = useState(false);
   // Trampa de tiempo anti-bot (ver contact.server.ts): el modal se monta al abrir.
   const [startedAt] = useState(() => Date.now());
   const previousFocus = useRef<HTMLElement | null>(null);
@@ -105,15 +95,8 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!pais) {
-      setPaisError(true);
-      document.getElementById("cm-pais")?.focus();
-      return;
-    }
-    const data = new FormData(e.currentTarget);
-    data.set("pais", pais);
     setSending(true);
-    send({ data })
+    send({ data: new FormData(e.currentTarget) })
       .then(() => {
         setSending(false);
         toast.success(c.contact.success);
@@ -296,17 +279,6 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                       className={INPUT}
                     />
                   </div>
-                  <CountryField
-                    label={f.country}
-                    countries={c.contact.countries}
-                    value={pais}
-                    onChange={(v) => {
-                      setPais(v);
-                      setPaisError(false);
-                    }}
-                    error={paisError ? c.contact.countryRequired : null}
-                    className="sm:col-span-2"
-                  />
                   <div className="sm:col-span-2">
                     <label htmlFor="cm-tipo" className="text-sm font-medium">
                       {f.projectType}
@@ -322,7 +294,8 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
 
               {type === "postulante" && (
                 <>
-                  <div>
+                  {/* Teléfono y puesto: una columna cada uno (con aviso el puesto viaja fijo y el teléfono ocupa todo el ancho). */}
+                  <div className={locked ? "sm:col-span-2" : undefined}>
                     <label htmlFor="cm-telefono" className="text-sm font-medium">
                       {f.phone} <RequiredMark />
                     </label>
@@ -336,20 +309,10 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                       className={INPUT}
                     />
                   </div>
-                  <CountryField
-                    label={f.country}
-                    countries={c.contact.countries}
-                    value={pais}
-                    onChange={(v) => {
-                      setPais(v);
-                      setPaisError(false);
-                    }}
-                    error={paisError ? c.contact.countryRequired : null}
-                  />
                   {/* Con aviso el puesto es el de la búsqueda y viaja fijo; sin aviso
                       (postulación espontánea) se escribe a mano. */}
                   {!locked && (
-                    <div className="sm:col-span-2">
+                    <div>
                       <label htmlFor="cm-puesto" className="text-sm font-medium">
                         {f.position} <RequiredMark />
                       </label>
@@ -368,13 +331,12 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                   {locked && <input type="hidden" name="puesto" value={options.puesto} />}
                   <div className="sm:col-span-2">
                     <label htmlFor="cm-cv" className="text-sm font-medium">
-                      {f.resume} <RequiredMark />
+                      {f.resume}
                     </label>
                     <input
                       id="cm-cv"
                       name="cv"
                       type="file"
-                      required
                       accept=".pdf,.doc,.docx"
                       className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
                     />
@@ -386,10 +348,7 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                 <>
                   <div>
                     <label htmlFor="cm-empresa" className="text-sm font-medium">
-                      {f.company}{" "}
-                      <span className="text-muted-foreground">
-                        {c.frameworkModal.fields.companyOptional}
-                      </span>
+                      {f.company}
                     </label>
                     <input
                       id="cm-empresa"
@@ -414,35 +373,17 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
                       className={INPUT}
                     />
                   </div>
-                  <CountryField
-                    label={f.country}
-                    countries={c.contact.countries}
-                    value={pais}
-                    onChange={(v) => {
-                      setPais(v);
-                      setPaisError(false);
-                    }}
-                    error={paisError ? c.contact.countryRequired : null}
-                    className="sm:col-span-2"
-                  />
                 </>
               )}
 
               <div className="sm:col-span-2">
                 <label htmlFor="cm-mensaje" className="text-sm font-medium">
                   {f.message}
-                  {type !== "postulante" && (
-                    <>
-                      {" "}
-                      <RequiredMark />
-                    </>
-                  )}
                 </label>
                 <textarea
                   id="cm-mensaje"
                   name="mensaje"
                   rows={6}
-                  required={type !== "postulante"}
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   placeholder={
@@ -478,52 +419,5 @@ function ContactModal({ options, onClose }: { options: OpenContactOptions; onClo
         </Dialog.Overlay>
       </Dialog.Portal>
     </Dialog.Root>
-  );
-}
-
-function CountryField({
-  label,
-  countries,
-  value,
-  onChange,
-  error,
-  className = "",
-}: {
-  label: string;
-  countries: string[];
-  value: string;
-  onChange: (value: string) => void;
-  error: string | null;
-  className?: string;
-}) {
-  return (
-    <div className={className}>
-      <label htmlFor="cm-pais" className="text-sm font-medium">
-        {label} <RequiredMark />
-      </label>
-      {/* Sin `required` ni `name`: el valor se agrega al enviar (ver handleSubmit). */}
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger
-          id="cm-pais"
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? "cm-pais-error" : undefined}
-          className={`${INPUT} h-auto text-left ${error ? "border-primary" : ""}`}
-        >
-          <SelectValue placeholder="—" />
-        </SelectTrigger>
-        <SelectContent side="bottom" avoidCollisions={false} className="max-h-64">
-          {countries.map((opt) => (
-            <SelectItem key={opt} value={opt}>
-              {opt}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {error && (
-        <p id="cm-pais-error" role="alert" className="mt-1.5 text-xs text-brand-text">
-          {error}
-        </p>
-      )}
-    </div>
   );
 }

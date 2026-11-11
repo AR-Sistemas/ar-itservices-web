@@ -30,13 +30,6 @@ import { HeroHeadlineCarousel } from "@/components/site/HeroHeadlineCarousel";
 import { useLang } from "@/i18n/language";
 import { getContent, type SolutionProduct } from "@/i18n/content";
 import { EventBanner } from "@/components/site/EventBanner";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { getPublicEditorial } from "@/lib/editorial.server";
 import { getAviso } from "@/lib/avisos.server";
 import { isIntermedio } from "@/lib/site-mode";
@@ -149,8 +142,6 @@ function Home() {
   // Levantados a estado (en vez de no controlados) para que no se pierdan si
   // el visitante cambia de pestaña de tipo de consulta y vuelve.
   const [empresaValue, setEmpresaValue] = useState("");
-  const [paisValue, setPaisValue] = useState("");
-  const [paisError, setPaisError] = useState(false);
   const [tipoValue, setTipoValue] = useState("");
   const [telefonoValue, setTelefonoValue] = useState("");
   const [mensajeValue, setMensajeValue] = useState("");
@@ -619,14 +610,8 @@ function Home() {
                 className="mt-8 grid scroll-mt-28 gap-5 sm:grid-cols-2"
                 onSubmit={(e) => {
                   e.preventDefault();
-                  if (!paisValue) {
-                    setPaisError(true);
-                    document.getElementById("pais")?.focus();
-                    return;
-                  }
                   const formEl = e.currentTarget;
                   const formData = new FormData(formEl);
-                  formData.set("pais", paisValue);
                   setSendState("sending");
                   sendContact({ data: formData })
                     .then(() => {
@@ -637,7 +622,6 @@ function Home() {
                       setProducto(null);
                       setSelectedPosition("");
                       setEmpresaValue("");
-                      setPaisValue("");
                       setTipoValue("");
                       setTelefonoValue("");
                       setMensajeValue("");
@@ -709,11 +693,6 @@ function Home() {
                     value={empresaValue}
                     onChange={setEmpresaValue}
                     required={contactType === "empresa"}
-                    optionalLabel={
-                      contactType === "consulta"
-                        ? c.frameworkModal.fields.companyOptional
-                        : undefined
-                    }
                   />
                 )}
                 {(contactType === "empresa" ||
@@ -728,19 +707,6 @@ function Home() {
                     onChange={setTelefonoValue}
                   />
                 )}
-
-                <SelectField
-                  id="pais"
-                  label={c.contact.fields.country}
-                  options={c.contact.countries}
-                  value={paisValue}
-                  onChange={(v) => {
-                    setPaisValue(v);
-                    setPaisError(false);
-                  }}
-                  error={paisError ? c.contact.countryRequired : null}
-                  className={contactType !== "postulante" ? "sm:col-span-2" : undefined}
-                />
 
                 {contactType === "empresa" && (
                   <div className="sm:col-span-2">
@@ -763,7 +729,7 @@ function Home() {
 
                 {contactType === "postulante" && (
                   <>
-                    <div className="sm:col-span-2">
+                    <div>
                       <label htmlFor="puesto" className="text-sm font-medium">
                         {c.contact.fields.position} <RequiredMark />
                       </label>
@@ -788,13 +754,12 @@ function Home() {
                     </div>
                     <div className="sm:col-span-2">
                       <label htmlFor="cv" className="text-sm font-medium">
-                        {c.contact.fields.resume} <RequiredMark />
+                        {c.contact.fields.resume}
                       </label>
                       <input
                         id="cv"
                         name="cv"
                         type="file"
-                        required
                         accept=".pdf,.doc,.docx"
                         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-2.5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-primary file:px-4 file:py-2 file:text-xs file:font-semibold file:text-primary-foreground"
                       />
@@ -805,12 +770,6 @@ function Home() {
                 <div className="sm:col-span-2">
                   <label htmlFor="mensaje" className="text-sm font-medium">
                     {c.contact.fields.message}
-                    {contactType !== "postulante" && (
-                      <>
-                        {" "}
-                        <RequiredMark />
-                      </>
-                    )}
                   </label>
                   <textarea
                     id="mensaje"
@@ -821,7 +780,6 @@ function Home() {
                       lang === "ES" ? "Contanos en qué podemos ayudarte" : "Tell us how we can help"
                     }
                     rows={contactType === "consulta" ? 4 : 5}
-                    required={contactType !== "postulante"}
                     className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
                   />
                 </div>
@@ -895,7 +853,7 @@ function Field({
   value,
   onChange,
   required = true,
-  optionalLabel,
+  className,
 }: {
   id: string;
   label: string;
@@ -904,13 +862,12 @@ function Field({
   value?: string;
   onChange?: (value: string) => void;
   required?: boolean;
-  optionalLabel?: string | undefined;
+  className?: string | undefined;
 }) {
   return (
-    <div>
+    <div className={className}>
       <label htmlFor={id} className="text-sm font-medium">
-        {label} {required && !optionalLabel && <RequiredMark />}
-        {optionalLabel && <span className="text-muted-foreground">{optionalLabel}</span>}
+        {label} {required && <RequiredMark />}
       </label>
       <input
         id={id}
@@ -922,56 +879,6 @@ function Field({
         onChange={onChange ? (e) => onChange(e.target.value) : undefined}
         className="mt-2 w-full rounded-lg border border-input bg-card px-4 py-3 text-sm"
       />
-    </div>
-  );
-}
-
-function SelectField({
-  id,
-  label,
-  options,
-  value,
-  onChange,
-  error,
-  className,
-}: {
-  id: string;
-  label: string;
-  options: string[];
-  value: string;
-  onChange: (value: string) => void;
-  error?: string | null;
-  className?: string | undefined;
-}) {
-  return (
-    <div className={className}>
-      <label htmlFor={id} className="text-sm font-medium">
-        {label} <RequiredMark />
-      </label>
-      {/* Sin `required` ni `name`: el <select> nativo de Radix queda oculto y no valida bien;
-          el valor se agrega al enviar y se valida en el onSubmit del formulario. */}
-      <Select value={value} onValueChange={onChange}>
-        <SelectTrigger
-          id={id}
-          aria-invalid={error ? true : undefined}
-          aria-describedby={error ? `${id}-error` : undefined}
-          className={`mt-2 h-auto w-full rounded-lg bg-card px-4 py-3 text-left text-sm ${error ? "border-primary" : "border-input"}`}
-        >
-          <SelectValue placeholder="—" />
-        </SelectTrigger>
-        <SelectContent side="bottom" avoidCollisions={false} className="max-h-64">
-          {options.map((opt) => (
-            <SelectItem key={opt} value={opt}>
-              {opt}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {error && (
-        <p id={`${id}-error`} role="alert" className="mt-1.5 text-xs text-brand-text">
-          {error}
-        </p>
-      )}
     </div>
   );
 }
