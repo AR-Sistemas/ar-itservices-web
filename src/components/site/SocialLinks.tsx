@@ -40,7 +40,7 @@ export function SocialLinks() {
   );
 }
 
-function LinkedInIcon({ className }: { className?: string }) {
+export function LinkedInIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}
@@ -54,7 +54,7 @@ function LinkedInIcon({ className }: { className?: string }) {
   );
 }
 
-function InstagramIcon({ className }: { className?: string }) {
+export function InstagramIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}

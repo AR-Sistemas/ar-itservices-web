@@ -5,6 +5,7 @@ import { LogoMark } from "@/components/site/LogoMark";
 import { LogoWordmark } from "@/components/site/LogoWordmark";
 import { useContactModal } from "@/components/site/ContactModal";
 import { CodeGridSpotlight } from "@/components/site/CodeGridSpotlight";
+import { InstagramIcon, LinkedInIcon } from "@/components/site/SocialLinks";
 import { Beams } from "@/components/site/Beams";
 import { PRODUCT_LOGO_SCALE, PRODUCT_LOGOS } from "@/components/site/product-logos";
 import { getPublicSolutionSlug } from "@/lib/solution-slugs";
@@ -44,13 +45,13 @@ function QrPage() {
   ];
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center overflow-x-clip bg-background px-5 py-10 sm:py-16">
+    <main className="relative flex min-h-dvh flex-col items-center overflow-x-clip bg-background px-5 py-5 sm:py-16">
       <CodeGridSpotlight />
       <Beams />
       <div className="relative z-10 w-full max-w-lg">
         <div className="flex items-center justify-between gap-4">
           <Link to="/" aria-label="AR IT Services" className="inline-flex items-center gap-3">
-            <LogoMark className="h-11 w-auto text-foreground" />
+            <LogoMark className="h-9 w-auto text-foreground sm:h-11" />
             <LogoWordmark className="h-4 w-auto text-foreground" />
           </Link>
           <div
@@ -71,16 +72,16 @@ function QrPage() {
             ))}
           </div>
         </div>
-        <h1 className="mt-16 text-3xl font-bold tracking-tight sm:text-4xl">
+        <h1 className="mt-6 text-2xl font-bold tracking-tight sm:mt-16 sm:text-4xl">
           {en ? "How can we help you?" : "¿Cómo podemos ayudarte?"}
         </h1>
-        <div className="mt-8 grid gap-4">
+        <div className="mt-4 grid gap-2.5 sm:mt-8 sm:gap-4">
           {options.map(({ label, icon: Icon, action }) => (
             <button
               key={label}
               type="button"
               onClick={action}
-              className="group flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card px-5 py-5 text-left text-lg font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+              className="group flex min-h-14 w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
             >
               <Icon aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />
               <span className="flex-1">{label}</span>
@@ -92,7 +93,7 @@ function QrPage() {
           ))}
           <a
             href="https://boletin.ar-itservices.com/"
-            className="group flex min-h-20 w-full items-center gap-4 rounded-2xl border border-border bg-card px-5 py-5 text-left text-lg font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
+            className="group flex min-h-14 w-full items-center gap-4 rounded-2xl border border-border bg-card px-4 py-3 text-left text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:px-5 sm:py-5 sm:text-lg"
           >
             <BookOpen aria-hidden="true" className="h-6 w-6 shrink-0 text-brand-text" />
             <span className="flex-1">{en ? "AI News" : "Novedades de IA"}</span>
@@ -101,6 +102,32 @@ function QrPage() {
               className="h-5 w-5 text-muted-foreground transition-colors group-hover:text-brand-text"
             />
           </a>
+          {/* Redes: una sola fila, dos columnas */}
+          <div className="grid grid-cols-2 gap-2.5 sm:gap-4">
+            {[
+              {
+                name: "Instagram",
+                href: "https://www.instagram.com/ar_itservices/",
+                icon: InstagramIcon,
+              },
+              {
+                name: "LinkedIn",
+                href: "https://ar.linkedin.com/company/ar-itservices",
+                icon: LinkedInIcon,
+              },
+            ].map(({ name, href, icon: Icon }) => (
+              <a
+                key={name}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex min-h-14 items-center justify-center gap-3 rounded-2xl border border-border bg-card px-3 py-3 text-base font-semibold transition-colors hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary sm:min-h-20 sm:text-lg"
+              >
+                <Icon className="h-5 w-5 shrink-0 text-brand-text" />
+                <span>{name}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -111,7 +138,7 @@ function QrPage() {
           aria-modal="true"
           aria-label={en ? "Explore our solutions" : "Conocé nuestras soluciones"}
         >
-          <div className="w-full max-w-lg rounded-2xl border border-border bg-card p-6 shadow-xl sm:p-8">
+          <div className="max-h-[calc(100dvh-2rem)] w-full max-w-lg overflow-y-auto rounded-2xl border border-border bg-card p-6 shadow-xl sm:p-8">
             <div className="flex items-start justify-between gap-4">
               <h2 className="text-xl font-bold">
                 {en ? "Explore our solutions" : "Conocé nuestras soluciones"}
