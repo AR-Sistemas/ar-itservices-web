@@ -14,6 +14,7 @@ import { Route as ComunicadoCambioDeMarcaRouteImport } from './routes/comunicado
 import { Route as NosotrosRouteImport } from './routes/nosotros'
 import { Route as NovedadesRouteImport } from './routes/novedades'
 import { Route as QrRouteImport } from './routes/qr'
+import { Route as ReunionesRouteImport } from './routes/reuniones'
 import { Route as SolucionesRouteImport } from './routes/soluciones'
 import { Route as TrabajaConNosotrosRouteImport } from './routes/trabaja-con-nosotros'
 import { Route as AvisoAvisoIdRouteImport } from './routes/aviso.$avisoId'
@@ -44,6 +45,11 @@ const QrRoute = QrRouteImport.update({
   path: '/qr',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ReunionesRoute = ReunionesRouteImport.update({
+  id: '/reuniones',
+  path: '/reuniones',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SolucionesRoute = SolucionesRouteImport.update({
   id: '/soluciones',
   path: '/soluciones',
@@ -71,6 +77,7 @@ export interface FileRoutesByFullPath {
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
+  '/reuniones': typeof ReunionesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByTo {
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
+  '/reuniones': typeof ReunionesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
@@ -94,6 +102,7 @@ export interface FileRoutesById {
   '/nosotros': typeof NosotrosRoute
   '/novedades': typeof NovedadesRoute
   '/qr': typeof QrRoute
+  '/reuniones': typeof ReunionesRoute
   '/soluciones': typeof SolucionesRoute
   '/trabaja-con-nosotros': typeof TrabajaConNosotrosRoute
   '/aviso/$avisoId': typeof AvisoAvisoIdRoute
@@ -107,6 +116,7 @@ export interface FileRouteTypes {
     | '/nosotros'
     | '/novedades'
     | '/qr'
+    | '/reuniones'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/nosotros'
     | '/novedades'
     | '/qr'
+    | '/reuniones'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
@@ -129,6 +140,7 @@ export interface FileRouteTypes {
     | '/nosotros'
     | '/novedades'
     | '/qr'
+    | '/reuniones'
     | '/soluciones'
     | '/trabaja-con-nosotros'
     | '/aviso/$avisoId'
@@ -141,6 +153,7 @@ export interface RootRouteChildren {
   NosotrosRoute: typeof NosotrosRoute
   NovedadesRoute: typeof NovedadesRoute
   QrRoute: typeof QrRoute
+  ReunionesRoute: typeof ReunionesRoute
   SolucionesRoute: typeof SolucionesRoute
   TrabajaConNosotrosRoute: typeof TrabajaConNosotrosRoute
   AvisoAvisoIdRoute: typeof AvisoAvisoIdRoute
@@ -184,6 +197,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QrRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reuniones': {
+      id: '/reuniones'
+      path: '/reuniones'
+      fullPath: '/reuniones'
+      preLoaderRoute: typeof ReunionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/soluciones': {
       id: '/soluciones'
       path: '/soluciones'
@@ -221,6 +241,7 @@ const rootRouteChildren: RootRouteChildren = {
   NosotrosRoute: NosotrosRoute,
   NovedadesRoute: NovedadesRoute,
   QrRoute: QrRoute,
+  ReunionesRoute: ReunionesRoute,
   SolucionesRoute: SolucionesRoute,
   TrabajaConNosotrosRoute: TrabajaConNosotrosRoute,
   AvisoAvisoIdRoute: AvisoAvisoIdRoute,
